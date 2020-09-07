@@ -1,0 +1,20 @@
+{
+  "name": "ampz-backend-sept-2020",
+  "version": "1.0.0",
+  "description": "Backend of AMPZ sports app built on Node Js, Express...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProjectAMPZ/ampz-backend-sept-2020.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ProjectAMPZ/ampz-backend-sept-2020/issues"
+  },
+  "homepage": "https://github.com/ProjectAMPZ/ampz-backend-sept-2020#readme"
+}
