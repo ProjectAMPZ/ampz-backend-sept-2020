@@ -4,6 +4,7 @@
   "description": "Backend of AMPZ sports app built on Node Js, Express...",
   "main": "index.js",
   "scripts": {
+    "start": "node -r esm src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/ProjectAMPZ/ampz-backend-sept-2020/issues"
   },
-  "homepage": "https://github.com/ProjectAMPZ/ampz-backend-sept-2020#readme"
+  "homepage": "https://github.com/ProjectAMPZ/ampz-backend-sept-2020#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1"
+  }
 }
