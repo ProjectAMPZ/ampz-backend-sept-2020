@@ -1,2 +1,2 @@
 # ampz-backend-sept-2020
-Backend of AMPZ sports app built on Node Js, Express...
+The Backend of AMPZ sports app built on Node Js, Express etc
