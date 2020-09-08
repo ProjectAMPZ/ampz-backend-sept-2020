@@ -2,6 +2,9 @@
 The Backend of AMPZ sports app built on Node Js, Express etc
 
 
+[![Build Status](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020.svg?token=qAiMe3EGGaDoSUEzBiGy&branch=develop)](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020)
+
+
 ## Required Features
 
 - Users can login
