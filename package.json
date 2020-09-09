@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node -r esm src/",
+    "dev": "nodemon -r esm src/",
     "test": "nyc  --reporter=text --reporter=html mocha src/**/*.test.js --timeout 12000 -c -r esm --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -30,8 +31,14 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "mocha": "^8.1.3",
     "nyc": "^15.1.0",
+    "prettier": "^2.1.1",
     "sinon": "^9.0.3",
     "sinon-chai": "^3.5.0"
   }
