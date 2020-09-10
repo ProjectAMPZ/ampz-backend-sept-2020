@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const FeatureSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
   sport: {
     type: String,
@@ -35,6 +35,6 @@ const FeatureSchema = new mongoose.Schema({
   },
 });
 
-const Feature = mongoose.model("features", FeatureSchema);
+const Feature = mongoose.model('features', FeatureSchema);
 
 export default Feature;

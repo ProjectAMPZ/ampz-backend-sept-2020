@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const ExperienceSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: 'user',
   },
   teamName: {
     type: String,
@@ -46,6 +46,6 @@ const ExperienceSchema = new mongoose.Schema({
   },
 });
 
-const Experience = mongoose.model("experience", ExperienceSchema);
+const Experience = mongoose.model('experience', ExperienceSchema);
 
 export default Experience;
