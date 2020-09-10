@@ -1,8 +1,12 @@
 import express from 'express';
-import 'dotenv/config';
+import { config } from 'dotenv';
 import morgan from 'morgan';
 import logger from './config';
+import "./db"
 // import v1Router from './routes'
+
+
+config();
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -23,7 +27,7 @@ app.use((req, res, next) => {
 app.use((err, req, res) => {
   logger.error(
     `${err.status || 500} - ${err.message} - ${req.originalUrl} - ${
-      req.method
+    req.method
     } - ${req.ip}`
   );
   res.status(err.status || 500).json({
