@@ -1,8 +1,11 @@
 import express from 'express';
-import 'dotenv/config';
+import { config } from 'dotenv';
 import morgan from 'morgan';
 import logger from './config';
+import './db';
 // import v1Router from './routes'
+
+config();
 
 const app = express();
 const port = process.env.PORT || 5000;
