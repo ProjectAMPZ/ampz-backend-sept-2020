@@ -3,6 +3,7 @@ The Backend of AMPZ sports app built on Node Js, Express etc
 
 
 [![Build Status](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020.svg?token=qAiMe3EGGaDoSUEzBiGy&branch=develop)](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020)
+[![Coverage Status](https://coveralls.io/repos/github/ProjectAMPZ/ampz-backend-sept-2020/badge.svg?branch=ch-rectify-coveralls)](https://coveralls.io/github/ProjectAMPZ/ampz-backend-sept-2020?branch=ch-rectify-coveralls)
 
 
 ## Required Features
