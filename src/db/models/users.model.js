@@ -7,13 +7,14 @@ const UserSchema = new mongoose.Schema({
   },
   userName: {
     type: String,
-    required: true,
-    unique: true,
+    trim: true,
+  },
+  googleUserId: {
+    type: String,
     trim: true,
   },
   password: {
-    type: String,
-    required: true,
+    type: String
   },
   email: {
     type: String,
@@ -21,63 +22,53 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
   gender: {
-    type: String,
-    required: true,
+    type: String
   },
   country: {
     type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
-  dayOfBirth: {
-    type: Number,
-    required: true,
-  },
-  monthOfBirth: {
-    type: String,
-    required: true,
-  },
-  yearOfBirth: {
-    type: Number,
-    required: true,
-  },
-  userLocation: {
-    type: String,
-  },
-  education: {
-    type: String,
-  },
-  guardianName: {
-    type: String,
 
   },
+  phoneNumber: {
+    type: String
+  },
+  dayOfBirth: {
+    type: Number
+
+  },
+  monthOfBirth: {
+    type: String
+
+  },
+  yearOfBirth: {
+    type: Number
+
+  },
+  userLocation: {
+    type: String
+  },
+  education: {
+    type: String
+  },
+  guardianName: {
+    type: String
+  },
   guardianEmail: {
-    type: String,
-    required: true,
+    type: String
   },
   guardianPhone: {
-    type: Number,
-    required: true,
+    type: String
   },
   primarySport: {
-    type: String,
-    required: true,
+    type: String
   },
   academyName: {
-    type: String,
-    required: true,
+    type: String
   },
   yearEstablished: {
     type: Number,
-    required: true,
   },
   biography: {
     type: String,
-    required: true,
   },
   role: {
     type: String,
