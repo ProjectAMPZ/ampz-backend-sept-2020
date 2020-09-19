@@ -23,7 +23,7 @@ async function sendEmail(to = 'okwuosachijioke@gmail.com', subject = 'AMPZ', mes
     await sgMail.send(msg);
     logger.info('Successfully Sent');
   } catch (err) {
-    logger.error(err);
+    // logger.error(err);
   }
 }
 

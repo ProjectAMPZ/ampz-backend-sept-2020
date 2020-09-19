@@ -11,6 +11,11 @@ export default {
     return pass;
   },
 
+  async verifyPassword(plainText, hashedText) {
+    const isMatch = await bcrypt.compare(plainText, hashedText);
+    return isMatch;
+  },
+
   async randomIntInc(low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);
   },

@@ -7,27 +7,21 @@ const FeatureSchema = new mongoose.Schema({
   },
   sport: {
     type: String,
-    required: true,
   },
   preferedArm: {
     type: String,
-    required: true,
   },
   preferedFoot: {
     type: String,
-    required: true,
   },
   position: {
     type: String,
-    required: true,
   },
   height: {
     type: String,
-    required: true,
   },
   weight: {
     type: String,
-    required: true,
   },
   updatedAt: {
     type: Date,

@@ -7,6 +7,7 @@ import app from '../index';
 import Auth from '../db/models/users.model';
 import Activation from '../db/models/accountActivation.model';
 import AuthController from '../controllers/auth.controller';
+import Email from '../utils/email.utils';
 import AuthService from '../services/auth.services';
 import logger from '../config';
 
@@ -79,11 +80,13 @@ const phoneExist = {
 };
 const invalidEmail = {
   email: 'hackerbay@gmail.com',
-  passcode: '245678'
+  passcode: '245678',
+  password: '123456'
 };
 const wrongPasscode = {
   email: 'okwuosachijioke1@gmail.com',
-  passcode: 'passcode'
+  passcode: 'passcode',
+  password: 'uuiyuiy'
 };
 
 before((done) => {
@@ -213,7 +216,7 @@ describe('Auth Route Endpoints', () => {
           done();
         });
     });
-    it('should activate user account if the user supplies complete information', (done) => {
+    it('should activate user account if the user supplies complete valid information', (done) => {
       chai.request(app)
         .post('/api/v1/auth/activate_account')
         .send({
@@ -311,6 +314,70 @@ describe('Auth Route Endpoints', () => {
     });
     it('Should mock encrypt password', () => {
       expect(AuthService.encrptPassword('reqBody'));
+    });
+    it('Should mock email function', () => {
+      expect(Email());
+    });
+  });
+  describe('POST api/v1/auth/login', () => {
+    it('should not login a user if the user supplies incomplete information', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send(incompleteUser)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should login a user account if the user supplies complete valid information', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('should not login a user if the user email cannot be found', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send(invalidEmail)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not login a user if the user supplies wrong password', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/login')
+        .send(wrongPasscode)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthController.login(req, res);
+      (res.status).should.have.callCount(0);
+      done();
     });
   });
 });
