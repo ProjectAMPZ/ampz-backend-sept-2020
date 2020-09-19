@@ -19,7 +19,7 @@ export default {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking email'
+        error: 'Error checking for email'
       });
     }
   },
@@ -34,7 +34,22 @@ export default {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking username'
+        error: 'Error checking for username'
+      });
+    }
+  },
+
+  async googleIdExist(id, res) {
+    try {
+      const condition = {
+        googleUserId: id
+      };
+      const user = await Auth.find(condition);
+      return user;
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error checking for google Id'
       });
     }
   },
@@ -71,5 +86,4 @@ export default {
       });
     }
   },
-
 };

@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
 import SignUpValidator from '../validations/auth/signup.validator';
 import LoginValidator from '../validations/auth/login.validator';
+import SocialLoginValidator from '../validations/auth/socialLogin.validator';
 import AccountActivationValidator from '../validations/auth/accountActivation.validator';
 
 const router = Router();
@@ -25,5 +26,10 @@ router.post('/login',
   LoginValidator.validateData(),
   LoginValidator.myValidationResult,
   AuthController.login);
+
+router.post('/social_login',
+  SocialLoginValidator.validateData(),
+  SocialLoginValidator.myValidationResult,
+  AuthController.socialLogin);
 
 export default router;

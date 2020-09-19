@@ -1,7 +1,7 @@
 # ampz-backend-sept-2020
 The Backend of AMPZ sports app built on Node Js, Express etc
 
-
+[![](https://img.shields.io/badge/Protected_by-Hound-a873d1.svg)](https://houndci.com)
 [![Build Status](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020.svg?token=qAiMe3EGGaDoSUEzBiGy&branch=develop)](https://travis-ci.com/ProjectAMPZ/ampz-backend-sept-2020)
 [![Coverage Status](https://coveralls.io/repos/github/ProjectAMPZ/ampz-backend-sept-2020/badge.svg?branch=develop)](https://coveralls.io/github/ProjectAMPZ/ampz-backend-sept-2020?branch=develop)
 
