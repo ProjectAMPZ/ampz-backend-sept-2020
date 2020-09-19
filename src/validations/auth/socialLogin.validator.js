@@ -5,32 +5,22 @@ import { check, validationResult } from 'express-validator';
  *
  *
  *
- * @class Login
+ * @class SocialLogin
  */
-class Login {
+class SocialLogin {
   /**
      * validate user data.
-     * @memberof Login
+     * @memberof SocialLogin
      * @returns {null} - No response.
      */
   static validateData() {
     return [
-      check('email')
+      check('token')
         .exists()
-        .withMessage('Email is required')
+        .withMessage('Token is required')
         .not()
         .isEmpty()
-        .withMessage('Email cannot be empty')
-        .isEmail()
-        .withMessage('Email should be a valid email address'),
-      check('password')
-        .exists()
-        .withMessage('Password is required')
-        .not()
-        .isEmpty()
-        .withMessage('Password cannot be empty')
-        .trim()
-        .escape(),
+        .withMessage('Token cannot be empty')
     ];
   }
 
@@ -39,7 +29,7 @@ class Login {
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @param {Response} next - The next parameter.
-   * @memberof Login
+   * @memberof SocialLogin
    * @returns {JSON} - A JSON success response.
    */
   static async myValidationResult(req, res, next) {
@@ -55,4 +45,4 @@ class Login {
     return next();
   }
 }
-export default Login;
+export default SocialLogin;

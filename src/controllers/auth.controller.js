@@ -1,3 +1,5 @@
+import { OAuth2Client } from 'google-auth-library';
+import { config } from 'dotenv';
 import Auth from '../db/models/users.model';
 import Activation from '../db/models/accountActivation.model';
 import Feature from '../db/models/feature.model';
@@ -8,6 +10,7 @@ import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
 // import logger from '../config/logger';
+config();
 
 /**
  *Contains Auth Controller
@@ -181,7 +184,7 @@ class AuthController {
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid Email address'
+          error: 'Invalid email address'
         });
       }
 
@@ -189,12 +192,12 @@ class AuthController {
       if (!confirmPassword) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid Password'
+          error: 'Invalid password'
         });
       }
 
       const condition = {
-        userId: user._Id
+        userId: user[0]._Id
       };
       const feature = await Feature.find(condition, (err) => {
         if (err) {
@@ -251,6 +254,218 @@ class AuthController {
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error Logging in user'
+      });
+    }
+  }
+
+  /**
+   * Login user through google.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async socialLogin(req, res) {
+    try {
+      const { token } = req.body;
+      const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      if (ticket) {
+        const payload = ticket.getPayload();
+        const response = {
+          email: payload.email,
+          fullName: payload.name,
+          isActivated: true,
+          googleUserId: payload.sub
+        };
+
+        // if the user has previously created account normally
+        const myUser = await AuthServices.emailExist(payload.email, res);
+        if (myUser.length) {
+          const condition = {
+            userId: myUser[0]._Id
+          };
+          const feature = await Feature.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching feature');
+            }
+          });
+          const experience = await Experience.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching experience');
+            }
+          });
+          const association = await Association.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching association');
+            }
+          });
+          const achievement = await Achievement.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching achievement');
+            }
+          });
+          const userToken = await Helper
+            .generateToken(myUser[0]._id, myUser[0].role, myUser[0].userName);
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              token: userToken,
+              user: {
+                _id: myUser[0]._id,
+                fullName: myUser[0].fullName,
+                userName: myUser[0].userName,
+                email: myUser[0].email,
+                verified: myUser[0].verified,
+                isActivated: myUser[0].isActivated,
+                gender: myUser[0].gender,
+                country: myUser[0].country,
+                phoneNumber: myUser[0].phoneNumber,
+                dayOfBirth: myUser[0].dayOfBirth,
+                monthOfBirth: myUser[0].monthOfBirth,
+                yearOfBirth: myUser[0].yearOfBirth,
+                role: myUser[0].role,
+              },
+              feature,
+              experience,
+              association,
+              achievement
+            }
+          });
+        }
+
+        const user = await AuthServices.googleIdExist(payload.sub, res);
+        // if the user dont have existing account
+        if (!user.length) {
+          await Auth.create({ ...response }, (err, createdUser) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db during creation of google user');
+            } else {
+              const featureRecord = {
+                userId: createdUser._id
+              };
+              Feature.create({ ...featureRecord }, (err) => {
+                if (err) {
+                  // logger.error(err);
+                  // throw new Error
+                  // ('Error occured in db during creation of social users feature record');
+                }
+              });
+
+              const condition = {
+                userId: createdUser._Id
+              };
+              (async () => {
+                const feature = await Feature.find(condition, (err) => {
+                  if (err) {
+                    // logger.error(err);
+                    // throw new Error('Error occured in db fetching feature');
+                  }
+                });
+                const experience = await Experience.find(condition, (err) => {
+                  if (err) {
+                    // logger.error(err);
+                    // throw new Error('Error occured in db fetching experience');
+                  }
+                });
+                const association = await Association.find(condition, (err) => {
+                  if (err) {
+                    // logger.error(err);
+                    // throw new Error('Error occured in db fetching association');
+                  }
+                });
+                const achievement = await Achievement.find(condition, (err) => {
+                  if (err) {
+                    // logger.error(err);
+                    // throw new Error('Error occured in db fetching achievement');
+                  }
+                });
+                const userToken = await Helper
+                  .generateToken(createdUser._id, createdUser.role, createdUser.userName);
+                return res.status(200).json({
+                  status: 'success',
+                  data: {
+                    token: userToken,
+                    user: createdUser,
+                    feature,
+                    experience,
+                    association,
+                    achievement
+                  }
+                });
+              })();
+            }
+          });
+        } else {
+          // if the user has previously created account through google
+          const condition = {
+            userId: user[0]._Id
+          };
+          const feature = await Feature.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching feature');
+            }
+          });
+          const experience = await Experience.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching experience');
+            }
+          });
+          const association = await Association.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching association');
+            }
+          });
+          const achievement = await Achievement.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching achievement');
+            }
+          });
+
+          const userToken = await Helper.generateToken(user[0]._id, user[0].role, user[0].userName);
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              token: userToken,
+              user: {
+                _id: user[0]._id,
+                fullName: user[0].fullName,
+                userName: user[0].userName,
+                email: user[0].email,
+                verified: user[0].verified,
+                isActivated: user[0].isActivated,
+                gender: user[0].gender,
+                country: user[0].country,
+                phoneNumber: user[0].phoneNumber,
+                dayOfBirth: user[0].dayOfBirth,
+                monthOfBirth: user[0].monthOfBirth,
+                yearOfBirth: user[0].yearOfBirth,
+                role: user[0].role,
+              },
+              feature,
+              experience,
+              association,
+              achievement
+            }
+          });
+        }
+      }
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error logging in user through google'
       });
     }
   }

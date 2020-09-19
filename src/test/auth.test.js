@@ -290,6 +290,17 @@ describe('Auth Route Endpoints', () => {
       (res.status).should.have.callCount(0);
       done();
     });
+    it('Should fake server error on googleIdExist function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {}
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthService.googleIdExist(req, res);
+      (res.status).should.have.callCount(0);
+      done();
+    });
     it('Should fake server error on phoneExist function', (done) => {
       const req = { body: {} };
       const res = {
@@ -315,8 +326,11 @@ describe('Auth Route Endpoints', () => {
     it('Should mock encrypt password', () => {
       expect(AuthService.encrptPassword('reqBody'));
     });
-    it('Should mock email function', () => {
-      expect(Email());
+    it('Should mock googleIdExist', () => {
+      expect(AuthService.googleIdExist('reqBody', 'req'));
+    });
+    it('Should mock email', () => {
+      expect(Email('gh'));
     });
   });
   describe('POST api/v1/auth/login', () => {
@@ -377,6 +391,49 @@ describe('Auth Route Endpoints', () => {
       sinon.stub(res, 'status').returnsThis();
       AuthController.login(req, res);
       (res.status).should.have.callCount(0);
+      done();
+    });
+  });
+  describe('POST api/v1/auth/social_login', () => {
+    it('should not login a user if the user supplies incomplete information', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/social_login')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not login a user if the user token is invalid', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/social_login')
+        .send({ token: 'invalid' })
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('500 Internal server error');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthController.socialLogin(req, res);
+      (res.status).should.have.callCount(0);
+      done();
+    });
+    it('Should fake social login', (done) => {
+      sinon.stub(AuthController, 'socialLogin').callsFake(() => ({
+        status: 'success',
+        data: {}
+      }));
       done();
     });
   });

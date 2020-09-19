@@ -24,11 +24,6 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res) => {
-  logger.error(
-    `${err.status || 500} - ${err.message} - ${req.originalUrl} - ${
-      req.method
-    } - ${req.ip}`
-  );
   res.status(err.status || 500).json({
     status: 'error',
     error: {
