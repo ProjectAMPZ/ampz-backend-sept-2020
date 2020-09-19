@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
 import SignUpValidator from '../validations/auth/signup.validator';
+import LoginValidator from '../validations/auth/login.validator';
 import AccountActivationValidator from '../validations/auth/accountActivation.validator';
 
 const router = Router();
@@ -19,5 +20,10 @@ router.post('/activate_account',
   AccountActivationValidator.emailAlreadyExist,
   AccountActivationValidator.confirmActivationCode,
   AuthController.activateAccount);
+
+router.post('/login',
+  LoginValidator.validateData(),
+  LoginValidator.myValidationResult,
+  AuthController.login);
 
 export default router;
