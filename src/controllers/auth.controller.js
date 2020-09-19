@@ -6,6 +6,7 @@ import Feature from '../db/models/feature.model';
 import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
 import Achievement from '../db/models/achievement.model';
+import ResetPassword from '../db/models/resetPassword.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
@@ -466,6 +467,127 @@ class AuthController {
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error logging in user through google'
+      });
+    }
+  }
+
+  /**
+   * Reset Password.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async resetPassword(req, res) {
+    try {
+      const { email } = req.params;
+      const Time = new Date();
+      const expiringDate = Time.setDate(Time.getDate() + 1);
+      const token = await Helper.generateToken(email, expiringDate, 'dummy');
+      await ResetPassword.deleteOne({ email }, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db while deleting old record');
+        }
+      });
+      const data = {
+        email,
+        expiringDate,
+        token,
+      };
+      await ResetPassword.create({ ...data }, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db while creating reset password record');
+        }
+      });
+      const url = `https://app.ampz.tv?token=${token}`;
+      const message = `To reset your password visit ${url}, the link expires in 24 hours`;
+      sendEmail(email, 'Password Reset', message);
+      return res.status(201).json({
+        status: 'success',
+        message: 'Password reset link sent to your mail'
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error reseting password'
+      });
+    }
+  }
+
+  /**
+   * Verify Reset Password token.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async verifyResetPasswordToken(req, res) {
+    try {
+      const { id } = req.body.payLoad;
+      const condition = {
+        email: id
+      };
+      const user = await ResetPassword.find(condition, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db while checking email');
+        }
+      });
+      const Time = new Date();
+      const currentDate = Time.setDate(Time.getDate());
+
+      if (+user[0].expiringDate < currentDate) {
+        return res.status(401).json({
+          status: '401 Unauthorized',
+          error: 'Reset password link has expired'
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'Token confirmed successfully',
+          email: user[0].email
+        }
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error reseting password'
+      });
+    }
+  }
+
+  /**
+   * Change Password.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async changePassword(req, res) {
+    try {
+      const { email, password } = req.body;
+      const encryptpassword = await Helper.encrptPassword(password);
+      const newData = {
+        password: encryptpassword
+      };
+      await Auth.findOneAndUpdate({ email }, { ...newData }, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db during password change');
+        }
+      });
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Password changed successfully'
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error changing password'
       });
     }
   }
