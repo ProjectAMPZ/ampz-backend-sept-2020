@@ -2,6 +2,7 @@ import { Router } from 'express';
 import AuthController from '../controllers/auth.controller';
 import SignUpValidator from '../validations/auth/signup.validator';
 import LoginValidator from '../validations/auth/login.validator';
+import PasswordResetValidator from '../validations/auth/resetPassword.validator';
 import SocialLoginValidator from '../validations/auth/socialLogin.validator';
 import AccountActivationValidator from '../validations/auth/accountActivation.validator';
 
@@ -31,5 +32,22 @@ router.post('/social_login',
   SocialLoginValidator.validateData(),
   SocialLoginValidator.myValidationResult,
   AuthController.socialLogin);
+
+router.get(
+  '/:email/reset_password',
+  PasswordResetValidator.emailAlreadyExist,
+  AuthController.resetPassword
+);
+
+router.get(
+  '/:token/verify_password_reset_token',
+  PasswordResetValidator.verifyToken,
+  AuthController.verifyResetPasswordToken
+);
+
+router.post('/change_password',
+  PasswordResetValidator.validateData(),
+  PasswordResetValidator.myValidationResult,
+  AuthController.changePassword);
 
 export default router;

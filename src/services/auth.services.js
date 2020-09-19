@@ -1,13 +1,7 @@
-import bcrypt from 'bcryptjs';
 import Auth from '../db/models/users.model';
 import Activation from '../db/models/accountActivation.model';
 
 export default {
-
-  async encrptPassword(password) {
-    const pass = await bcrypt.hash(password, 8);
-    return pass;
-  },
 
   async emailExist(email, res) {
     try {
