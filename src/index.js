@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { config } from 'dotenv';
 import morgan from 'morgan';
 import logger from './config';
@@ -8,6 +9,7 @@ import v1Router from './routes';
 config();
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 5000;
 global.logger = logger;
 
