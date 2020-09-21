@@ -5,6 +5,7 @@ import LoginValidator from '../validations/auth/login.validator';
 import PasswordResetValidator from '../validations/auth/resetPassword.validator';
 import SocialLoginValidator from '../validations/auth/socialLogin.validator';
 import AccountActivationValidator from '../validations/auth/accountActivation.validator';
+import ResendVerificationValidator from '../validations/auth/resendVerificationCode.validator';
 
 const router = Router();
 
@@ -15,6 +16,11 @@ router.post('/signup',
   SignUpValidator.usernameAlreadyExist,
   SignUpValidator.phonenumberAlreadyExist,
   AuthController.signUp);
+
+router.post('/resend-verification',
+  ResendVerificationValidator.validateData(),
+  ResendVerificationValidator.myValidationResult,
+  AuthController.resendVerificationCode);
 
 router.post('/activate_account',
   AccountActivationValidator.validateData(),
@@ -39,15 +45,10 @@ router.get(
   AuthController.resetPassword
 );
 
-router.get(
-  '/:token/verify_password_reset_token',
-  PasswordResetValidator.verifyToken,
-  AuthController.verifyResetPasswordToken
-);
-
 router.post('/change_password',
   PasswordResetValidator.validateData(),
   PasswordResetValidator.myValidationResult,
+  PasswordResetValidator.verifyPasscode,
   AuthController.changePassword);
 
 export default router;

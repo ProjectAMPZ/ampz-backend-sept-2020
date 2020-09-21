@@ -41,16 +41,16 @@ export default {
     return token;
   },
 
-  async verifyToken(token, req, res) {
-    await jwt.verify(token, process.env.SECRET || 'alternativeSecret', (error, result) => {
-      if (error) {
-        return res.status(401).json({
-          status: '401 Unauthorized',
-          error: 'Access token is Invalid'
-        });
-      }
-      req.body.payLoad = result.data;
-      return true;
-    });
-  }
+  // async verifyToken(token, req, res) {
+  //   await jwt.verify(token, process.env.SECRET || 'alternativeSecret', (error, result) => {
+  //     if (error) {
+  //       return res.status(401).json({
+  //         status: '401 Unauthorized',
+  //         error: 'Access token is Invalid'
+  //       });
+  //     }
+  //     req.body.payLoad = result.data;
+  //     return true;
+  //   });
+  // }
 };

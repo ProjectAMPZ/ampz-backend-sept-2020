@@ -1,5 +1,6 @@
 import Auth from '../db/models/users.model';
 import Activation from '../db/models/accountActivation.model';
+import ResetPassword from '../db/models/resetPassword.model';
 
 export default {
 
@@ -73,6 +74,29 @@ export default {
         return true;
       }
       return false;
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error matching activation code'
+      });
+    }
+  },
+
+  async verifyPasscode(email, code, res) {
+    try {
+      const condition = {
+        email
+      };
+      const user = await ResetPassword.find(condition);
+      if (user[0].token !== code) {
+        return 2;
+      }
+      const Time = new Date();
+      const currentDate = Time.setDate(Time.getDate());
+      if (+user[0].expiringDate < currentDate) {
+        return 3;
+      }
+      return true;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',

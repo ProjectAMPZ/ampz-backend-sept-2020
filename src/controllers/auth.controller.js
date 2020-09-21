@@ -483,7 +483,7 @@ class AuthController {
       const { email } = req.params;
       const Time = new Date();
       const expiringDate = Time.setDate(Time.getDate() + 1);
-      const token = await Helper.generateToken(email, expiringDate, 'dummy');
+      const token = await Helper.generateCode(5);
       await ResetPassword.deleteOne({ email }, (err) => {
         if (err) {
           // logger.error(err);
@@ -501,55 +501,11 @@ class AuthController {
           // throw new Error('Error occured in db while creating reset password record');
         }
       });
-      const url = `https://app.ampz.tv?token=${token}`;
-      const message = `To reset your password visit ${url}, the link expires in 24 hours`;
+      const message = `To reset your password use this code:${token}, the code expires in 24 hours`;
       sendEmail(email, 'Password Reset', message);
       return res.status(201).json({
         status: 'success',
         message: 'Password reset link sent to your mail'
-      });
-    } catch (err) {
-      return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error reseting password'
-      });
-    }
-  }
-
-  /**
-   * Verify Reset Password token.
-   * @param {Request} req - Response object.
-   * @param {Response} res - The payload.
-   * @memberof AuthController
-   * @returns {JSON} - A JSON success response.
-   */
-  static async verifyResetPasswordToken(req, res) {
-    try {
-      const { id } = req.body.payLoad;
-      const condition = {
-        email: id
-      };
-      const user = await ResetPassword.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db while checking email');
-        }
-      });
-      const Time = new Date();
-      const currentDate = Time.setDate(Time.getDate());
-
-      if (+user[0].expiringDate < currentDate) {
-        return res.status(401).json({
-          status: '401 Unauthorized',
-          error: 'Reset password link has expired'
-        });
-      }
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          message: 'Token confirmed successfully',
-          email: user[0].email
-        }
       });
     } catch (err) {
       return res.status(500).json({
@@ -588,6 +544,40 @@ class AuthController {
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error changing password'
+      });
+    }
+  }
+
+  /**
+   * Resend Verification Code
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async resendVerificationCode(req, res) {
+    try {
+      const { email } = req.body;
+      const code = await Helper.generateCode(5);
+      const newData = {
+        passcode: code
+      };
+      const message = `Your account activation code is <b>${code}<b/>`;
+      sendEmail(email, 'Account Activation', message);
+      Activation.findOneAndUpdate({ email }, { ...newData }, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db during creation of activation record');
+        }
+        return res.status(201).json({
+          status: 'success',
+          message: 'Account activation code has been sent to your email'
+        });
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error resending verification code'
       });
     }
   }

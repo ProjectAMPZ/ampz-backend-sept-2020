@@ -1,6 +1,5 @@
 import { check, validationResult } from 'express-validator';
 import AuthServices from '../../services/auth.services';
-import Helper from '../../utils/user.utils';
 /**
  *Contains PasswordReset Validator
  *
@@ -30,6 +29,14 @@ class PasswordReset {
         .not()
         .isEmpty()
         .withMessage('Password cannot be empty')
+        .trim()
+        .escape(),
+      check('code')
+        .exists()
+        .withMessage('Code is required')
+        .not()
+        .isEmpty()
+        .withMessage('Code cannot be empty')
         .trim()
         .escape(),
     ];
@@ -84,9 +91,20 @@ class PasswordReset {
    * @memberof SignUp
    * @returns {JSON} - A JSON response.
    */
-  static async verifyToken(req, res, next) {
-    const { token } = req.params;
-    await Helper.verifyToken(token, req, res);
+  static async verifyPasscode(req, res, next) {
+    const { email, code } = req.body;
+    const result = await AuthServices.verifyPasscode(email, code, res);
+    if (result === 2) {
+      return res.status(401).json({
+        status: '401 Unauthorized',
+        error: 'Passcode is Invalid'
+      });
+    } if (result === 3) {
+      return res.status(401).json({
+        status: '401 Unauthorized',
+        error: 'Passcode has expired'
+      });
+    }
     return next();
   }
 }

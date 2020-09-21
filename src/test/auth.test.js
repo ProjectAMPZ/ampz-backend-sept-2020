@@ -25,6 +25,11 @@ const incompleteUser = {
   username: 'hackerbay',
   password: '24567/8'
 };
+const changePasswordInvalidCode = {
+  email: 'okwuosachijioke1@gmail.com',
+  password: '12345678',
+  code: '34534543'
+};
 const user = {
   fullName: 'hackerbay',
   userName: 'jackson',
@@ -326,14 +331,28 @@ describe('Auth Route Endpoints', () => {
       (res.status).should.have.callCount(0);
       done();
     });
-    it('Should mock encrypt password', () => {
+    it('Should fake server error on verifyPasscode function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {}
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthService.verifyPasscode(req, res);
+      (res.status).should.have.callCount(0);
+      done();
+    });
+    it('Should mock encrypt password', (done) => {
       expect(Helper.encrptPassword('reqBody'));
+      done();
     });
-    it('Should mock googleIdExist', () => {
+    it('Should mock googleIdExist', (done) => {
       expect(AuthService.googleIdExist('reqBody', 'req'));
+      done();
     });
-    it('Should mock email', () => {
+    it('Should mock email', (done) => {
       expect(Email('gh'));
+      done();
     });
   });
   describe('POST api/v1/auth/login', () => {
@@ -475,7 +494,7 @@ describe('Auth Route Endpoints', () => {
       done();
     });
   });
-  describe('GET api/v1/auth/:token/verify_password_reset_token', () => {
+  describe('POST api/v1/auth/change_password', () => {
     before((done) => {
       ResetPassword.find({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
         if (myuser) {
@@ -484,65 +503,6 @@ describe('Auth Route Endpoints', () => {
         }
       });
     });
-    it('should not verify token if it is invalid', (done) => {
-      chai.request(app)
-        .get('/api/v1/auth/invalidtoken/verify_password_reset_token')
-        .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
-          done();
-        });
-    });
-    it('should verify token if is it valid', (done) => {
-      chai.request(app)
-        .get(`/api/v1/auth/${passwordToken}/verify_password_reset_token`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
-          done();
-        });
-    });
-    it('Should fake server error', (done) => {
-      const req = { body: {} };
-      const res = {
-        status() { },
-        send() { }
-      };
-      sinon.stub(res, 'status').returnsThis();
-      AuthController.verifyResetPasswordToken(req, res);
-      (res.status).should.have.callCount(1);
-      done();
-    });
-  });
-  describe('GET api/v1/auth/:token/verify_password_reset_token', () => {
-    before((done) => {
-      const newData = {
-        expiringDate: '2343'
-      };
-      ResetPassword.findOneAndUpdate({ email: 'okwuosachijioke1@gmail.com' }, { ...newData }, (err, myuser) => {
-        if (myuser) {
-          done();
-        }
-      });
-    });
-    it('should not verify token if is it expired', (done) => {
-      chai.request(app)
-        .get(`/api/v1/auth/${passwordToken}/verify_password_reset_token`)
-        .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
-          done();
-        });
-    });
-  });
-
-  describe('POST api/v1/auth/change_password', () => {
     it('should not change password if all parameters are not supplied', (done) => {
       chai.request(app)
         .post('/api/v1/auth/change_password')
@@ -554,10 +514,26 @@ describe('Auth Route Endpoints', () => {
           done();
         });
     });
+    it('should not change password if passcode is invalid', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/change_password')
+        .send(changePasswordInvalidCode)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
     it('should change password if suppied data is complete', (done) => {
       chai.request(app)
         .post('/api/v1/auth/change_password')
-        .send(user)
+        .send({
+          email: 'okwuosachijioke1@gmail.com',
+          password: '123456',
+          code: passwordToken
+        })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -574,6 +550,72 @@ describe('Auth Route Endpoints', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       AuthController.changePassword(req, res);
+      (res.status).should.have.callCount(0);
+      done();
+    });
+  });
+  describe('POST api/v1/auth/change_password', () => {
+    before((done) => {
+      const newData = {
+        expiringDate: '2343'
+      };
+      ResetPassword.findOneAndUpdate({ email: 'okwuosachijioke1@gmail.com' }, { ...newData }, (err, myuser) => {
+        if (myuser) {
+          done();
+        }
+      });
+    });
+    it('should not verify token if is it expired', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/change_password')
+        .send({
+          email: 'okwuosachijioke1@gmail.com',
+          password: '123456',
+          code: passwordToken
+        })
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+  });
+  describe('POST api/v1/auth/resend-verification', () => {
+    it('should not resend verification code if email is not supplied', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/resend-verification')
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should resend verification code if suppied data is complete', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/resend-verification')
+        .send({
+          email: 'okwuosachijioke1@gmail.com'
+        })
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() { },
+        send() { }
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthController.resendVerificationCode(req, res);
       (res.status).should.have.callCount(0);
       done();
     });
