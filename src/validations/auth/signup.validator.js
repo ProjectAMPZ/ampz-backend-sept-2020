@@ -22,8 +22,6 @@ class SignUp {
         .not()
         .isEmpty()
         .withMessage('Fullname  cannot be empty')
-        .isAlpha()
-        .withMessage('Fullname  should be alphabets only')
         .isLength({ min: 3 })
         .withMessage('Fullname  should be at least 3 characters long')
         .trim()
