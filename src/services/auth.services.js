@@ -3,18 +3,17 @@ import Activation from '../db/models/accountActivation.model';
 import ResetPassword from '../db/models/resetPassword.model';
 
 export default {
-
   async emailExist(email, res) {
     try {
       const condition = {
-        email
+        email,
       };
       const user = await Auth.find(condition);
       return user;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking for email'
+        error: 'Error checking for email',
       });
     }
   },
@@ -22,14 +21,14 @@ export default {
   async usernameExist(username, res) {
     try {
       const condition = {
-        userName: username
+        userName: username,
       };
       const user = await Auth.find(condition);
       return user;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking for username'
+        error: 'Error checking for username',
       });
     }
   },
@@ -37,14 +36,14 @@ export default {
   async googleIdExist(id, res) {
     try {
       const condition = {
-        googleUserId: id
+        googleUserId: id,
       };
       const user = await Auth.find(condition);
       return user;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking for google Id'
+        error: 'Error checking for google Id',
       });
     }
   },
@@ -52,14 +51,14 @@ export default {
   async phoneExist(phonenumber, res) {
     try {
       const condition = {
-        phoneNumber: phonenumber
+        phoneNumber: phonenumber,
       };
       const user = await Auth.find(condition);
       return user;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error checking phonenumber'
+        error: 'Error checking phonenumber',
       });
     }
   },
@@ -67,7 +66,7 @@ export default {
   async matchCode(id, code, res) {
     try {
       const condition = {
-        userId: id
+        userId: id,
       };
       const user = await Activation.find(condition);
       if (user[0].passcode === code) {
@@ -77,7 +76,7 @@ export default {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error matching activation code'
+        error: 'Error matching activation code',
       });
     }
   },
@@ -85,7 +84,7 @@ export default {
   async verifyPasscode(email, code, res) {
     try {
       const condition = {
-        email
+        email,
       };
       const user = await ResetPassword.find(condition);
       if (user[0].token !== code) {
@@ -100,7 +99,7 @@ export default {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error matching activation code'
+        error: 'Error matching activation code',
       });
     }
   },

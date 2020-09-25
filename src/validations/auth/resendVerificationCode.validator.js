@@ -21,7 +21,7 @@ class ResendVerificationCode {
         .isEmpty()
         .withMessage('Email cannot be empty')
         .isEmail()
-        .withMessage('Email should be a valid email address')  
+        .withMessage('Email should be a valid email address')
     ];
   }
 
