@@ -6,10 +6,26 @@ import path from 'path';
 import app from '../index';
 import Helper from '../utils/user.utils';
 import BioController from '../controllers/bio.controller';
+import FeatureController from '../controllers/feature.controller';
 
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
+
+const feature = {
+  sport: 'Football',
+  preferedArm: 'Right',
+  preferedFoot: 'Right',
+  position: 'CM',
+  height: '5.4',
+  weight: '65',
+};
+
+const incompleteFeature = {
+  sport: 'Football',
+  preferedArm: 'Right',
+  preferedFoot: 'Right',
+};
 
 let token;
 (async () => {
@@ -114,6 +130,81 @@ describe('Profile Route Endpoints', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       BioController.updateBio(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+
+  describe('POST api/v1/profile/feature', () => {
+    it('should not create feature if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/profile/feature')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should not create feature if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/profile/feature')
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+
+    it('should not create feature if feature is incomplete', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/profile/feature')
+        .set('token', token)
+        .send(incompleteFeature)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have
+            .property('error')
+            .eql('Your request contains invalid parameters');
+          done();
+        });
+    });
+
+    it('should create feature if feature is complete', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/profile/feature')
+        .set('token', token)
+        .send(feature)
+        .end((err, res) => {
+          res.should.have.status(201);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have
+            .property('message')
+            .eql('feature created successfully');
+          done();
+        });
+    });
+
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      FeatureController.createFeature(req, res);
       res.status.should.have.callCount(1);
       done();
     });
