@@ -41,7 +41,7 @@ class AuthController {
         dayOfBirth,
         monthOfBirth,
         yearOfBirth,
-        role
+        role,
       } = req.body;
 
       const encryptpassword = await Helper.encrptPassword(password);
@@ -57,7 +57,7 @@ class AuthController {
         dayOfBirth,
         monthOfBirth,
         yearOfBirth,
-        role
+        role,
       };
       const code = await Helper.generateCode(5);
       await Auth.create({ ...newUser }, (err, createdUser) => {
@@ -66,7 +66,7 @@ class AuthController {
           // throw new Error('Error occured in db during creation of user');
         } else {
           const featureRecord = {
-            userId: createdUser._id
+            userId: createdUser._id,
           };
           Feature.create({ ...featureRecord }, (err) => {
             if (err) {
@@ -77,7 +77,7 @@ class AuthController {
           const activationRecord = {
             userId: createdUser._id,
             email: createdUser.email,
-            passcode: code
+            passcode: code,
           };
           const message = `Your account activation code is <b>${code}<b/>`;
           sendEmail(createdUser.email, 'Account Activation', message);
@@ -89,7 +89,7 @@ class AuthController {
 
             return res.status(201).json({
               status: 'success',
-              message: 'Account activation code has been sent to your email'
+              message: 'Account activation code has been sent to your email',
             });
           });
         }
@@ -97,7 +97,7 @@ class AuthController {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error creating new user'
+        error: 'Error creating new user',
       });
     }
   }
@@ -111,11 +111,9 @@ class AuthController {
    */
   static async activateAccount(req, res) {
     try {
-      const {
-        _id
-      } = req.body;
+      const { _id } = req.body;
       const newData = {
-        isActivated: true
+        isActivated: true,
       };
       const user = await Auth.findByIdAndUpdate(_id, { ...newData }, (err) => {
         if (err) {
@@ -124,7 +122,7 @@ class AuthController {
         }
       });
       const condition = {
-        userId: user._Id
+        userId: user._Id,
       };
       const feature = await Feature.find(condition, (err) => {
         if (err) {
@@ -150,7 +148,11 @@ class AuthController {
           // throw new Error('Error occured in db fetching achievement');
         }
       });
-      const token = await Helper.generateToken(user._id, user.role, user.userName);
+      const token = await Helper.generateToken(
+        user._id,
+        user.role,
+        user.userName
+      );
       return res.status(200).json({
         status: 'success',
         data: {
@@ -159,13 +161,13 @@ class AuthController {
           feature,
           experience,
           association,
-          achievement
-        }
+          achievement,
+        },
       });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error activating user account'
+        error: 'Error activating user account',
       });
     }
   }
@@ -185,20 +187,23 @@ class AuthController {
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid email address'
+          error: 'Invalid email address',
         });
       }
 
-      const confirmPassword = await Helper.verifyPassword(password, user[0].password);
+      const confirmPassword = await Helper.verifyPassword(
+        password,
+        user[0].password
+      );
       if (!confirmPassword) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid password'
+          error: 'Invalid password',
         });
       }
 
       const condition = {
-        userId: user[0]._Id
+        userId: user[0]._Id,
       };
       const feature = await Feature.find(condition, (err) => {
         if (err) {
@@ -225,36 +230,28 @@ class AuthController {
         }
       });
 
-      const token = await Helper.generateToken(user[0]._id, user[0].role, user[0].userName);
+      const token = await Helper.generateToken(
+        user[0]._id,
+        user[0].role,
+        user[0].userName
+      );
       return res.status(200).json({
         status: 'success',
         data: {
           token,
           user: {
-            _id: user[0]._id,
-            fullName: user[0].fullName,
-            userName: user[0].userName,
-            email: user[0].email,
-            verified: user[0].verified,
-            isActivated: user[0].isActivated,
-            gender: user[0].gender,
-            country: user[0].country,
-            phoneNumber: user[0].phoneNumber,
-            dayOfBirth: user[0].dayOfBirth,
-            monthOfBirth: user[0].monthOfBirth,
-            yearOfBirth: user[0].yearOfBirth,
-            role: user[0].role,
+            ...user[0]._doc,
           },
           feature,
           experience,
           association,
-          achievement
-        }
+          achievement,
+        },
       });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error Logging in user'
+        error: 'Error Logging in user',
       });
     }
   }
@@ -280,14 +277,14 @@ class AuthController {
           email: payload.email,
           fullName: payload.name,
           isActivated: true,
-          googleUserId: payload.sub
+          googleUserId: payload.sub,
         };
 
         // if the user has previously created account normally
         const myUser = await AuthServices.emailExist(payload.email, res);
         if (myUser.length) {
           const condition = {
-            userId: myUser[0]._Id
+            userId: myUser[0]._Id,
           };
           const feature = await Feature.find(condition, (err) => {
             if (err) {
@@ -313,8 +310,11 @@ class AuthController {
               // throw new Error('Error occured in db fetching achievement');
             }
           });
-          const userToken = await Helper
-            .generateToken(myUser[0]._id, myUser[0].role, myUser[0].userName);
+          const userToken = await Helper.generateToken(
+            myUser[0]._id,
+            myUser[0].role,
+            myUser[0].userName
+          );
           return res.status(200).json({
             status: 'success',
             data: {
@@ -337,8 +337,8 @@ class AuthController {
               feature,
               experience,
               association,
-              achievement
-            }
+              achievement,
+            },
           });
         }
 
@@ -351,7 +351,7 @@ class AuthController {
               // throw new Error('Error occured in db during creation of google user');
             } else {
               const featureRecord = {
-                userId: createdUser._id
+                userId: createdUser._id,
               };
               Feature.create({ ...featureRecord }, (err) => {
                 if (err) {
@@ -362,7 +362,7 @@ class AuthController {
               });
 
               const condition = {
-                userId: createdUser._Id
+                userId: createdUser._Id,
               };
               (async () => {
                 const feature = await Feature.find(condition, (err) => {
@@ -389,8 +389,11 @@ class AuthController {
                     // throw new Error('Error occured in db fetching achievement');
                   }
                 });
-                const userToken = await Helper
-                  .generateToken(createdUser._id, createdUser.role, createdUser.userName);
+                const userToken = await Helper.generateToken(
+                  createdUser._id,
+                  createdUser.role,
+                  createdUser.userName
+                );
                 return res.status(200).json({
                   status: 'success',
                   data: {
@@ -399,8 +402,8 @@ class AuthController {
                     feature,
                     experience,
                     association,
-                    achievement
-                  }
+                    achievement,
+                  },
                 });
               })();
             }
@@ -408,7 +411,7 @@ class AuthController {
         } else {
           // if the user has previously created account through google
           const condition = {
-            userId: user[0]._Id
+            userId: user[0]._Id,
           };
           const feature = await Feature.find(condition, (err) => {
             if (err) {
@@ -435,7 +438,11 @@ class AuthController {
             }
           });
 
-          const userToken = await Helper.generateToken(user[0]._id, user[0].role, user[0].userName);
+          const userToken = await Helper.generateToken(
+            user[0]._id,
+            user[0].role,
+            user[0].userName
+          );
           return res.status(200).json({
             status: 'success',
             data: {
@@ -458,15 +465,15 @@ class AuthController {
               feature,
               experience,
               association,
-              achievement
-            }
+              achievement,
+            },
           });
         }
       }
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error logging in user through google'
+        error: 'Error logging in user through google',
       });
     }
   }
@@ -505,12 +512,12 @@ class AuthController {
       sendEmail(email, 'Password Reset', message);
       return res.status(201).json({
         status: 'success',
-        message: 'Password reset link sent to your mail'
+        message: 'Password reset link sent to your mail',
       });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error reseting password'
+        error: 'Error reseting password',
       });
     }
   }
@@ -527,7 +534,7 @@ class AuthController {
       const { email, password } = req.body;
       const encryptpassword = await Helper.encrptPassword(password);
       const newData = {
-        password: encryptpassword
+        password: encryptpassword,
       };
       await Auth.findOneAndUpdate({ email }, { ...newData }, (err) => {
         if (err) {
@@ -538,12 +545,12 @@ class AuthController {
 
       return res.status(200).json({
         status: 'success',
-        message: 'Password changed successfully'
+        message: 'Password changed successfully',
       });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error changing password'
+        error: 'Error changing password',
       });
     }
   }
@@ -560,7 +567,7 @@ class AuthController {
       const { email } = req.body;
       const code = await Helper.generateCode(5);
       const newData = {
-        passcode: code
+        passcode: code,
       };
       const message = `Your account activation code is <b>${code}<b/>`;
       sendEmail(email, 'Account Activation', message);
@@ -571,13 +578,13 @@ class AuthController {
         }
         return res.status(201).json({
           status: 'success',
-          message: 'Account activation code has been sent to your email'
+          message: 'Account activation code has been sent to your email',
         });
       });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error resending verification code'
+        error: 'Error resending verification code',
       });
     }
   }

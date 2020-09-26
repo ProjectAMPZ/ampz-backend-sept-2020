@@ -6,9 +6,18 @@
   "scripts": {
     "start": "node -r esm src/",
     "dev": "nodemon -r esm src/",
-    "test": "nyc  --reporter=text --reporter=html mocha src/**/*.test.js --timeout 12000 -c -r esm --exit",
+    "test": "nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm --cache false --timeout 80000  --recursive --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint src/**/* --ext js --fix --ignore-pattern src/logs/*"
+  },
+  "nyc": {
+    "exclude": [
+      "src/index.js",
+      "src/config/index.js",
+      "src/db/*",
+      "src/routes/index.js",
+      "src/test/*"
+    ]
   },
   "repository": {
     "type": "git",
@@ -24,6 +33,7 @@
   "dependencies": {
     "@sendgrid/mail": "^7.2.5",
     "app-root-path": "^3.0.0",
+    "aws-sdk": "^2.759.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "coveralls": "^3.1.0",
@@ -34,7 +44,9 @@
     "google-auth-library": "^6.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.4",
-    "morgan": "^1.10.0", 
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
