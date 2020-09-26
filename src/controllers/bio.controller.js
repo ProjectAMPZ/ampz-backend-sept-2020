@@ -8,7 +8,6 @@ import User from '../db/models/users.model';
 class BioController {
   /* eslint camelcase: 0 */
   /**
-
   /**
    * Update bio.
    * @param {Request} req - Response object.

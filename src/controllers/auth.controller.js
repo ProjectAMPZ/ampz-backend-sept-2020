@@ -203,9 +203,10 @@ class AuthController {
       }
 
       const condition = {
-        userId: user[0]._Id,
+        userId: user[0].id,
       };
-      const feature = await Feature.find(condition, (err) => {
+
+      const feature = await Feature.findOne(condition, (err) => {
         if (err) {
           // logger.error(err);
           // throw new Error('Error occured in db fetching feature');
@@ -231,7 +232,7 @@ class AuthController {
       });
 
       const token = await Helper.generateToken(
-        user[0]._id,
+        user[0].id,
         user[0].role,
         user[0].userName
       );
