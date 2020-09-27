@@ -24,7 +24,6 @@ class AchievementController {
         message: 'achievement created successfully',
       });
     } catch (err) {
-      // logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
