@@ -1,16 +1,16 @@
-import { OAuth2Client } from 'google-auth-library';
-import { config } from 'dotenv';
-import Auth from '../db/models/users.model';
-import Activation from '../db/models/accountActivation.model';
-import Feature from '../db/models/feature.model';
-import Experience from '../db/models/experience.model';
-import Association from '../db/models/association.model';
-import Achievement from '../db/models/achievement.model';
-import ResetPassword from '../db/models/resetPassword.model';
-import Helper from '../utils/user.utils';
-import AuthServices from '../services/auth.services';
-import sendEmail from '../utils/email.utils';
-// import logger from '../config/logger';
+import { OAuth2Client } from "google-auth-library";
+import { config } from "dotenv";
+import Auth from "../db/models/users.model";
+import Activation from "../db/models/accountActivation.model";
+import Feature from "../db/models/feature.model";
+import Experience from "../db/models/experience.model";
+import Association from "../db/models/association.model";
+import Achievement from "../db/models/achievement.model";
+import ResetPassword from "../db/models/resetPassword.model";
+import Helper from "../utils/user.utils";
+import AuthServices from "../services/auth.services";
+import sendEmail from "../utils/email.utils";
+
 config();
 
 /**
@@ -80,7 +80,7 @@ class AuthController {
             passcode: code,
           };
           const message = `Your account activation code is <b>${code}<b/>`;
-          sendEmail(createdUser.email, 'Account Activation', message);
+          sendEmail(createdUser.email, "Account Activation", message);
           Activation.create({ ...activationRecord }, (err) => {
             if (err) {
               // logger.error(err);
@@ -88,16 +88,16 @@ class AuthController {
             }
 
             return res.status(201).json({
-              status: 'success',
-              message: 'Account activation code has been sent to your email',
+              status: "success",
+              message: "Account activation code has been sent to your email",
             });
           });
         }
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error creating new user',
+        status: "500 Internal server error",
+        error: "Error creating new user",
       });
     }
   }
@@ -154,7 +154,7 @@ class AuthController {
         user.userName
       );
       return res.status(200).json({
-        status: 'success',
+        status: "success",
         data: {
           token,
           user,
@@ -166,8 +166,8 @@ class AuthController {
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error activating user account',
+        status: "500 Internal server error",
+        error: "Error activating user account",
       });
     }
   }
@@ -185,18 +185,18 @@ class AuthController {
       const user = await AuthServices.emailExist(email, res);
       if (!user.length) {
         return res.status(401).json({
-          status: '401 Unauthorized',
-          error: 'Invalid email address',
+          status: "401 Unauthorized",
+          error: "Invalid email address",
         });
       }
       const confirmPassword = await Helper.verifyPassword(
         password,
-        user[0].password || 'google'
+        user[0].password || "google"
       );
       if (!confirmPassword) {
         return res.status(401).json({
-          status: '401 Unauthorized',
-          error: 'Invalid password',
+          status: "401 Unauthorized",
+          error: "Invalid password",
         });
       }
 
@@ -235,7 +235,7 @@ class AuthController {
         user[0].userName
       );
       return res.status(200).json({
-        status: 'success',
+        status: "success",
         data: {
           token,
           user: {
@@ -249,8 +249,8 @@ class AuthController {
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error Logging in user',
+        status: "500 Internal server error",
+        error: "Error Logging in user",
       });
     }
   }
@@ -315,7 +315,7 @@ class AuthController {
             myUser[0].userName
           );
           return res.status(200).json({
-            status: 'success',
+            status: "success",
             data: {
               token: userToken,
               user: {
@@ -381,7 +381,7 @@ class AuthController {
                   createdUser.userName
                 );
                 return res.status(200).json({
-                  status: 'success',
+                  status: "success",
                   data: {
                     token: userToken,
                     user: createdUser,
@@ -398,8 +398,8 @@ class AuthController {
       }
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error logging in user through google',
+        status: "500 Internal server error",
+        error: "Error logging in user through google",
       });
     }
   }
@@ -435,15 +435,15 @@ class AuthController {
         }
       });
       const message = `To reset your password use this code:${token}, the code expires in 24 hours`;
-      sendEmail(email, 'Password Reset', message);
+      sendEmail(email, "Password Reset", message);
       return res.status(201).json({
-        status: 'success',
-        message: 'Password reset link sent to your mail',
+        status: "success",
+        message: "Password reset link sent to your mail",
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error reseting password',
+        status: "500 Internal server error",
+        error: "Error reseting password",
       });
     }
   }
@@ -470,13 +470,13 @@ class AuthController {
       });
 
       return res.status(200).json({
-        status: 'success',
-        message: 'Password changed successfully',
+        status: "success",
+        message: "Password changed successfully",
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error changing password',
+        status: "500 Internal server error",
+        error: "Error changing password",
       });
     }
   }
@@ -496,21 +496,21 @@ class AuthController {
         passcode: code,
       };
       const message = `Your account activation code is <b>${code}<b/>`;
-      sendEmail(email, 'Account Activation', message);
+      sendEmail(email, "Account Activation", message);
       Activation.findOneAndUpdate({ email }, { ...newData }, (err) => {
         if (err) {
           // logger.error(err);
           // throw new Error('Error occured in db during creation of activation record');
         }
         return res.status(201).json({
-          status: 'success',
-          message: 'Account activation code has been sent to your email',
+          status: "success",
+          message: "Account activation code has been sent to your email",
         });
       });
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error resending verification code',
+        status: "500 Internal server error",
+        error: "Error resending verification code",
       });
     }
   }
@@ -532,26 +532,26 @@ class AuthController {
 
         const feature = await Feature.findOne(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching feature');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching feature');
           }
         });
         const experience = await Experience.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching experience');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching experience');
           }
         });
         const association = await Association.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching association');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching association');
           }
         });
         const achievement = await Achievement.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching achievement');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching achievement');
           }
         });
 
@@ -561,7 +561,7 @@ class AuthController {
           user[0].userName
         );
         return res.status(200).json({
-          status: 'success',
+          status: "success",
           data: {
             token,
             user: {
@@ -576,8 +576,8 @@ class AuthController {
       }
     } catch (err) {
       return res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error Logging in user',
+        status: "500 Internal server error",
+        error: "Error Logging in user",
       });
     }
   }

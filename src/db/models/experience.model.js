@@ -7,34 +7,27 @@ const ExperienceSchema = new mongoose.Schema({
   },
   teamName: {
     type: String,
-    required: true,
   },
   competitionType: {
     type: String,
-    required: true,
   },
   startMonth: {
     type: String,
-    required: true,
   },
   startYear: {
     type: String,
-    required: true,
   },
   endMonth: {
     type: String,
-    required: true,
   },
   endYear: {
     type: String,
-    required: true,
   },
   active: {
     type: Boolean,
   },
   keyAchievements: {
     type: String,
-    required: true,
   },
   createdAt: {
     type: Date,
