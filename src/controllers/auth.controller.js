@@ -182,7 +182,7 @@ class AuthController {
   static async login(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await AuthServices.emailExist(email, res);  
+      const user = await AuthServices.emailExist(email, res);
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
@@ -319,7 +319,7 @@ class AuthController {
             data: {
               token: userToken,
               user: {
-                ...myUser[0]._doc
+                ...myUser[0]._doc,
               },
               feature,
               experience,
