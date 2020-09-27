@@ -6,6 +6,7 @@ import PasswordResetValidator from '../validations/auth/resetPassword.validator'
 import SocialLoginValidator from '../validations/auth/socialLogin.validator';
 import AccountActivationValidator from '../validations/auth/accountActivation.validator';
 import ResendVerificationValidator from '../validations/auth/resendVerificationCode.validator';
+import verifyToken from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -50,5 +51,7 @@ router.post('/change_password',
   PasswordResetValidator.myValidationResult,
   PasswordResetValidator.verifyPasscode,
   AuthController.changePassword);
+
+router.get('/load_user', verifyToken, AuthController.loadUser);
 
 export default router;

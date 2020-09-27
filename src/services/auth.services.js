@@ -18,6 +18,21 @@ export default {
     }
   },
 
+  async userIdExist(id, res) {
+    try {
+      const condition = {
+        _id: id,
+      };
+      const user = await Auth.find(condition);
+      return user;
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error checking for user id',
+      });
+    }
+  },
+
   async usernameExist(username, res) {
     try {
       const condition = {
