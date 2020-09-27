@@ -19,7 +19,7 @@ class FeatureController {
     try {
       req.body.userId = req.data.id;
 
-      await (await Feature.create(req.body)).populate('userId');
+      await Feature.create(req.body);
       return res
         .status(201)
         .json({ status: 'success', message: 'feature created successfully' });

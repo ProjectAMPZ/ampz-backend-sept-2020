@@ -122,9 +122,9 @@ class AuthController {
         }
       });
       const condition = {
-        userId: user._Id,
+        userId: user.id,
       };
-      const feature = await Feature.find(condition, (err) => {
+      const feature = await Feature.findOne(condition, (err) => {
         if (err) {
           // logger.error(err);
           // throw new Error('Error occured in db fetching feature');
@@ -149,7 +149,7 @@ class AuthController {
         }
       });
       const token = await Helper.generateToken(
-        user._id,
+        user.id,
         user.role,
         user.userName
       );
@@ -182,18 +182,16 @@ class AuthController {
   static async login(req, res) {
     try {
       const { email, password } = req.body;
-      const user = await AuthServices.emailExist(email, res);
-
+      const user = await AuthServices.emailExist(email, res);  
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
           error: 'Invalid email address',
         });
       }
-
       const confirmPassword = await Helper.verifyPassword(
         password,
-        user[0].password
+        user[0].password || 'google'
       );
       if (!confirmPassword) {
         return res.status(401).json({
@@ -285,9 +283,9 @@ class AuthController {
         const myUser = await AuthServices.emailExist(payload.email, res);
         if (myUser.length) {
           const condition = {
-            userId: myUser[0]._Id,
+            userId: myUser[0].id,
           };
-          const feature = await Feature.find(condition, (err) => {
+          const feature = await Feature.findOne(condition, (err) => {
             if (err) {
               // logger.error(err);
               // throw new Error('Error occured in db fetching feature');
@@ -321,19 +319,7 @@ class AuthController {
             data: {
               token: userToken,
               user: {
-                _id: myUser[0]._id,
-                fullName: myUser[0].fullName,
-                userName: myUser[0].userName,
-                email: myUser[0].email,
-                verified: myUser[0].verified,
-                isActivated: myUser[0].isActivated,
-                gender: myUser[0].gender,
-                country: myUser[0].country,
-                phoneNumber: myUser[0].phoneNumber,
-                dayOfBirth: myUser[0].dayOfBirth,
-                monthOfBirth: myUser[0].monthOfBirth,
-                yearOfBirth: myUser[0].yearOfBirth,
-                role: myUser[0].role,
+                ...myUser[0]._doc
               },
               feature,
               experience,
@@ -342,7 +328,6 @@ class AuthController {
             },
           });
         }
-
         const user = await AuthServices.googleIdExist(payload.sub, res);
         // if the user dont have existing account
         if (!user.length) {
@@ -363,10 +348,10 @@ class AuthController {
               });
 
               const condition = {
-                userId: createdUser._Id,
+                userId: createdUser.id,
               };
               (async () => {
-                const feature = await Feature.find(condition, (err) => {
+                const feature = await Feature.findOne(condition, (err) => {
                   if (err) {
                     // logger.error(err);
                     // throw new Error('Error occured in db fetching feature');
@@ -391,7 +376,7 @@ class AuthController {
                   }
                 });
                 const userToken = await Helper.generateToken(
-                  createdUser._id,
+                  createdUser.id,
                   createdUser.role,
                   createdUser.userName
                 );
@@ -408,66 +393,6 @@ class AuthController {
                 });
               })();
             }
-          });
-        } else {
-          // if the user has previously created account through google
-          const condition = {
-            userId: user[0]._Id,
-          };
-          const feature = await Feature.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching feature');
-            }
-          });
-          const experience = await Experience.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching experience');
-            }
-          });
-          const association = await Association.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching association');
-            }
-          });
-          const achievement = await Achievement.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching achievement');
-            }
-          });
-
-          const userToken = await Helper.generateToken(
-            user[0]._id,
-            user[0].role,
-            user[0].userName
-          );
-          return res.status(200).json({
-            status: 'success',
-            data: {
-              token: userToken,
-              user: {
-                _id: user[0]._id,
-                fullName: user[0].fullName,
-                userName: user[0].userName,
-                email: user[0].email,
-                verified: user[0].verified,
-                isActivated: user[0].isActivated,
-                gender: user[0].gender,
-                country: user[0].country,
-                phoneNumber: user[0].phoneNumber,
-                dayOfBirth: user[0].dayOfBirth,
-                monthOfBirth: user[0].monthOfBirth,
-                yearOfBirth: user[0].yearOfBirth,
-                role: user[0].role,
-              },
-              feature,
-              experience,
-              association,
-              achievement,
-            },
           });
         }
       }
