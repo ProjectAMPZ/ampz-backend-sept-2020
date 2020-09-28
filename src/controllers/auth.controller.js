@@ -514,5 +514,72 @@ class AuthController {
       });
     }
   }
+
+  /**
+   * Load user.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async loadUser(req, res) {
+    try {
+      const user = await AuthServices.userIdExist(req.data.id, res);
+      if (user.length) {
+        const condition = {
+          userId: user[0].id,
+        };
+
+        const feature = await Feature.findOne(condition, (err) => {
+          if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching feature');
+          }
+        });
+        const experience = await Experience.find(condition, (err) => {
+          if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching experience');
+          }
+        });
+        const association = await Association.find(condition, (err) => {
+          if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching association');
+          }
+        });
+        const achievement = await Achievement.find(condition, (err) => {
+          if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching achievement');
+          }
+        });
+
+        const token = await Helper.generateToken(
+          user[0].id,
+          user[0].role,
+          user[0].userName
+        );
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            token,
+            user: {
+              ...user[0]._doc,
+            },
+            feature,
+            experience,
+            association,
+            achievement,
+          },
+        });
+      }
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error Logging in user',
+      });
+    }
+  }
 }
 export default AuthController;

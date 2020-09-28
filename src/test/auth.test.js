@@ -97,6 +97,8 @@ const wrongPasscode = {
   password: 'uuiyuiy',
 };
 
+let myToken;
+
 before((done) => {
   Activation.deleteMany({ email: 'okwuosachijioke1@gmail.com' }, (err) => {
     if (err) {
@@ -308,6 +310,17 @@ describe('Auth Route Endpoints', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       AuthService.usernameExist(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+    it('Should fake server error on user id exisit function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthService.userIdExist(req, res);
       res.status.should.have.callCount(0);
       done();
     });
@@ -644,16 +657,75 @@ describe('Auth Route Endpoints', () => {
           done();
         });
     });
-    // it('Should fake server error', (done) => {
-    //   const req = { body: {} };
-    //   const res = {
-    //     status() { },
-    //     send() { }
-    //   };
-    //   sinon.stub(res, 'status').returnsThis();
-    //   AuthController.resendVerificationCode(req, res);
-    //   (res.status).should.have.callCount(0);
-    //   done();
-    // });
+  });
+  describe('GET api/v1/auth/load_user', () => {
+    before((done) => {
+      Auth.find(
+        { email: 'okwuosachijioke1@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              myToken = await Helper.generateToken(
+                myuser[0].id,
+                myuser[0].role,
+                myuser[0].userName
+              );
+            })();
+            done();
+          }
+        }
+      );
+    });
+    it('should not load a user if there is no token', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/load_user')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should not load a user if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/load_user')
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should load a user if valid token is supplied', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/auth/load_user')
+        .set('token', myToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthController.loadUser(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
   });
 });
