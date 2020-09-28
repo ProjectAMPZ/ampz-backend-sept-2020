@@ -1,5 +1,5 @@
-import Feature from '../db/models/feature.model';
-import logger from '../config';
+import Feature from "../db/models/feature.model";
+import logger from "../config";
 /**
  *Contains Feature Controller
  *
@@ -7,27 +7,6 @@ import logger from '../config';
  */
 class FeatureController {
   /* eslint camelcase: 0 */
-
-  /**
-   * create/update a user Feature.
-   * @param {Request} req - Response object.
-   * @param {Response} res - The payload.
-   * @memberof FeatureController
-   * @returns {JSON} - A JSON success response.
-   */
-  static async createFeature(req, res) {
-    try {
-      req.body.userId = req.data.id;
-
-      await (await Feature.create(req.body)).populate('userId');
-      return res
-        .status(201)
-        .json({ status: 'success', message: 'feature created successfully' });
-    } catch (err) {
-      logger.error(err.message);
-      res.status(500).json({ status: 'error', error: 'server error' });
-    }
-  }
 
   /**
    * update feature.
@@ -45,7 +24,7 @@ class FeatureController {
       if (!feature) {
         return res
           .status(404)
-          .json({ status: '404 Not Found', message: 'feature not found' });
+          .json({ status: "404 Not Found", message: "feature not found" });
       }
 
       await Feature.findOneAndUpdate(req.params.userId, req.body, {
@@ -54,12 +33,12 @@ class FeatureController {
 
       res
         .status(200)
-        .json({ status: 'success', message: 'feature updated successfully' });
+        .json({ status: "success", message: "feature updated successfully" });
     } catch (err) {
-      // logger.error(err.message);
+      logger.error(err.message);
       res.status(500).json({
-        status: '500 Internal server error',
-        error: 'Error updating feature',
+        status: "500 Internal server error",
+        error: "Error updating feature",
       });
     }
   }
