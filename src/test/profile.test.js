@@ -7,26 +7,23 @@ import app from '../index';
 import Helper from '../utils/user.utils';
 import BioController from '../controllers/bio.controller';
 import FeatureController from '../controllers/feature.controller';
+import Auth from '../db/models/users.model';
 
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
 
-const feature = {
-  sport: 'Football',
+const updateFeature = {
+  sport: 'Baseball',
   preferedArm: 'Right',
   preferedFoot: 'Right',
-  position: 'CM',
-  height: '5.8',
+  position: 'DM',
+  height: '5.4',
   weight: '65',
 };
 
-const updateFeature = {
-  sport: 'ShinaBall',
-};
-
 const incompleteFeature = {
-  sport: 'Football',
+  sport: 'Baseball',
   preferedArm: 'Right',
   preferedFoot: 'Right',
 };
@@ -37,6 +34,7 @@ const role = {
 
 const emptyRole = {};
 
+let userId;
 let token;
 (async () => {
   token = await Helper.generateToken(
@@ -60,7 +58,6 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
     it('should not update profile if the token is invalid', (done) => {
       chai
         .request(app)
@@ -74,7 +71,6 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
     it('should not upload image if the file type is invalid', (done) => {
       chai
         .request(app)
@@ -103,7 +99,6 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
     it('should upload image and update profile if token is valid', (done) => {
       chai
         .request(app)
@@ -132,7 +127,6 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
     it('Should fake server error', (done) => {
       const req = { body: {} };
       const res = {
@@ -145,7 +139,6 @@ describe('Profile Route Endpoints', () => {
       done();
     });
   });
-
   describe('PUT api/v1/profile/bio/role', () => {
     it('should not update role if the user does not supply a token', (done) => {
       chai
@@ -216,12 +209,20 @@ describe('Profile Route Endpoints', () => {
       done();
     });
   });
-
-  describe('POST api/v1/profile/feature', () => {
-    it('should not create feature if the user does not supply a token', (done) => {
+  describe('PUT api/v1/profile/feature/:userId', () => {
+    before((done) => {
+      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
+        if (myuser) {
+          userId = myuser._id;
+          done();
+        }
+      });
+    });
+    it('should not update feature if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/feature')
+        .put(`/api/v1/profile/feature/${userId}`)
+        .send(updateFeature)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -230,12 +231,12 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
-    it('should not create feature if the token is invalid', (done) => {
+    it('should not update feature if the token is invalid', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/feature')
+        .put(`/api/v1/profile/feature/${userId}`)
         .set('token', 'invalid token')
+        .send(updateFeature)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -244,11 +245,10 @@ describe('Profile Route Endpoints', () => {
           done();
         });
     });
-
-    it('should not create feature if feature is incomplete', (done) => {
+    it('should not update feature if user supplies incomplete information', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/feature')
+        .put(`/api/v1/profile/feature/${userId}`)
         .set('token', token)
         .send(incompleteFeature)
         .end((err, res) => {
@@ -258,66 +258,6 @@ describe('Profile Route Endpoints', () => {
           res.body.should.have
             .property('error')
             .eql('Your request contains invalid parameters');
-          done();
-        });
-    });
-
-    it('should create feature if feature is complete', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/profile/feature')
-        .set('token', token)
-        .send(feature)
-        .end((err, res) => {
-          res.should.have.status(201);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have
-            .property('message')
-            .eql('feature created successfully');
-          done();
-        });
-    });
-
-    it('Should fake server error', (done) => {
-      const req = { body: {} };
-      const res = {
-        status() {},
-        send() {},
-      };
-      sinon.stub(res, 'status').returnsThis();
-      FeatureController.createFeature(req, res);
-      res.status.should.have.callCount(1);
-      done();
-    });
-  });
-
-  describe('PUT api/v1/profile/feature/5f70bcd239d65a30e0129b2a', () => {
-    it('should not update feature if the user does not supply a token', (done) => {
-      chai
-        .request(app)
-        .put('/api/v1/profile/feature/5f70bcd239d65a30e0129b2a')
-        .send(updateFeature)
-        .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
-          done();
-        });
-    });
-
-    it('should not update feature if the token is invalid', (done) => {
-      chai
-        .request(app)
-        .put('/api/v1/profile/feature/5f70bcd239d65a30e0129b2a')
-        .set('token', 'invalid token')
-        .send(updateFeature)
-        .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
           done();
         });
     });
@@ -338,7 +278,7 @@ describe('Profile Route Endpoints', () => {
     it('should update feature if feature is found', (done) => {
       chai
         .request(app)
-        .put('/api/v1/profile/feature/5f70bcd239d65a30e0129b2a')
+        .put(`/api/v1/profile/feature/${userId}`)
         .set('token', token)
         .send(updateFeature)
         .end((err, res) => {

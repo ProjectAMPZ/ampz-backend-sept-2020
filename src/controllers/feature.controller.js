@@ -9,27 +9,6 @@ class FeatureController {
   /* eslint camelcase: 0 */
 
   /**
-   * create/update a user Feature.
-   * @param {Request} req - Response object.
-   * @param {Response} res - The payload.
-   * @memberof FeatureController
-   * @returns {JSON} - A JSON success response.
-   */
-  static async createFeature(req, res) {
-    try {
-      req.body.userId = req.data.id;
-
-      await (await Feature.create(req.body)).populate('userId');
-      return res
-        .status(201)
-        .json({ status: 'success', message: 'feature created successfully' });
-    } catch (err) {
-      logger.error(err.message);
-      res.status(500).json({ status: 'error', error: 'server error' });
-    }
-  }
-
-  /**
    * update feature.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
@@ -56,7 +35,7 @@ class FeatureController {
         .status(200)
         .json({ status: 'success', message: 'feature updated successfully' });
     } catch (err) {
-      // logger.error(err.message);
+      logger.error(err.message);
       res.status(500).json({
         status: '500 Internal server error',
         error: 'Error updating feature',

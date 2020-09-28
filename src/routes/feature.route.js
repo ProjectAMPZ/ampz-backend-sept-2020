@@ -5,14 +5,12 @@ import verifyToken from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post(
-  '/feature',
+router.put(
+  '/feature/:userId',
   verifyToken,
   FeatureValidator.validateData(),
   FeatureValidator.ValidationResult,
-  FeatureController.createFeature
+  FeatureController.updateFeature
 );
-
-router.put('/feature/:userId', verifyToken, FeatureController.updateFeature);
 
 export default router;
