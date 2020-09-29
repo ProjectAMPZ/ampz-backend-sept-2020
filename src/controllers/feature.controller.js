@@ -1,5 +1,5 @@
-import Feature from "../db/models/feature.model";
-import logger from "../config";
+import Feature from '../db/models/feature.model';
+import logger from '../config';
 /**
  *Contains Feature Controller
  *
@@ -24,21 +24,21 @@ class FeatureController {
       if (!feature) {
         return res
           .status(404)
-          .json({ status: "404 Not Found", message: "feature not found" });
+          .json({ status: '404 Not Found', message: 'feature not found' });
       }
 
-      await Feature.findOneAndUpdate(req.params.userId, req.body, {
+      await Feature.findOneAndUpdate({ userId: req.data.id }, req.body, {
         new: true,
       });
 
       res
         .status(200)
-        .json({ status: "success", message: "feature updated successfully" });
+        .json({ status: 'success', message: 'feature updated successfully' });
     } catch (err) {
       logger.error(err.message);
       res.status(500).json({
-        status: "500 Internal server error",
-        error: "Error updating feature",
+        status: '500 Internal server error',
+        error: 'Error updating feature',
       });
     }
   }
