@@ -6,7 +6,7 @@ import verifyToken from "../middlewares/auth.middleware";
 const router = Router();
 
 router.put(
-  "/feature/:userId",
+  "/feature",
   verifyToken,
   FeatureValidator.validateData(),
   FeatureValidator.ValidationResult,
