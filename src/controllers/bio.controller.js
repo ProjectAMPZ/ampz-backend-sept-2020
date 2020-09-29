@@ -17,11 +17,36 @@ class BioController {
    */
   static async updateBio(req, res) {
     try {
-      await User.findOneAndUpdate({ _id: req.data.id }, req.body);
+      await User.findOneAndUpdate({ _id: req.data.id }, req.body, {
+        new: true,
+      });
 
       res
         .status(200)
         .json({ status: 'success', message: 'bio updated successfully' });
+    } catch (err) {
+      // logger.error(err.message);
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
+
+  /**
+   * Update bio.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof ProfileController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async uploadImage(req, res) {
+    try {
+      await User.findOneAndUpdate({ _id: req.data.id }, req.body);
+      res.status(200).json({
+        status: 'success',
+        message: 'profile picture updated successfully',
+      });
     } catch (err) {
       // logger.error(err.message);
       res.status(500).json({

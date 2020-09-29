@@ -35,10 +35,48 @@ const upload = multer({
   }),
 });
 
-const singleUpload = upload.array('image', 2);
+const singlePhotoUpload = upload.single('image');
 
-const uploadFile = async (req, res, next) => {
-  await singleUpload(req, res, (err) => {
+export const coverPhotoUpload = async (req, res, next) => {
+  await singlePhotoUpload(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({
+        status: '400 Invalid Request',
+        error: err.message,
+      });
+    }
+
+    let coverphoto;
+
+    (async () => {
+      coverphoto = req.body.coverPhotoUrl;
+
+      const s4 = new aws.S3(awsCredentials);
+
+      if (coverphoto) {
+        const coverPhotoKey = coverphoto.substring(53);
+        await s4.deleteObject(
+          {
+            Bucket: 'ampz-backend-sept',
+            Key: coverPhotoKey,
+          },
+          () => {
+            // if (err) {
+            //   // console.log(err);
+            // } else {
+            //   // console.log(data);
+            // }
+          }
+        );
+      }
+    })();
+    req.body.coverPhotoUrl = req.file.location;
+    next();
+  });
+};
+
+export const profilePhotoUpload = async (req, res, next) => {
+  await singlePhotoUpload(req, res, (err) => {
     if (err) {
       return res.status(400).json({
         status: '400 Invalid Request',
@@ -47,11 +85,9 @@ const uploadFile = async (req, res, next) => {
     }
 
     let profilephoto;
-    let coverphoto;
 
     (async () => {
       profilephoto = req.body.profilePhotoUrl;
-      coverphoto = req.body.coverPhotoUrl;
 
       const s4 = new aws.S3(awsCredentials);
       if (profilephoto) {
@@ -71,28 +107,8 @@ const uploadFile = async (req, res, next) => {
           }
         );
       }
-
-      if (coverphoto) {
-        const coverPhotoKey = coverphoto.substring(53);
-        await s4.deleteObject(
-          {
-            Bucket: 'ampz-backend-sept',
-            Key: coverPhotoKey,
-          },
-          () => {
-            // if (err) {
-            //   // console.log(err);
-            // } else {
-            //   // console.log(data);
-            // }
-          }
-        );
-      }
     })();
-    req.body.profilePhotoUrl = req.files[0].location;
-    req.body.coverPhotoUrl = req.files[1].location;
+    req.body.profilePhotoUrl = req.file.location;
     next();
   });
 };
-
-export default uploadFile;
