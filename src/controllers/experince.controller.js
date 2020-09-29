@@ -1,54 +1,55 @@
-import Achievement from '../db/models/achievement.model';
-import logger from '../config';
+import Experience from '../db/models/experience.model';
+// import logger from "../config";
 /**
- *Contains Achievement Controller
+ *Contains Experience Controller
  *
- * @class AchievementController
+ * @class ExperienceController
  */
-class AchievementController {
+class ExperienceController {
   /* eslint camelcase: 0 */
 
   /**
-   * Create profile achievement.
+   * Create profile experience.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof AuthController
    * @returns {JSON} - A JSON success response.
    */
-  static async createAchievement(req, res) {
+  static async createExperience(req, res) {
     req.body.userId = req.data.id;
     try {
-      await Achievement.create(req.body);
+      await Experience.create(req.body);
       res.status(201).json({
         status: 'success',
-        message: 'achievement created successfully',
+        message: 'experience created successfully',
       });
     } catch (err) {
+      // logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 
   /**
-   * update achievement.
+   * update experience.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof postController
    * @returns {JSON} - A JSON success response.
    */
-  static async updateAchievement(req, res) {
+  static async updateExperience(req, res) {
     try {
-      const achievement = await Achievement.findById({
-        _id: req.params.achievementId,
+      const experience = await Experience.findById({
+        _id: req.params.experienceId,
       });
 
-      if (!achievement) {
+      if (!experience) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'achievement not found' });
+          .json({ status: 'error', message: 'experience not found' });
       }
 
-      await Achievement.findOneAndUpdate(
-        { _id: req.params.achievementId },
+      await Experience.findOneAndUpdate(
+        { _id: req.params.experienceId },
         req.body,
         {
           new: true,
@@ -57,10 +58,9 @@ class AchievementController {
 
       res.status(200).json({
         status: 'success',
-        message: 'achievement updated successfully',
+        message: 'experience updated successfully',
       });
     } catch (err) {
-      logger.error(err.message);
       res.status(500).json({
         status: 'error',
         error: 'Server error',
@@ -69,29 +69,29 @@ class AchievementController {
   }
 
   /**
-   * Delete Achievement.
+   * Delete Experience.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof AuthController
    * @returns {JSON} - A JSON success response.
    */
-  static async deleteAchievement(req, res) {
+  static async deleteExperience(req, res) {
     try {
-      const achievement = await Achievement.findById({
-        _id: req.params.achievementId,
+      const experience = await Experience.findById({
+        _id: req.params.experienceId,
       });
 
-      if (!achievement) {
+      if (!experience) {
         return res
           .status(404)
-          .json({ status: '404 Not Found', error: 'achievement not found' });
+          .json({ status: '404 Not Found', error: 'experience not found' });
       }
 
-      await achievement.remove();
+      await experience.remove();
 
       res.status(200).json({
         status: 'success',
-        message: 'achievement deleted successfully',
+        message: 'experience deleted successfully',
       });
     } catch (err) {
       res.status(500).json({
@@ -102,4 +102,4 @@ class AchievementController {
   }
 }
 
-export default AchievementController;
+export default ExperienceController;

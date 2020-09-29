@@ -10,7 +10,7 @@ import ResetPassword from '../db/models/resetPassword.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
-// import logger from '../config/logger';
+
 config();
 
 /**
@@ -532,26 +532,26 @@ class AuthController {
 
         const feature = await Feature.findOne(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching feature');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching feature');
           }
         });
         const experience = await Experience.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching experience');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching experience');
           }
         });
         const association = await Association.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching association');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching association');
           }
         });
         const achievement = await Achievement.find(condition, (err) => {
           if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching achievement');
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching achievement');
           }
         });
 
