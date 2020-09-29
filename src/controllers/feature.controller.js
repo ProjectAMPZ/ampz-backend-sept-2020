@@ -18,7 +18,7 @@ class FeatureController {
   static async updateFeature(req, res) {
     try {
       const feature = await Feature.findOne({
-        userId: req.params.userId,
+        userId: req.data.id,
       });
 
       if (!feature) {

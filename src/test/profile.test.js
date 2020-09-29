@@ -34,8 +34,9 @@ const role = {
 
 const emptyRole = {};
 
-let userId;
 let token;
+let featureToken;
+
 (async () => {
   token = await Helper.generateToken(
     "5f6afb3f57964d34ac4f38b5",
@@ -209,11 +210,17 @@ describe("Profile Route Endpoints", () => {
       done();
     });
   });
-  describe("PUT api/v1/profile/feature/:userId", () => {
+  describe("PUT api/v1/profile/feature", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
         if (myuser) {
-          userId = myuser._id;
+          (async () => {
+            featureToken = await Helper.generateToken(
+              myuser._id,
+              myuser._role,
+              myuser.userName
+            );
+          })();
           done();
         }
       });
@@ -221,7 +228,7 @@ describe("Profile Route Endpoints", () => {
     it("should not update feature if the user does not supply a token", (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/feature/${userId}`)
+        .put(`/api/v1/profile/feature`)
         .send(updateFeature)
         .end((err, res) => {
           res.should.have.status(401);
@@ -234,7 +241,7 @@ describe("Profile Route Endpoints", () => {
     it("should not update feature if the token is invalid", (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/feature/${userId}`)
+        .put(`/api/v1/profile/feature`)
         .set("token", "invalid token")
         .send(updateFeature)
         .end((err, res) => {
@@ -248,8 +255,8 @@ describe("Profile Route Endpoints", () => {
     it("should not update feature if user supplies incomplete information", (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/feature/${userId}`)
-        .set("token", token)
+        .put(`/api/v1/profile/feature`)
+        .set("token", featureToken)
         .send(incompleteFeature)
         .end((err, res) => {
           res.should.have.status(400);
@@ -264,7 +271,7 @@ describe("Profile Route Endpoints", () => {
     it("should not update feature if feature is not found", (done) => {
       chai
         .request(app)
-        .put("/api/v1/profile/feature/5f70bcd239d65a30e0129b2b")
+        .put("/api/v1/profile/feature")
         .set("token", token)
         .send(updateFeature)
         .end((err, res) => {
@@ -278,8 +285,8 @@ describe("Profile Route Endpoints", () => {
     it("should update feature if feature is found", (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/feature/${userId}`)
-        .set("token", token)
+        .put(`/api/v1/profile/feature`)
+        .set("token", featureToken)
         .send(updateFeature)
         .end((err, res) => {
           res.should.have.status(200);
