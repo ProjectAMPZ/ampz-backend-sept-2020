@@ -1,12 +1,12 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import Sinonchai from 'sinon-chai';
-import sinon from 'sinon';
-import app from '../index';
-import Helper from '../utils/user.utils';
-import Auth from '../db/models/users.model';
-import Association from '../db/models/association.model';
-import AssociationController from '../controllers/association.contoller';
+import chai from "chai";
+import chaiHttp from "chai-http";
+import Sinonchai from "sinon-chai";
+import sinon from "sinon";
+import app from "../index";
+import Helper from "../utils/user.utils";
+import Auth from "../db/models/users.model";
+import Association from "../db/models/association.model";
+import AssociationController from "../controllers/association.contoller";
 
 chai.should();
 chai.use(Sinonchai);
@@ -17,40 +17,37 @@ let associationUserId;
 let associationId;
 
 const partiallyconmpleteAssociation = {
-  institutionName: 'TEST institution',
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
-  issueMonth: 'TEST issueMonth',
-  issueYear: 'TEST issueYear',
+  associationType: "TEST associationType",
+  institutionName: "TEST institutionName",
+  issueMonth: "TEST issueMonth",
+  issueYear: "TEST issueYear",
   active: true,
-  description: 'TEST description',
+  description: "TEST description",
 };
 
 const conmpleteAssociation = {
-  institutionName: 'TEST institution',
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
-  issueMonth: 'TEST issueMonth',
-  issueYear: 'TEST issueYear',
-  expiryMonth: 'TEST expiryMonth',
-  expiryYear: 'TEST expiryYear',
-  description: 'TEST description',
+  associationType: "TEST associationType",
+  institutionName: "TEST institutionName",
+  issueMonth: "TEST issueMonth",
+  issueYear: "TEST issueYear",
+  expiryMonth: "TEST expiryMonth",
+  expiryYear: "TEST expiryYear",
+  description: "TEST description",
   active: true,
 };
 const incompleteAssociation = {
-  institutionName: 'TEST institution',
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
+  associationType: "TEST associationType",
+  institutionName: "TEST institutionName",
 };
 
 const updateExperience = {
-  institutionName: 'TEST institution',
+  associationType: "TEST associationType",
 };
 
-describe('Profile Association Route Endpoint', () => {
-  describe('POST api/v1/profile/association', () => {
+describe("Profile Association Route Endpoint", () => {
+  describe("POST api/v1/profile/association", () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationToken = await Helper.generateToken(
@@ -63,92 +60,92 @@ describe('Profile Association Route Endpoint', () => {
         }
       });
     });
-    it('should not create association if the user does not supply a token', (done) => {
+    it("should not create association if the user does not supply a token", (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/association')
+        .post("/api/v1/profile/association")
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error");
           done();
         });
     });
-    it('should not create association if the token is invalid', (done) => {
+    it("should not create association if the token is invalid", (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/association')
-        .set('token', 'invalid token')
+        .post("/api/v1/profile/association")
+        .set("token", "invalid token")
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error").eql("Access token is Invalid");
           done();
         });
     });
 
-    it('should not create association if association is incomplete', (done) => {
+    it("should not create association if association is incomplete", (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/association')
-        .set('token', associationToken)
+        .post("/api/v1/profile/association")
+        .set("token", associationToken)
         .send(incompleteAssociation)
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("400 Invalid Request");
           res.body.should.have
-            .property('error')
-            .eql('Your request contains invalid parameters');
+            .property("error")
+            .eql("Your request contains invalid parameters");
           done();
         });
     });
-    it('should create association if association is partiallycomplete', (done) => {
+    it("should create association if association is partiallycomplete", (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/association')
-        .set('token', associationToken)
+        .post("/api/v1/profile/association")
+        .set("token", associationToken)
         .send(partiallyconmpleteAssociation)
         .end((err, res) => {
           res.should.have.status(201);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("success");
+          res.body.should.have.property("data");
           done();
         });
     });
-    it('should create association if association is complete', (done) => {
+    it("should create association if association is complete", (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/association')
-        .set('token', associationToken)
+        .post("/api/v1/profile/association")
+        .set("token", associationToken)
         .send(conmpleteAssociation)
         .end((err, res) => {
           res.should.have.status(201);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("success");
+          res.body.should.have.property("data");
           done();
         });
     });
-    it('Should fake server error', (done) => {
+    it("Should fake server error", (done) => {
       const req = { body: {} };
       const res = {
         status() {},
         send() {},
       };
-      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(res, "status").returnsThis();
       AssociationController.createAssociation(req, res);
       res.status.should.have.callCount(0);
       done();
     });
   });
 
-  describe('PUT api/v1/profile/association/:associationId', () => {
+  describe("PUT api/v1/profile/association/:associationId", () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
@@ -162,14 +159,14 @@ describe('Profile Association Route Endpoint', () => {
       });
       Association.create(
         {
-          institutionName: 'TEST institution',
-          associationType: 'TEST associationType',
-          associationName: 'TEST associationName',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          expiryMonth: 'TEST expiryMonth',
-          expiryYear: 'TEST expiryYear',
-          description: 'TEST description',
+          institutionName: "TEST institution",
+          associationType: "TEST associationType",
+          institutionName: "TEST institutionName",
+          issueMonth: "TEST issueMonth",
+          issueYear: "TEST issueYear",
+          expiryMonth: "TEST expiryMonth",
+          expiryYear: "TEST expiryYear",
+          description: "TEST description",
           active: false,
           userId: associationUserId,
         },
@@ -179,78 +176,78 @@ describe('Profile Association Route Endpoint', () => {
         }
       );
     });
-    it('should not update association if the user does not supply a token', (done) => {
+    it("should not update association if the user does not supply a token", (done) => {
       chai
         .request(app)
         .put(`/api/v1/profile/association/${associationId}`)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error");
           done();
         });
     });
 
-    it('should not update association if the token is invalid', (done) => {
+    it("should not update association if the token is invalid", (done) => {
       chai
         .request(app)
         .put(`/api/v1/profile/association/${associationId}`)
-        .set('token', 'invalid token')
+        .set("token", "invalid token")
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error").eql("Access token is Invalid");
           done();
         });
     });
-    it('should not update association if association is not found', (done) => {
+    it("should not update association if association is not found", (done) => {
       chai
         .request(app)
-        .put('/api/v1/profile/association/5f723030f2a978274813c51d')
-        .set('token', associationToken)
+        .put("/api/v1/profile/association/5f723030f2a978274813c51d")
+        .set("token", associationToken)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(404);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('message').eql('association not found');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("error");
+          res.body.should.have.property("message").eql("association not found");
           done();
         });
     });
-    it('should update association if association is found', (done) => {
+    it("should update association if association is found", (done) => {
       chai
         .request(app)
         .put(`/api/v1/profile/association/${associationId}`)
-        .set('token', associationToken)
+        .set("token", associationToken)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("success");
+          res.body.should.have.property("data");
           done();
         });
     });
-    it('Should fake server error', (done) => {
+    it("Should fake server error", (done) => {
       const req = { body: {} };
       const res = {
         status() {},
         send() {},
       };
-      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(res, "status").returnsThis();
       AssociationController.updateAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
     });
   });
 
-  describe('GET api/v1/profile/association/:associationId', () => {
+  describe("GET api/v1/profile/association/:associationId", () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
@@ -264,12 +261,12 @@ describe('Profile Association Route Endpoint', () => {
       });
       Association.create(
         {
-          institutionName: 'TEST institution',
-          associationType: 'TEST associationType',
-          associationName: 'TEST associationName',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          description: 'TEST description',
+          institutionName: "TEST institution",
+          associationType: "TEST associationType",
+          institutionName: "TEST institutionName",
+          issueMonth: "TEST issueMonth",
+          issueYear: "TEST issueYear",
+          description: "TEST description",
           active: true,
           userId: associationUserId,
         },
@@ -279,74 +276,74 @@ describe('Profile Association Route Endpoint', () => {
         }
       );
     });
-    it('should not get association if the user does not supply a token', (done) => {
+    it("should not get association if the user does not supply a token", (done) => {
       chai
         .request(app)
         .get(`/api/v1/profile/association/${associationId}`)
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error");
           done();
         });
     });
 
-    it('should not get association if the token is invalid', (done) => {
+    it("should not get association if the token is invalid", (done) => {
       chai
         .request(app)
         .get(`/api/v1/profile/association/${associationId}`)
-        .set('token', 'invalid token')
+        .set("token", "invalid token")
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error").eql("Access token is Invalid");
           done();
         });
     });
-    it('should not get association if association is not found', (done) => {
+    it("should not get association if association is not found", (done) => {
       chai
         .request(app)
-        .get('/api/v1/profile/association/5f723030f2a978274813c51d')
-        .set('token', associationToken)
+        .get("/api/v1/profile/association/5f723030f2a978274813c51d")
+        .set("token", associationToken)
         .end((err, res) => {
           res.should.have.status(404);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('message').eql('association not found');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("error");
+          res.body.should.have.property("message").eql("association not found");
           done();
         });
     });
-    it('should get association if association is found', (done) => {
+    it("should get association if association is found", (done) => {
       chai
         .request(app)
         .get(`/api/v1/profile/association/${associationId}`)
-        .set('token', associationToken)
+        .set("token", associationToken)
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("success");
+          res.body.should.have.property("data");
           done();
         });
     });
-    it('Should fake server error', (done) => {
+    it("Should fake server error", (done) => {
       const req = { body: {} };
       const res = {
         status() {},
         send() {},
       };
-      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(res, "status").returnsThis();
       AssociationController.getAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
     });
   });
 
-  describe('DELETE api/v1/profile/association/:associationId', () => {
+  describe("DELETE api/v1/profile/association/:associationId", () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
@@ -360,14 +357,14 @@ describe('Profile Association Route Endpoint', () => {
       });
       Association.create(
         {
-          institutionName: 'TEST institution',
-          associationType: 'TEST associationType',
-          associationName: 'TEST associationName',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          expiryMonth: 'TEST expiryMonth',
-          expiryYear: 'TEST expiryYear',
-          description: 'TEST description',
+          institutionName: "TEST institution",
+          associationType: "TEST associationType",
+          institutionName: "TEST institutionName",
+          issueMonth: "TEST issueMonth",
+          issueYear: "TEST issueYear",
+          expiryMonth: "TEST expiryMonth",
+          expiryYear: "TEST expiryYear",
+          description: "TEST description",
           active: false,
           userId: associationUserId,
         },
@@ -377,66 +374,66 @@ describe('Profile Association Route Endpoint', () => {
         }
       );
     });
-    it('should not delete association if the user does not supply a token', (done) => {
+    it("should not delete association if the user does not supply a token", (done) => {
       chai
         .request(app)
         .delete(`/api/v1/profile/association/${associationId}`)
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error");
           done();
         });
     });
-    it('should not delete association if the token is invalid', (done) => {
+    it("should not delete association if the token is invalid", (done) => {
       chai
         .request(app)
         .delete(`/api/v1/profile/association/${associationId}`)
-        .set('token', 'invalid token')
+        .set("token", "invalid token")
         .end((err, res) => {
           res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("401 Unauthorized");
+          res.body.should.have.property("error").eql("Access token is Invalid");
           done();
         });
     });
-    it('should not delete association if association is not found', (done) => {
+    it("should not delete association if association is not found", (done) => {
       chai
         .request(app)
-        .delete('/api/v1/profile/association/5f70f3fee718fe18e4635e48')
-        .set('token', associationToken)
+        .delete("/api/v1/profile/association/5f70f3fee718fe18e4635e48")
+        .set("token", associationToken)
         .end((err, res) => {
           res.should.have.status(404);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('404 Not Found');
-          res.body.should.have.property('error').eql('association not found');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("404 Not Found");
+          res.body.should.have.property("error").eql("association not found");
           done();
         });
     });
-    it('should delete association if association is found', (done) => {
+    it("should delete association if association is found", (done) => {
       chai
         .request(app)
         .delete(`/api/v1/profile/association/${associationId}`)
-        .set('token', associationToken)
+        .set("token", associationToken)
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
+          res.body.should.be.an("object");
+          res.body.should.have.property("status").eql("success");
           res.body.should.have
-            .property('message')
-            .eql('association deleted successfully');
+            .property("message")
+            .eql("association deleted successfully");
           done();
         });
     });
-    it('Should fake server error', (done) => {
+    it("Should fake server error", (done) => {
       const req = { body: {} };
       const res = {
         status() {},
         send() {},
       };
-      sinon.stub(res, 'status').returnsThis();
+      sinon.stub(res, "status").returnsThis();
       AssociationController.deleteAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
