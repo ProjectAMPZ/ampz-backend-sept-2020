@@ -23,8 +23,8 @@ class ExperienceValidator {
       check("startMonth")
         .not()
         .isEmpty()
-        .withMessage('start month is required'),
-      check('startYear').not().isEmpty().withMessage('start Year is required'),
+        .withMessage("start month is required"),
+      check("startYear").not().isEmpty().withMessage("start Year is required"),
       check("keyAchievements")
         .not()
         .isEmpty()

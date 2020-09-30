@@ -8,7 +8,6 @@ import Auth from "../db/models/users.model";
 import Experience from "../db/models/experience.model";
 import ExperienceController from "../controllers/experince.controller";
 
-
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);

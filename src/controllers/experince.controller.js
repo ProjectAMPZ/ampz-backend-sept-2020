@@ -77,7 +77,6 @@ class ExperienceController {
    */
   static async getExperience(req, res) {
     try {
-
       let experience = await Experience.findById({
         _id: req.params.experienceId,
       });
@@ -85,10 +84,8 @@ class ExperienceController {
       if (!experience) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'experience not found' });
+          .json({ status: "error", message: "experience not found" });
       }
-
-    
 
       res.status(200).json({
         status: "success",
