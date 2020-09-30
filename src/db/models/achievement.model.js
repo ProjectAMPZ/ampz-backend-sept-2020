@@ -1,18 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const AchievementSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: "user",
   },
   title: {
     type: String,
     required: true,
     trim: true,
-  },
-  day: {
-    type: String,
-    required: true,
   },
   month: {
     type: String,
@@ -37,6 +33,6 @@ const AchievementSchema = new mongoose.Schema({
   },
 });
 
-const Achievement = mongoose.model('achievement', AchievementSchema);
+const Achievement = mongoose.model("achievement", AchievementSchema);
 
 export default Achievement;
