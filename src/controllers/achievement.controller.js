@@ -18,10 +18,10 @@ class AchievementController {
   static async createAchievement(req, res) {
     req.body.userId = req.data.id;
     try {
-      await Achievement.create(req.body);
+      const achievement = await Achievement.create(req.body);
       res.status(201).json({
         status: "success",
-        message: "achievement created successfully",
+        data: achievement,
       });
     } catch (err) {
       res.status(500).json({ status: "error", error: "Server error" });
@@ -37,7 +37,7 @@ class AchievementController {
    */
   static async updateAchievement(req, res) {
     try {
-      const achievement = await Achievement.findById({
+      let achievement = await Achievement.findById({
         _id: req.params.achievementId,
       });
 
@@ -47,7 +47,7 @@ class AchievementController {
           .json({ status: "error", message: "achievement not found" });
       }
 
-      await Achievement.findOneAndUpdate(
+      achievement = await Achievement.findOneAndUpdate(
         { _id: req.params.achievementId },
         req.body,
         {
@@ -57,10 +57,41 @@ class AchievementController {
 
       res.status(200).json({
         status: "success",
-        message: "achievement updated successfully",
+        data: achievement,
       });
     } catch (err) {
       logger.error(err.message);
+      res.status(500).json({
+        status: "error",
+        error: "Server error",
+      });
+    }
+  }
+
+  /**
+   * get single achievement.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getAchievement(req, res) {
+    try {
+      let achievement = await Association.findById({
+        _id: req.params.achievementId,
+      });
+
+      if (!achievement) {
+        return res
+          .status(404)
+          .json({ status: "error", message: "achievement not found" });
+      }
+
+      res.status(200).json({
+        status: "success",
+        data: achievement,
+      });
+    } catch (err) {
       res.status(500).json({
         status: "error",
         error: "Server error",
