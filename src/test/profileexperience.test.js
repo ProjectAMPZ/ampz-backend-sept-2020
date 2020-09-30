@@ -7,7 +7,7 @@ import Helper from "../utils/user.utils";
 import Auth from "../db/models/users.model";
 import Experience from "../db/models/experience.model";
 import ExperienceController from "../controllers/experince.controller";
-import logger from "../config";
+
 
 chai.should();
 chai.use(Sinonchai);
@@ -36,6 +36,7 @@ const conmpleteExperience = {
   keyAchievements: "awesome achievements",
   active: true,
 };
+
 const incompleteExperience = {
   teamName: "EXPEREINCE 2",
   competitionType: "another competition",
@@ -246,7 +247,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
   describe("GET api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
@@ -291,7 +291,6 @@ describe("Profile Experience Route Endpoint", () => {
           done();
         });
     });
-
     it("should not get experience if the token is invalid", (done) => {
       chai
         .request(app)
@@ -343,7 +342,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
   describe("DELETE api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
