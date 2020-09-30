@@ -5,54 +5,55 @@ import sinon from 'sinon';
 import app from '../index';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
-import Experience from '../db/models/experience.model';
-import ExperienceController from '../controllers/experince.controller';
+import Association from '../db/models/association.model';
+import AssociationController from '../controllers/association.contoller';
 
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
 
-let experienceToken;
-let experienceUserId;
-let experienceId;
+let associationToken;
+let associationUserId;
+let associationId;
 
-const partiallyconmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
-  competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
-  keyAchievements: 'awesome achievements',
+const partiallyconmpleteAssociation = {
+  institutionName: 'TEST institution',
+  associationType: 'TEST associationType',
+  associationName: 'TEST associationName',
+  issueMonth: 'TEST issueMonth',
+  issueYear: 'TEST issueYear',
   active: true,
+  description: 'TEST description',
 };
 
-const conmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
-  competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
-  endMonth: 'Dec',
-  endYear: '2019',
-  keyAchievements: 'awesome achievements',
+const conmpleteAssociation = {
+  institutionName: 'TEST institution',
+  associationType: 'TEST associationType',
+  associationName: 'TEST associationName',
+  issueMonth: 'TEST issueMonth',
+  issueYear: 'TEST issueYear',
+  expiryMonth: 'TEST expiryMonth',
+  expiryYear: 'TEST expiryYear',
+  description: 'TEST description',
   active: true,
 };
-const incompleteExperience = {
-  teamName: 'EXPEREINCE 2',
-  competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
+const incompleteAssociation = {
+  institutionName: 'TEST institution',
+  associationType: 'TEST associationType',
+  associationName: 'TEST associationName',
 };
 
 const updateExperience = {
-  teamName: 'EXPEREINCE 2',
+  institutionName: 'TEST institution',
 };
 
-describe('Profile Experience Route Endpoint', () => {
-  describe('POST api/v1/profile/experience', () => {
+describe('Profile Association Route Endpoint', () => {
+  describe('POST api/v1/profile/association', () => {
     before((done) => {
       Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
-            experienceToken = await Helper.generateToken(
+            associationToken = await Helper.generateToken(
               myuser._id,
               myuser._role,
               myuser.userName
@@ -62,10 +63,10 @@ describe('Profile Experience Route Endpoint', () => {
         }
       });
     });
-    it('should not create experience if the user does not supply a token', (done) => {
+    it('should not create association if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/experience')
+        .post('/api/v1/profile/association')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -74,10 +75,10 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not create experience if the token is invalid', (done) => {
+    it('should not create association if the token is invalid', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/experience')
+        .post('/api/v1/profile/association')
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -88,12 +89,12 @@ describe('Profile Experience Route Endpoint', () => {
         });
     });
 
-    it('should not create experience if experience is incomplete', (done) => {
+    it('should not create association if association is incomplete', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/experience')
-        .set('token', experienceToken)
-        .send(incompleteExperience)
+        .post('/api/v1/profile/association')
+        .set('token', associationToken)
+        .send(incompleteAssociation)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.an('object');
@@ -104,12 +105,12 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should create experience if experience is partiallycomplete', (done) => {
+    it('should create association if association is partiallycomplete', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/experience')
-        .set('token', experienceToken)
-        .send(partiallyconmpleteExperience)
+        .post('/api/v1/profile/association')
+        .set('token', associationToken)
+        .send(partiallyconmpleteAssociation)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -118,12 +119,12 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should create experience if experience is complete', (done) => {
+    it('should create association if association is complete', (done) => {
       chai
         .request(app)
-        .post('/api/v1/profile/experience')
-        .set('token', experienceToken)
-        .send(conmpleteExperience)
+        .post('/api/v1/profile/association')
+        .set('token', associationToken)
+        .send(conmpleteAssociation)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -139,19 +140,19 @@ describe('Profile Experience Route Endpoint', () => {
         send() {},
       };
       sinon.stub(res, 'status').returnsThis();
-      ExperienceController.createExperience(req, res);
+      AssociationController.createAssociation(req, res);
       res.status.should.have.callCount(0);
       done();
     });
   });
 
-  describe('PUT api/v1/profile/experience/:experienceId', () => {
+  describe('PUT api/v1/profile/association/:associationId', () => {
     before((done) => {
       Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
+            associationUserId = myuser._id;
+            associationToken = await Helper.generateToken(
               myuser._id,
               myuser._role,
               myuser.userName
@@ -159,28 +160,29 @@ describe('Profile Experience Route Endpoint', () => {
           })();
         }
       });
-      Experience.create(
+      Association.create(
         {
-          teamName: 'TEST EXPEREINCE',
-          competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
-          keyAchievements: 'awesome achievements',
-          active: true,
-          userId: experienceUserId,
+          institutionName: 'TEST institution',
+          associationType: 'TEST associationType',
+          associationName: 'TEST associationName',
+          issueMonth: 'TEST issueMonth',
+          issueYear: 'TEST issueYear',
+          expiryMonth: 'TEST expiryMonth',
+          expiryYear: 'TEST expiryYear',
+          description: 'TEST description',
+          active: false,
+          userId: associationUserId,
         },
-        (err, experience) => {
-          experienceId = experience._id;
+        (err, association) => {
+          associationId = association._id;
           done();
         }
       );
     });
-    it('should not update experience if the user does not supply a token', (done) => {
+    it('should not update association if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/experience/${experienceId}`)
+        .put(`/api/v1/profile/association/${associationId}`)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(401);
@@ -191,10 +193,10 @@ describe('Profile Experience Route Endpoint', () => {
         });
     });
 
-    it('should not update experience if the token is invalid', (done) => {
+    it('should not update association if the token is invalid', (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/experience/${experienceId}`)
+        .put(`/api/v1/profile/association/${associationId}`)
         .set('token', 'invalid token')
         .send(updateExperience)
         .end((err, res) => {
@@ -205,25 +207,25 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not update experience if experience is not found', (done) => {
+    it('should not update association if association is not found', (done) => {
       chai
         .request(app)
-        .put('/api/v1/profile/experience/5f723030f2a978274813c51d')
-        .set('token', experienceToken)
+        .put('/api/v1/profile/association/5f723030f2a978274813c51d')
+        .set('token', associationToken)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('message').eql('experience not found');
+          res.body.should.have.property('message').eql('association not found');
           done();
         });
     });
-    it('should update experience if experience is found', (done) => {
+    it('should update association if association is found', (done) => {
       chai
         .request(app)
-        .put(`/api/v1/profile/experience/${experienceId}`)
-        .set('token', experienceToken)
+        .put(`/api/v1/profile/association/${associationId}`)
+        .set('token', associationToken)
         .send(updateExperience)
         .end((err, res) => {
           res.should.have.status(200);
@@ -240,19 +242,19 @@ describe('Profile Experience Route Endpoint', () => {
         send() {},
       };
       sinon.stub(res, 'status').returnsThis();
-      ExperienceController.updateExperience(req, res);
+      AssociationController.updateAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
     });
   });
 
-  describe('GET api/v1/profile/experience/:experienceId', () => {
+  describe('GET api/v1/profile/association/:associationId', () => {
     before((done) => {
       Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
+            associationUserId = myuser._id;
+            associationToken = await Helper.generateToken(
               myuser._id,
               myuser._role,
               myuser.userName
@@ -260,28 +262,27 @@ describe('Profile Experience Route Endpoint', () => {
           })();
         }
       });
-      Experience.create(
+      Association.create(
         {
-          teamName: 'NEW EXPEREINCE',
-          competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
-          keyAchievements: 'awesome achievements',
+          institutionName: 'TEST institution',
+          associationType: 'TEST associationType',
+          associationName: 'TEST associationName',
+          issueMonth: 'TEST issueMonth',
+          issueYear: 'TEST issueYear',
+          description: 'TEST description',
           active: true,
-          userId: experienceUserId,
+          userId: associationUserId,
         },
-        (err, experience) => {
-          experienceId = experience._id;
+        (err, association) => {
+          associationId = association._id;
           done();
         }
       );
     });
-    it('should not get experience if the user does not supply a token', (done) => {
+    it('should not get association if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/profile/experience/${experienceId}`)
+        .get(`/api/v1/profile/association/${associationId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -291,10 +292,10 @@ describe('Profile Experience Route Endpoint', () => {
         });
     });
 
-    it('should not get experience if the token is invalid', (done) => {
+    it('should not get association if the token is invalid', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/profile/experience/${experienceId}`)
+        .get(`/api/v1/profile/association/${associationId}`)
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -304,24 +305,24 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not get experience if experience is not found', (done) => {
+    it('should not get association if association is not found', (done) => {
       chai
         .request(app)
-        .get('/api/v1/profile/experience/5f723030f2a978274813c51d')
-        .set('token', experienceToken)
+        .get('/api/v1/profile/association/5f723030f2a978274813c51d')
+        .set('token', associationToken)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('message').eql('experience not found');
+          res.body.should.have.property('message').eql('association not found');
           done();
         });
     });
-    it('should get experience if experience is found', (done) => {
+    it('should get association if association is found', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/profile/experience/${experienceId}`)
-        .set('token', experienceToken)
+        .get(`/api/v1/profile/association/${associationId}`)
+        .set('token', associationToken)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -337,19 +338,19 @@ describe('Profile Experience Route Endpoint', () => {
         send() {},
       };
       sinon.stub(res, 'status').returnsThis();
-      ExperienceController.getExperience(req, res);
+      AssociationController.getAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
     });
   });
 
-  describe('DELETE api/v1/profile/experience/:experienceId', () => {
+  describe('DELETE api/v1/profile/association/:associationId', () => {
     before((done) => {
       Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
+            associationUserId = myuser._id;
+            associationToken = await Helper.generateToken(
               myuser._id,
               myuser._role,
               myuser.userName
@@ -357,28 +358,29 @@ describe('Profile Experience Route Endpoint', () => {
           })();
         }
       });
-      Experience.create(
+      Association.create(
         {
-          teamName: 'TEST EXPEREINCE',
-          competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
-          keyAchievements: 'awesome achievements',
-          active: true,
-          userId: experienceUserId,
+          institutionName: 'TEST institution',
+          associationType: 'TEST associationType',
+          associationName: 'TEST associationName',
+          issueMonth: 'TEST issueMonth',
+          issueYear: 'TEST issueYear',
+          expiryMonth: 'TEST expiryMonth',
+          expiryYear: 'TEST expiryYear',
+          description: 'TEST description',
+          active: false,
+          userId: associationUserId,
         },
-        (err, experience) => {
-          experienceId = experience._id;
+        (err, association) => {
+          associationId = association._id;
           done();
         }
       );
     });
-    it('should not delete experience if the user does not supply a token', (done) => {
+    it('should not delete association if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .delete(`/api/v1/profile/experience/${experienceId}`)
+        .delete(`/api/v1/profile/association/${associationId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -387,10 +389,10 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not delete experience if the token is invalid', (done) => {
+    it('should not delete association if the token is invalid', (done) => {
       chai
         .request(app)
-        .delete(`/api/v1/profile/experience/${experienceId}`)
+        .delete(`/api/v1/profile/association/${associationId}`)
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -400,31 +402,31 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not delete experience if experience is not found', (done) => {
+    it('should not delete association if association is not found', (done) => {
       chai
         .request(app)
-        .delete('/api/v1/profile/experience/5f70f3fee718fe18e4635e48')
-        .set('token', experienceToken)
+        .delete('/api/v1/profile/association/5f70f3fee718fe18e4635e48')
+        .set('token', associationToken)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('404 Not Found');
-          res.body.should.have.property('error').eql('experience not found');
+          res.body.should.have.property('error').eql('association not found');
           done();
         });
     });
-    it('should delete experience if experience is found', (done) => {
+    it('should delete association if association is found', (done) => {
       chai
         .request(app)
-        .delete(`/api/v1/profile/experience/${experienceId}`)
-        .set('token', experienceToken)
+        .delete(`/api/v1/profile/association/${associationId}`)
+        .set('token', associationToken)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
           res.body.should.have
             .property('message')
-            .eql('experience deleted successfully');
+            .eql('association deleted successfully');
           done();
         });
     });
@@ -435,7 +437,7 @@ describe('Profile Experience Route Endpoint', () => {
         send() {},
       };
       sinon.stub(res, 'status').returnsThis();
-      ExperienceController.deleteExperience(req, res);
+      AssociationController.deleteAssociation(req, res);
       res.status.should.have.callCount(1);
       done();
     });

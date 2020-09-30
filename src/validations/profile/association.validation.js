@@ -1,13 +1,13 @@
 import { check, validationResult } from 'express-validator';
 
 /**
- *Contains Experience Validator
+ *Contains Association Validator
  *
  *
  *
- * @class Experience
+ * @class Association
  */
-class ExperienceValidator {
+class AssociationValidator {
   /**
    * validate user data.
    * @memberof Achievement
@@ -15,20 +15,23 @@ class ExperienceValidator {
    */
   static validateData() {
     return [
-      check('teamName').not().isEmpty().withMessage('team name is required'),
-      check('competitionType')
+      check('institutionName')
         .not()
         .isEmpty()
-        .withMessage('competition type is required'),
-      check('startMonth')
+        .withMessage('Institution name is required'),
+      check('associationName')
         .not()
         .isEmpty()
-        .withMessage('start month is required'),
-      check('startYear').not().isEmpty().withMessage('start Year is required'),
-      check('keyAchievements')
+        .withMessage('association name is required'),
+      check('associationType')
         .not()
         .isEmpty()
-        .withMessage('key achievements is required'),
+        .withMessage('association type is required'),
+      check('issueMonth')
+        .not()
+        .isEmpty()
+        .withMessage('Issued Month is required'),
+      check('issueYear').not().isEmpty().withMessage('issueYear is required'),
       check('active')
         .not()
         .isEmpty()
@@ -44,7 +47,7 @@ class ExperienceValidator {
    * @param {Response} res - The payload.
    * @param {Response} next - The next parameter.
    * @memberof SignUp
-   * @returns {JSON} - A JSON success response.
+   * @returns {JSON} - A JSON success .
    */
   static async ValidationResult(req, res, next) {
     const errors = validationResult(req);
@@ -56,8 +59,8 @@ class ExperienceValidator {
         errors: errArr,
       });
     }
-    return next();
+    next();
   }
 }
 
-export default ExperienceValidator;
+export default AssociationValidator;

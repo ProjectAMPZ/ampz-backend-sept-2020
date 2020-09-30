@@ -7,38 +7,30 @@ const AssociationSchema = new mongoose.Schema({
   },
   institutionName: {
     type: String,
-    required: true,
   },
   associationName: {
     type: String,
-    required: true,
   },
   associationType: {
     type: String,
-    required: true,
   },
   issueMonth: {
     type: String,
-    required: true,
   },
   issueYear: {
-    type: Number,
-    required: true,
+    type: String,
   },
   expiryMonth: {
     type: String,
-    required: true,
   },
   expiryYear: {
-    type: Number,
-    required: true,
+    type: String,
   },
   active: {
     type: Boolean,
   },
   description: {
     type: String,
-    required: true,
   },
   createdAt: {
     type: Date,

@@ -1,5 +1,5 @@
-import Achievement from '../db/models/achievement.model';
-import logger from '../config';
+import Achievement from "../db/models/achievement.model";
+import logger from "../config";
 /**
  *Contains Achievement Controller
  *
@@ -20,11 +20,11 @@ class AchievementController {
     try {
       await Achievement.create(req.body);
       res.status(201).json({
-        status: 'success',
-        message: 'achievement created successfully',
+        status: "success",
+        message: "achievement created successfully",
       });
     } catch (err) {
-      res.status(500).json({ status: 'error', error: 'Server error' });
+      res.status(500).json({ status: "error", error: "Server error" });
     }
   }
 
@@ -44,7 +44,7 @@ class AchievementController {
       if (!achievement) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'achievement not found' });
+          .json({ status: "error", message: "achievement not found" });
       }
 
       await Achievement.findOneAndUpdate(
@@ -56,14 +56,14 @@ class AchievementController {
       );
 
       res.status(200).json({
-        status: 'success',
-        message: 'achievement updated successfully',
+        status: "success",
+        message: "achievement updated successfully",
       });
     } catch (err) {
       logger.error(err.message);
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
@@ -84,19 +84,19 @@ class AchievementController {
       if (!achievement) {
         return res
           .status(404)
-          .json({ status: '404 Not Found', error: 'achievement not found' });
+          .json({ status: "404 Not Found", error: "achievement not found" });
       }
 
       await achievement.remove();
 
       res.status(200).json({
-        status: 'success',
-        message: 'achievement deleted successfully',
+        status: "success",
+        message: "achievement deleted successfully",
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }

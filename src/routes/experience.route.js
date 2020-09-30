@@ -18,6 +18,13 @@ router.put(
   verifyToken,
   ExperienceController.updateExperience
 );
+
+router.get(
+  '/experience/:experienceId',
+  verifyToken,
+  ExperienceController.getExperience
+);
+
 router.delete(
   '/experience/:experienceId',
   verifyToken,
