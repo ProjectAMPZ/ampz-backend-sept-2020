@@ -17,24 +17,25 @@ let experienceUserId;
 let experienceId;
 
 const partiallyconmpleteExperience = {
-  teamName: "TEST EXPEREINCE",
-  competitionType: "another competition",
-  startMonth: "august",
-  startYear: "2019",
-  keyAchievements: "awesome achievements",
+  teamName: 'TEST EXPEREINCE',
+  competitionType: 'another competition',
+  startMonth: 'august',
+  startYear: '2019',
+  keyAchievements: 'awesome achievements',
   active: true,
 };
 
 const conmpleteExperience = {
-  teamName: "TEST EXPEREINCE",
-  competitionType: "another competition",
-  startMonth: "august",
-  startYear: "2019",
-  endMonth: "Dec",
-  endYear: "2019",
-  keyAchievements: "awesome achievements",
+  teamName: 'TEST EXPEREINCE',
+  competitionType: 'another competition',
+  startMonth: 'august',
+  startYear: '2019',
+  endMonth: 'Dec',
+  endYear: '2019',
+  keyAchievements: 'awesome achievements',
   active: true,
 };
+
 const incompleteExperience = {
   teamName: "EXPEREINCE 2",
   competitionType: "another competition",
@@ -246,6 +247,7 @@ describe("Profile Experience Route Endpoint", () => {
     });
   });
 
+
   describe("GET api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
@@ -290,7 +292,6 @@ describe("Profile Experience Route Endpoint", () => {
           done();
         });
     });
-
     it("should not get experience if the token is invalid", (done) => {
       chai
         .request(app)
@@ -342,6 +343,7 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
+
 
   describe("DELETE api/v1/profile/experience/:experienceId", () => {
     before((done) => {

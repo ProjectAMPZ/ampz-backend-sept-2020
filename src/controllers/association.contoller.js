@@ -1,55 +1,54 @@
-import Experience from "../db/models/experience.model";
+import Association from "../db/models/association.model";
 // import logger from "../config";
 /**
- *Contains Experience Controller
+ *Contains Association Controller
  *
- * @class ExperienceController
+ * @class AssociationController
  */
-class ExperienceController {
+class AssociationController {
   /* eslint camelcase: 0 */
 
   /**
-   * Create profile experience.
+   * Create profile association.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof AuthController
    * @returns {JSON} - A JSON success response.
    */
-  static async createExperience(req, res) {
+  static async createAssociation(req, res) {
     req.body.userId = req.data.id;
     try {
-      const experience = await Experience.create(req.body);
+      const association = await Association.create(req.body);
       res.status(201).json({
         status: "success",
-        data: experience,
+        data: association,
       });
     } catch (err) {
-      // logger.error(err.message);
       res.status(500).json({ status: "error", error: "Server error" });
     }
   }
 
   /**
-   * update experience.
+   * update association.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof postController
    * @returns {JSON} - A JSON success response.
    */
-  static async updateExperience(req, res) {
+  static async updateAssociation(req, res) {
     try {
-      let experience = await Experience.findById({
-        _id: req.params.experienceId,
+      let association = await Association.findById({
+        _id: req.params.associationId,
       });
 
-      if (!experience) {
+      if (!association) {
         return res
           .status(404)
-          .json({ status: "error", message: "experience not found" });
+          .json({ status: "error", message: "association not found" });
       }
 
-      experience = await Experience.findOneAndUpdate(
-        { _id: req.params.experienceId },
+      association = await Association.findOneAndUpdate(
+        { _id: req.params.associationId },
         req.body,
         {
           new: true,
@@ -58,7 +57,7 @@ class ExperienceController {
 
       res.status(200).json({
         status: "success",
-        data: experience,
+        data: association,
       });
     } catch (err) {
       res.status(500).json({
@@ -69,30 +68,27 @@ class ExperienceController {
   }
 
   /**
-   * get single experience.
+   * get single association.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof postController
    * @returns {JSON} - A JSON success response.
    */
-  static async getExperience(req, res) {
+  static async getAssociation(req, res) {
     try {
-
-      let experience = await Experience.findById({
-        _id: req.params.experienceId,
+      const association = await Association.findById({
+        _id: req.params.associationId,
       });
 
-      if (!experience) {
+      if (!association) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'experience not found' });
+          .json({ status: "error", message: "association not found" });
       }
-
-    
 
       res.status(200).json({
         status: "success",
-        data: experience,
+        data: association,
       });
     } catch (err) {
       res.status(500).json({
@@ -103,29 +99,29 @@ class ExperienceController {
   }
 
   /**
-   * Delete Experience.
+   * Delete Association.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof AuthController
    * @returns {JSON} - A JSON success response.
    */
-  static async deleteExperience(req, res) {
+  static async deleteAssociation(req, res) {
     try {
-      const experience = await Experience.findById({
-        _id: req.params.experienceId,
+      const association = await Association.findById({
+        _id: req.params.associationId,
       });
 
-      if (!experience) {
+      if (!association) {
         return res
           .status(404)
-          .json({ status: "404 Not Found", error: "experience not found" });
+          .json({ status: "404 Not Found", error: "association not found" });
       }
 
-      await experience.remove();
+      await association.remove();
 
       res.status(200).json({
         status: "success",
-        message: "experience deleted successfully",
+        message: "association deleted successfully",
       });
     } catch (err) {
       res.status(500).json({
@@ -136,4 +132,4 @@ class ExperienceController {
   }
 }
 
-export default ExperienceController;
+export default AssociationController;

@@ -20,7 +20,7 @@ router.put(
 );
 
 router.get(
-  "/experience/:experienceId",
+  '/experience/:experienceId',
   verifyToken,
   ExperienceController.getExperience
 );
