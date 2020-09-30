@@ -15,10 +15,10 @@ class AssociationValidator {
    */
   static validateData() {
     return [
-      check("institutionName")
+      check("associationName")
         .not()
         .isEmpty()
-        .withMessage("institution name is required"),
+        .withMessage("association name is required"),
       check("associationType")
         .not()
         .isEmpty()

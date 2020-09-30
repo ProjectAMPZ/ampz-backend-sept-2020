@@ -1,5 +1,5 @@
 import Association from "../db/models/association.model";
-// import logger from "../config";
+
 /**
  *Contains Association Controller
  *

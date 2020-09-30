@@ -1,12 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const AssociationSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-  },
-  institutionName: {
-    type: String,
+    ref: "user",
   },
   associationName: {
     type: String,
@@ -42,6 +39,6 @@ const AssociationSchema = new mongoose.Schema({
   },
 });
 
-const Association = mongoose.model('association', AssociationSchema);
+const Association = mongoose.model("association", AssociationSchema);
 
 export default Association;

@@ -18,7 +18,7 @@ let associationId;
 
 const partiallyconmpleteAssociation = {
   associationType: "TEST associationType",
-  institutionName: "TEST institutionName",
+  associationName: "TEST associationName",
   issueMonth: "TEST issueMonth",
   issueYear: "TEST issueYear",
   active: true,
@@ -27,7 +27,7 @@ const partiallyconmpleteAssociation = {
 
 const conmpleteAssociation = {
   associationType: "TEST associationType",
-  institutionName: "TEST institutionName",
+  associationName: "TEST associationName",
   issueMonth: "TEST issueMonth",
   issueYear: "TEST issueYear",
   expiryMonth: "TEST expiryMonth",
@@ -37,7 +37,7 @@ const conmpleteAssociation = {
 };
 const incompleteAssociation = {
   associationType: "TEST associationType",
-  institutionName: "TEST institutionName",
+  associationName: "TEST associationName",
 };
 
 const updateExperience = {
@@ -159,9 +159,9 @@ describe("Profile Association Route Endpoint", () => {
       });
       Association.create(
         {
-          institutionName: "TEST institution",
+          associationName: "TEST institution",
           associationType: "TEST associationType",
-          institutionName: "TEST institutionName",
+          associationName: "TEST associationName",
           issueMonth: "TEST issueMonth",
           issueYear: "TEST issueYear",
           expiryMonth: "TEST expiryMonth",
@@ -261,9 +261,9 @@ describe("Profile Association Route Endpoint", () => {
       });
       Association.create(
         {
-          institutionName: "TEST institution",
+          associationName: "TEST institution",
           associationType: "TEST associationType",
-          institutionName: "TEST institutionName",
+          associationName: "TEST associationName",
           issueMonth: "TEST issueMonth",
           issueYear: "TEST issueYear",
           description: "TEST description",
@@ -357,9 +357,9 @@ describe("Profile Association Route Endpoint", () => {
       });
       Association.create(
         {
-          institutionName: "TEST institution",
+          associationName: "TEST institution",
           associationType: "TEST associationType",
-          institutionName: "TEST institutionName",
+          associationName: "TEST associationName",
           issueMonth: "TEST issueMonth",
           issueYear: "TEST issueYear",
           expiryMonth: "TEST expiryMonth",
