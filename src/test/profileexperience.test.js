@@ -8,6 +8,7 @@ import Auth from "../db/models/users.model";
 import Experience from "../db/models/experience.model";
 import ExperienceController from "../controllers/experince.controller";
 
+
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
@@ -17,22 +18,22 @@ let experienceUserId;
 let experienceId;
 
 const partiallyconmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
-  competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
-  keyAchievements: 'awesome achievements',
+  teamName: "TEST EXPEREINCE",
+  competitionType: "another competition",
+  startMonth: "august",
+  startYear: "2019",
+  keyAchievements: "awesome achievements",
   active: true,
 };
 
 const conmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
-  competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
-  endMonth: 'Dec',
-  endYear: '2019',
-  keyAchievements: 'awesome achievements',
+  teamName: "TEST EXPEREINCE",
+  competitionType: "another competition",
+  startMonth: "august",
+  startYear: "2019",
+  endMonth: "Dec",
+  endYear: "2019",
+  keyAchievements: "awesome achievements",
   active: true,
 };
 
@@ -246,8 +247,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
-
   describe("GET api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
@@ -343,8 +342,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
-
   describe("DELETE api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {

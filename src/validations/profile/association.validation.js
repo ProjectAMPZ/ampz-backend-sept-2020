@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator';
+import { check, validationResult } from "express-validator";
 
 /**
  *Contains Association Validator
@@ -15,29 +15,25 @@ class AssociationValidator {
    */
   static validateData() {
     return [
-      check('institutionName')
+      check("institutionName")
         .not()
         .isEmpty()
-        .withMessage('Institution name is required'),
-      check('associationName')
+        .withMessage("institution name is required"),
+      check("associationType")
         .not()
         .isEmpty()
-        .withMessage('association name is required'),
-      check('associationType')
+        .withMessage("association type is required"),
+      check("issueMonth")
         .not()
         .isEmpty()
-        .withMessage('association type is required'),
-      check('issueMonth')
+        .withMessage("Issued Month is required"),
+      check("issueYear").not().isEmpty().withMessage("issueYear is required"),
+      check("active")
         .not()
         .isEmpty()
-        .withMessage('Issued Month is required'),
-      check('issueYear').not().isEmpty().withMessage('issueYear is required'),
-      check('active')
-        .not()
-        .isEmpty()
-        .withMessage('select whelther you are active or not')
+        .withMessage("select whelther you are active or not")
         .isIn([true, false])
-        .withMessage('active must be true or false'),
+        .withMessage("active must be true or false"),
     ];
   }
 
@@ -54,8 +50,8 @@ class AssociationValidator {
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({ msg }) => msg);
       return res.status(400).json({
-        status: '400 Invalid Request',
-        error: 'Your request contains invalid parameters',
+        status: "400 Invalid Request",
+        error: "Your request contains invalid parameters",
         errors: errArr,
       });
     }
