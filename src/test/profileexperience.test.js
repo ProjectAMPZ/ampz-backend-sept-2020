@@ -35,6 +35,7 @@ const conmpleteExperience = {
   keyAchievements: "awesome achievements",
   active: true,
 };
+
 const incompleteExperience = {
   teamName: "EXPEREINCE 2",
   competitionType: "another competition",
@@ -290,7 +291,6 @@ describe("Profile Experience Route Endpoint", () => {
           done();
         });
     });
-
     it("should not get experience if the token is invalid", (done) => {
       chai
         .request(app)
