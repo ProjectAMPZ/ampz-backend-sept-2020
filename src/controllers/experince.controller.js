@@ -1,5 +1,4 @@
 import Experience from "../db/models/experience.model";
-// import logger from "../config";
 /**
  *Contains Experience Controller
  *

@@ -1,12 +1,12 @@
-import { Router } from 'express';
-import AchievementController from '../controllers/achievement.controller';
-import AchievementValidator from '../validations/profile/achievement.validator';
-import verifyToken from '../middlewares/auth.middleware';
+import { Router } from "express";
+import AchievementController from "../controllers/achievement.controller";
+import AchievementValidator from "../validations/profile/achievement.validator";
+import verifyToken from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router.post(
-  '/achievement',
+  "/achievement",
   verifyToken,
   AchievementValidator.validateData(),
   AchievementValidator.ValidationResult,
@@ -14,12 +14,19 @@ router.post(
 );
 
 router.put(
-  '/achievement/:achievementId',
+  "/achievement/:achievementId",
   verifyToken,
   AchievementController.updateAchievement
 );
+
+router.get(
+  "/achievement/:achievementId",
+  verifyToken,
+  AchievementController.getAchievement
+);
+
 router.delete(
-  '/achievement/:achievementId',
+  "/achievement/:achievementId",
   verifyToken,
   AchievementController.deleteAchievement
 );
