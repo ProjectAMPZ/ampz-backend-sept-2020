@@ -1,5 +1,4 @@
-import Experience from '../db/models/experience.model';
-// import logger from "../config";
+import Experience from "../db/models/experience.model";
 /**
  *Contains Experience Controller
  *
@@ -20,12 +19,12 @@ class ExperienceController {
     try {
       await Experience.create(req.body);
       res.status(201).json({
-        status: 'success',
-        message: 'experience created successfully',
+        status: "success",
+        message: "experience created successfully",
       });
     } catch (err) {
       // logger.error(err.message);
-      res.status(500).json({ status: 'error', error: 'Server error' });
+      res.status(500).json({ status: "error", error: "Server error" });
     }
   }
 
@@ -45,7 +44,7 @@ class ExperienceController {
       if (!experience) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'experience not found' });
+          .json({ status: "error", message: "experience not found" });
       }
 
       await Experience.findOneAndUpdate(
@@ -57,13 +56,13 @@ class ExperienceController {
       );
 
       res.status(200).json({
-        status: 'success',
-        message: 'experience updated successfully',
+        status: "success",
+        message: "experience updated successfully",
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
@@ -84,19 +83,19 @@ class ExperienceController {
       if (!experience) {
         return res
           .status(404)
-          .json({ status: '404 Not Found', error: 'experience not found' });
+          .json({ status: "404 Not Found", error: "experience not found" });
       }
 
       await experience.remove();
 
       res.status(200).json({
-        status: 'success',
-        message: 'experience deleted successfully',
+        status: "success",
+        message: "experience deleted successfully",
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
