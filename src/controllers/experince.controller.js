@@ -1,4 +1,4 @@
-import Experience from '../db/models/experience.model';
+import Experience from "../db/models/experience.model";
 // import logger from "../config";
 /**
  *Contains Experience Controller
@@ -20,12 +20,12 @@ class ExperienceController {
     try {
       const experience = await Experience.create(req.body);
       res.status(201).json({
-        status: 'success',
+        status: "success",
         data: experience,
       });
     } catch (err) {
       // logger.error(err.message);
-      res.status(500).json({ status: 'error', error: 'Server error' });
+      res.status(500).json({ status: "error", error: "Server error" });
     }
   }
 
@@ -45,7 +45,7 @@ class ExperienceController {
       if (!experience) {
         return res
           .status(404)
-          .json({ status: 'error', message: 'experience not found' });
+          .json({ status: "error", message: "experience not found" });
       }
 
       experience = await Experience.findOneAndUpdate(
@@ -57,13 +57,13 @@ class ExperienceController {
       );
 
       res.status(200).json({
-        status: 'success',
+        status: "success",
         data: experience,
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
@@ -77,7 +77,8 @@ class ExperienceController {
    */
   static async getExperience(req, res) {
     try {
-      const experience = await Experience.findById({
+
+      let experience = await Experience.findById({
         _id: req.params.experienceId,
       });
 
@@ -87,14 +88,16 @@ class ExperienceController {
           .json({ status: 'error', message: 'experience not found' });
       }
 
+    
+
       res.status(200).json({
-        status: 'success',
+        status: "success",
         data: experience,
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
@@ -115,19 +118,19 @@ class ExperienceController {
       if (!experience) {
         return res
           .status(404)
-          .json({ status: '404 Not Found', error: 'experience not found' });
+          .json({ status: "404 Not Found", error: "experience not found" });
       }
 
       await experience.remove();
 
       res.status(200).json({
-        status: 'success',
-        message: 'experience deleted successfully',
+        status: "success",
+        message: "experience deleted successfully",
       });
     } catch (err) {
       res.status(500).json({
-        status: 'error',
-        error: 'Server error',
+        status: "error",
+        error: "Server error",
       });
     }
   }
