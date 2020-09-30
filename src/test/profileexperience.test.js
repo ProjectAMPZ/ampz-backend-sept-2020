@@ -246,7 +246,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
   describe("GET api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
@@ -342,7 +341,6 @@ describe("Profile Experience Route Endpoint", () => {
       done();
     });
   });
-
   describe("DELETE api/v1/profile/experience/:experienceId", () => {
     before((done) => {
       Auth.findOne({ email: "okwuosachijioke1@gmail.com" }, (err, myuser) => {
