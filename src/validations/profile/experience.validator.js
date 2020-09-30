@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator';
+import { check, validationResult } from "express-validator";
 
 /**
  *Contains Experience Validator
@@ -15,28 +15,26 @@ class ExperienceValidator {
    */
   static validateData() {
     return [
-      check('teamName').not().isEmpty().withMessage('team name is required'),
-      check('competitionType')
+      check("teamName").not().isEmpty().withMessage("team name is required"),
+      check("competitionType")
         .not()
         .isEmpty()
-        .withMessage('competition type is required'),
-      check('startMonth')
+        .withMessage("competition type is required"),
+      check("startMonth")
         .not()
         .isEmpty()
-        .withMessage('start month is required'),
-      check('startYear').not().isEmpty().withMessage('start Year is required'),
-      check('endMonth').not().isEmpty().withMessage('end month is required'),
-      check('endYear').not().isEmpty().withMessage('end year is required'),
-      check('keyAchievements')
+        .withMessage("start month is required"),
+      check("startYear").not().isEmpty().withMessage("start Year is required"),
+      check("keyAchievements")
         .not()
         .isEmpty()
-        .withMessage('key achievements is required'),
-      check('active')
+        .withMessage("key achievements is required"),
+      check("active")
         .not()
         .isEmpty()
-        .withMessage('select whelther you are active or not')
+        .withMessage("select whelther you are active or not")
         .isIn([true, false])
-        .withMessage('active must be true or false'),
+        .withMessage("active must be true or false"),
     ];
   }
 
@@ -53,8 +51,8 @@ class ExperienceValidator {
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({ msg }) => msg);
       return res.status(400).json({
-        status: '400 Invalid Request',
-        error: 'Your request contains invalid parameters',
+        status: "400 Invalid Request",
+        error: "Your request contains invalid parameters",
         errors: errArr,
       });
     }
