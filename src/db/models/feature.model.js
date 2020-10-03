@@ -29,6 +29,6 @@ const FeatureSchema = new mongoose.Schema({
   },
 });
 
-const Feature = mongoose.model('Feature', FeatureSchema);
+const Feature = mongoose.model('feature', FeatureSchema);
 
 export default Feature;
