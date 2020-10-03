@@ -51,7 +51,7 @@ const emailExist = {
   password: '123456',
   confirmPassword: '123456',
   gender: 'male',
-  country: '234',
+  country: '2344',
   phoneNumber: '08037381011',
   dayOfBirth: '22',
   monthOfBirth: '08',
@@ -532,15 +532,17 @@ describe('Auth Route Endpoints', () => {
   });
   describe('POST api/v1/auth/change_password', () => {
     before((done) => {
-      ResetPassword.find(
-        { email: 'okwuosachijioke1@gmail.com' },
-        (err, myuser) => {
-          if (myuser) {
-            passwordToken = myuser[0].token;
-            done();
+      (async () => {
+        ResetPassword.find(
+          { email: 'okwuosachijioke1@gmail.com' },
+          (err, myuser) => {
+            if (myuser) {            
+              passwordToken = myuser[0].token; 
+            }
           }
-        }
-      );
+        );
+      })();      
+     done()
     });
     it('should not change password if all parameters are not supplied', (done) => {
       chai
