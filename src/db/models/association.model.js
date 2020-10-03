@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const AssociationSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'user',
   },
   associationName: {
@@ -33,7 +33,7 @@ const AssociationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  updateAt: {
+  updatedAt: {
     type: Date,
     default: Date.now,
   },

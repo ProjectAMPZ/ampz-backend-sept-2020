@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const ExperienceSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'user',
   },
   teamName: {

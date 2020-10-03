@@ -52,7 +52,6 @@ export const coverPhotoUpload = async (req, res, next) => {
       coverphoto = req.body.coverPhotoUrl;
 
       const s4 = new aws.S3(awsCredentials);
-
       if (coverphoto) {
         const coverPhotoKey = coverphoto.substring(53);
         await s4.deleteObject(
@@ -90,6 +89,7 @@ export const profilePhotoUpload = async (req, res, next) => {
       profilephoto = req.body.profilePhotoUrl;
 
       const s4 = new aws.S3(awsCredentials);
+
       if (profilephoto) {
         const profilePhotoKey = profilephoto.substring(53);
 

@@ -1,12 +1,12 @@
-import { Router } from "express";
-import ExperienceController from "../controllers/experince.controller";
-import ExperienceValidator from "../validations/profile/experience.validator";
-import verifyToken from "../middlewares/auth.middleware";
+import { Router } from 'express';
+import ExperienceController from '../controllers/experience.controller';
+import ExperienceValidator from '../validations/profile/experience.validator';
+import verifyToken from '../middlewares/auth.middleware';
 
 const router = Router();
 
 router.post(
-  "/experience",
+  '/experience',
   verifyToken,
   ExperienceValidator.validateData(),
   ExperienceValidator.ValidationResult,
@@ -14,19 +14,19 @@ router.post(
 );
 
 router.put(
-  "/experience/:experienceId",
+  '/experience/:experienceId',
   verifyToken,
   ExperienceController.updateExperience
 );
 
 router.get(
-  "/experience/:experienceId",
+  '/experience/:experienceId',
   verifyToken,
   ExperienceController.getExperience
 );
 
 router.delete(
-  "/experience/:experienceId",
+  '/experience/:experienceId',
   verifyToken,
   ExperienceController.deleteExperience
 );
