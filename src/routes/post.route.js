@@ -8,5 +8,6 @@ const router = Router();
 router.get('/', PostController.getPosts);
 
 router.post('/', verifyToken, postFileUpload, PostController.createPost);
+router.put('/:postId', verifyToken, postFileUpload, PostController.updatePost);
 
 export default router;
