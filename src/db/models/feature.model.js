@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const FeatureSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
+    ref: 'user',
   },
   sport: {
     type: String,

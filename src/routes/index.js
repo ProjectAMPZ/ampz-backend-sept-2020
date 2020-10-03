@@ -1,18 +1,20 @@
-import { Router } from "express";
-import authRouter from "./auth.route";
-import bioRouter from "./bio.route";
-import featureRouter from "./feature.route";
-import experienceRouter from "./experience.route";
-import achievementRouter from "./achievement.route";
-import associationRouter from "./association.route";
+import { Router } from 'express';
+import authRouter from './auth.route';
+import bioRouter from './bio.route';
+import featureRouter from './feature.route';
+import experienceRouter from './experience.route';
+import achievementRouter from './achievement.route';
+import associationRouter from './association.route';
+import postRouter from './post.route';
 
 const router = Router();
 
-router.use("/auth", authRouter);
-router.use("/profile", bioRouter);
-router.use("/profile", featureRouter);
-router.use("/profile", experienceRouter);
-router.use("/profile", associationRouter);
-router.use("/profile", achievementRouter);
+router.use('/auth', authRouter);
+router.use('/profile', bioRouter);
+router.use('/profile', featureRouter);
+router.use('/profile', experienceRouter);
+router.use('/profile', associationRouter);
+router.use('/profile', achievementRouter);
+router.use('/post', postRouter);
 
 export default router;
