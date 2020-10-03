@@ -59,7 +59,7 @@ class PostController {
         endTime,
         deadline,
         fee,
-        mediaUrl: req.body.media,
+        mediaUrl: req.body.mediaUrl,
         category: req.query.category,
       };
       if (tags) post.tags = tags.split(',').map((tag) => tag.trim());
@@ -98,6 +98,33 @@ class PostController {
     } catch (err) {
       // logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'server error' });
+    }
+  }
+
+  /**
+   * update post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async updatePost(req, res) {
+    try {
+      const post = await Post.findOneAndUpdate(
+        { _id: req.params.postId },
+        req.body,
+        {
+          new: true,
+        }
+      );
+
+      res.status(200).json({ status: 'success', data: post });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
     }
   }
 }

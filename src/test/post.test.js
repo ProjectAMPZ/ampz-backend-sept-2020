@@ -13,6 +13,8 @@ chai.use(Sinonchai);
 chai.use(chaiHttp);
 
 let postToken;
+let postId;
+let mediaUrl;
 
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
@@ -220,6 +222,127 @@ describe('Post Route Endpoint', () => {
       sinon.stub(res, 'status').returnsThis();
       PostController.getPosts(req, res);
       res.status.should.have.callCount(0);
+      done();
+    });
+  });
+
+  describe('PUT api/v1/post/:postId', () => {
+    before((done) => {
+      chai
+        .request(app)
+        .post('/api/v1/post')
+        .set('token', postToken)
+        .set('Content-Type', 'multipart/form-data')
+        .set('Connection', 'keep-alive')
+        .field('caption', 'UPDATE POST')
+        .field('description', 'UPDATE POST DESCRIPTION')
+        .field('eventType', 'Football event')
+        .field('sport', 'Football')
+        .field('minAge', '16')
+        .field('maxAge', '20')
+        .field('country', 'Nigeria')
+        .field('state', 'Lagos')
+        .field('venue', 'Yaba')
+        .field('tags', 'football, lagos, event')
+        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .end((err, res) => {
+          postId = res.body.data._id;
+          done();
+        });
+    });
+    it('should not update post if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/${postId}`)
+        .field('description', 'UPDATE POST DESCRIPTION')
+        .field('eventType', 'Football event')
+        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .field(
+          'mediaUrl',
+          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
+        )
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not update post if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/${postId}`)
+        .set('token', 'invalid token')
+        .field('description', 'UPDATE POST DESCRIPTION')
+        .field('eventType', 'Football event')
+        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .field(
+          'mediaUrl',
+          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
+        )
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+
+    it('should not update post if the file type is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/${postId}`)
+        .set('token', postToken)
+        .set('Content-Type', 'multipart/form-data')
+        .set('Connection', 'keep-alive')
+        .field('caption', 'POST CAPTION')
+        .field('description', 'POST DESCRIPTION')
+        .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
+        .field(
+          'mediaUrl',
+          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
+        )
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should update post if update fields are supplied', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/${postId}`)
+        .set('token', postToken)
+        .set('Content-Type', 'multipart/form-data')
+        .set('Connection', 'keep-alive')
+        .field('caption', 'TEST POST CAPTION')
+        .attach('media', path.resolve(__dirname, '../assets/img/img3.jpg'))
+        .field(
+          'mediaUrl',
+          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
+        )
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.updatePost(req, res);
+      res.status.should.have.callCount(1);
       done();
     });
   });

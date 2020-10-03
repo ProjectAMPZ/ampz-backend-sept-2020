@@ -6,6 +6,12 @@ import { config } from 'dotenv';
 const s3 = new aws.S3();
 config();
 
+const awsCredentials = aws.config.update({
+  secretAccessKey: process.env.S3_ACCESS_SECRET,
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  region: 'us-west-1',
+});
+
 const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === 'image/jpg'
@@ -47,7 +53,27 @@ const postFileUpload = async (req, res, next) => {
         error: err.message,
       });
     }
-    req.body.media = req.file.location;
+
+    (async () => {
+      const s4 = new aws.S3(awsCredentials);
+      if (req.body.mediaUrl) {
+        const mediaUrlKey = req.body.mediaUrl.substring(53);
+        await s4.deleteObject(
+          {
+            Bucket: 'ampz-backend-sept',
+            Key: mediaUrlKey,
+          },
+          () => {
+            // if (err) {
+            //   // console.log(err);
+            // } else {
+            //   // console.log(data);
+            // }
+          }
+        );
+      }
+    })();
+    req.body.mediaUrl = req.file.location;
     next();
   });
 };
