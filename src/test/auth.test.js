@@ -533,7 +533,7 @@ describe('Auth Route Endpoints', () => {
   describe('POST api/v1/auth/change_password', () => {
     before((done) => {
       (async () => {
-        ResetPassword.find(
+        await ResetPassword.find(
           { email: 'okwuosachijioke1@gmail.com' },
           (err, myuser) => {
             if (myuser) {            
