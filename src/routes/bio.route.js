@@ -5,7 +5,7 @@ import verifyToken from '../middlewares/auth.middleware';
 import {
   coverPhotoUpload,
   profilePhotoUpload,
-} from '../services/imageUpload.services';
+} from '../services/imageUpload.service';
 
 const router = Router();
 
