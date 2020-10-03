@@ -536,13 +536,13 @@ describe('Auth Route Endpoints', () => {
         await ResetPassword.find(
           { email: 'okwuosachijioke1@gmail.com' },
           (err, myuser) => {
-            if (myuser) {            
-              passwordToken = myuser[0].token; 
+            if (myuser) {
+              passwordToken = myuser[0].token;
             }
           }
         );
-      })();      
-     done()
+      })();
+      done();
     });
     it('should not change password if all parameters are not supplied', (done) => {
       chai
