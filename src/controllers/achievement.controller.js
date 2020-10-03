@@ -1,7 +1,7 @@
 import Achievement from '../db/models/achievement.model';
 import logger from '../config';
 /**
- *Contains Achievement Controller
+ *Contains Achievement Controller and methods
  *
  * @class AchievementController
  */
