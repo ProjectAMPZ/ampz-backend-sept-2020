@@ -1,7 +1,7 @@
-import Association from "../db/models/association.model";
+import Association from '../db/models/association.model';
 
 /**
- *Contains Association Controller
+ *Contains Association Controller and methods
  *
  * @class AssociationController
  */
@@ -20,11 +20,11 @@ class AssociationController {
     try {
       const association = await Association.create(req.body);
       res.status(201).json({
-        status: "success",
+        status: 'success',
         data: association,
       });
     } catch (err) {
-      res.status(500).json({ status: "error", error: "Server error" });
+      res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 
@@ -44,7 +44,7 @@ class AssociationController {
       if (!association) {
         return res
           .status(404)
-          .json({ status: "error", message: "association not found" });
+          .json({ status: 'error', message: 'association not found' });
       }
 
       association = await Association.findOneAndUpdate(
@@ -56,13 +56,13 @@ class AssociationController {
       );
 
       res.status(200).json({
-        status: "success",
+        status: 'success',
         data: association,
       });
     } catch (err) {
       res.status(500).json({
-        status: "error",
-        error: "Server error",
+        status: 'error',
+        error: 'Server error',
       });
     }
   }
@@ -83,17 +83,17 @@ class AssociationController {
       if (!association) {
         return res
           .status(404)
-          .json({ status: "error", message: "association not found" });
+          .json({ status: 'error', message: 'association not found' });
       }
 
       res.status(200).json({
-        status: "success",
+        status: 'success',
         data: association,
       });
     } catch (err) {
       res.status(500).json({
-        status: "error",
-        error: "Server error",
+        status: 'error',
+        error: 'Server error',
       });
     }
   }
@@ -114,19 +114,19 @@ class AssociationController {
       if (!association) {
         return res
           .status(404)
-          .json({ status: "404 Not Found", error: "association not found" });
+          .json({ status: '404 Not Found', error: 'association not found' });
       }
 
       await association.remove();
 
       res.status(200).json({
-        status: "success",
-        message: "association deleted successfully",
+        status: 'success',
+        message: 'association deleted successfully',
       });
     } catch (err) {
       res.status(500).json({
-        status: "error",
-        error: "Server error",
+        status: 'error',
+        error: 'Server error',
       });
     }
   }

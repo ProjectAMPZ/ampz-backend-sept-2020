@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import BioController from '../controllers/bio.controller';
-import BioRoleValidator from '../validations/profile/biorolevalidation';
+import BioRoleValidator from '../validations/profile/bioRole.validation';
 import verifyToken from '../middlewares/auth.middleware';
 import {
   coverPhotoUpload,
   profilePhotoUpload,
-} from '../services/imageupload.services';
+} from '../services/imageUpload.service';
 
 const router = Router();
 
