@@ -130,6 +130,32 @@ class PostController {
   }
 
   /**
+   * delete a post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async deletePost(req, res) {
+    try {
+      const post = await Post.findById({ _id: req.params.postId });
+      if (!post) {
+        return res
+          .status(404)
+          .json({ status: '404 Not Found', error: 'post not found' });
+      }
+
+      await post.remove();
+      return res
+        .status(200)
+        .json({ status: 'success', message: 'post deleted successfully' });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'server error' });
+    }
+  }
+
+  /**
    * like/unlike posts.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
@@ -139,15 +165,17 @@ class PostController {
   static async likePost(req, res) {
     try {
       const userId = req.data.id;
-      const {postId} = req.params; 
+      const { postId } = req.params;
 
-      const result = await PostServices.likedByUser(postId,userId,res);
-      if(result){
-         await PostServices.unLike(postId,userId,res);        
-      }else{
-         await PostServices.like(postId,userId,res);        
-      }      
-      res.status(200).json({ status: 'success', message:'Post like updated successfully' });
+      const result = await PostServices.likedByUser(postId, userId, res);
+      if (result) {
+        await PostServices.unLike(postId, userId, res);
+      } else {
+        await PostServices.like(postId, userId, res);
+      }
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Post like updated successfully' });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -163,19 +191,22 @@ class PostController {
   static async bookmarkPost(req, res) {
     try {
       const userId = req.data.id;
-      const {postId} = req.params; 
+      const { postId } = req.params;
 
-      const result = await PostServices.bookmarkedByUser(postId,userId,res);
-      if(result){
-         await PostServices.removeBookmark(postId,userId,res);
-      }else{
-         await PostServices.bookmark(postId,userId,res); 
-      }      
-      res.status(200).json({ status: 'success', message:'Bookmark updated successfully' });
+      const result = await PostServices.bookmarkedByUser(postId, userId, res);
+      if (result) {
+        await PostServices.removeBookmark(postId, userId, res);
+      } else {
+        await PostServices.bookmark(postId, userId, res);
+      }
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Bookmark updated successfully' });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
+
   /**
    * comment on post.
    * @param {Request} req - Response object.
@@ -186,15 +217,17 @@ class PostController {
   static async commentOnPost(req, res) {
     try {
       const userId = req.data.id;
-      const {postId} = req.params; 
-      const {text} = req.body;  
-      const request ={
+      const { postId } = req.params;
+      const { text } = req.body;
+      const request = {
         postId,
         userId,
-        text
-      }
-      Comment.create({ ...request});
-      res.status(200).json({ status: 'success', message:'Comment added successfully'});
+        text,
+      };
+      Comment.create({ ...request });
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Comment added successfully' });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
