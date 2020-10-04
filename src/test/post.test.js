@@ -280,10 +280,10 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error').eql('Access token is Invalid');
+          res.body.should.have.property('error');
           done();
         });
-    });
+    });   
     it('should not update post if the file type is invalid', (done) => {
       chai
         .request(app)
@@ -463,6 +463,71 @@ describe('Post Route Endpoint', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       PostController.bookmarkPost(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+  describe('PUT api/v1/post/comment/:postId', () => {  
+    it('should not comment on post if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/comment/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not comment on post if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/comment/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+      });
+    });
+    it('should not comment on post if comment is not supplied', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/comment/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error').eql('Your request contains invalid parameters');
+          done();
+      });
+    });
+    it('should comment on a post if a user supplies valid token and comment', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/comment/${postId}`)
+        .set('token', postToken)
+        .send({text:'This is test comment'})
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });  
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.commentOnPost(req, res);
       res.status.should.have.callCount(1);
       done();
     });
