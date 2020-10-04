@@ -6,6 +6,7 @@ import experienceRouter from './experience.route';
 import achievementRouter from './achievement.route';
 import associationRouter from './association.route';
 import postRouter from './post.route';
+import filterRouter from './filter.route';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/profile', experienceRouter);
 router.use('/profile', associationRouter);
 router.use('/profile', achievementRouter);
 router.use('/post', postRouter);
+router.use('/filter', filterRouter);
 
 export default router;
