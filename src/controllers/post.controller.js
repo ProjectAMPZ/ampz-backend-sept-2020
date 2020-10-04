@@ -153,6 +153,30 @@ class PostController {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
+
+  /**
+   * bookmark/unbookmark posts.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async bookmarkPost(req, res) {
+    try {
+      const userId = req.data.id;
+      const {postId} = req.params; 
+
+      const result = await postServices.bookmarkedByUser(postId,userId,res);
+      if(result){
+         await postServices.removeBookmark(postId,userId,res);
+      }else{
+         await postServices.bookmark(postId,userId,res); 
+      }      
+      res.status(200).json({ status: 'success', message:'Bookmark updated successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
 }
 
 export default PostController;
