@@ -7,6 +7,7 @@ import app from '../index';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import PostController from '../controllers/post.controller';
+import PostServices from '../services/post.services';
 
 chai.should();
 chai.use(Sinonchai);
@@ -57,7 +58,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should not create post if the file type is invalid', (done) => {
       chai
         .request(app)
@@ -94,7 +94,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should not create post if the file type is invalid', (done) => {
       chai
         .request(app)
@@ -121,7 +120,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should create post if post fields are submitted', (done) => {
       chai
         .request(app)
@@ -141,7 +139,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should create post if virtual academy post fields are submitted', (done) => {
       chai
         .request(app)
@@ -212,7 +209,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('Should fake server error', (done) => {
       const req = { body: {} };
       const res = {
@@ -225,7 +221,6 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
-
   describe('PUT api/v1/post/:postId', () => {
     before((done) => {
       chai
@@ -289,7 +284,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should not update post if the file type is invalid', (done) => {
       chai
         .request(app)
@@ -312,7 +306,6 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-
     it('should update post if update fields are supplied', (done) => {
       chai
         .request(app)
@@ -346,4 +339,104 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+  describe('PUT api/v1/post/like/:postId', () => {  
+    it('should not like or unlike post if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/like/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not like or unlike post if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/like/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+      });
+    });
+    it('should like a post if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/like/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('should unlike a post if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/like/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.likePost(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+  describe('Post Services Mock', () => {
+    it('Should fake server error on likedByUser function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.likedByUser(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+    it('Should fake server error on unlike function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.unLike(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });   
+    it('Should fake server error on like function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.like(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });   
+  });
+  
 });
