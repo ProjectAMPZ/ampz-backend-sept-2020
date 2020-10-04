@@ -9,4 +9,5 @@ router.get('/', PostController.getPosts);
 router.post('/', verifyToken, postFileUpload, PostController.createPost);
 router.put('/:postId', verifyToken, postFileUpload, PostController.updatePost);
 router.put('/like/:postId', verifyToken, PostController.likePost);
+router.put('/bookmark/:postId', verifyToken, PostController.bookmarkPost);
 export default router;

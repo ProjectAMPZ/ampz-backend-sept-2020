@@ -403,6 +403,70 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+  describe('PUT api/v1/post/bookmark/:postId', () => {  
+    it('should not bookmark or remove post if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/bookmark/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not bookmark or remove post if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/bookmark/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+      });
+    });
+    it('should bookmark a post if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/bookmark/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('should remove bookamrk from a post if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/bookmark/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.bookmarkPost(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
   describe('Post Services Mock', () => {
     it('Should fake server error on likedByUser function', (done) => {
       const req = { body: {} };
@@ -437,6 +501,41 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });   
+    it('Should fake server error on likedByUser function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.bookmarkedByUser(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+    it('Should fake server error on unlike function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.bookmark(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });   
+    it('Should fake server error on like function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.removeBookmark(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });   
   });
+    
+
   
 });
