@@ -73,7 +73,11 @@ const postFileUpload = async (req, res, next) => {
         );
       }
     })();
+
+    const mediaType = req.file.mimetype.split('/')[0];
     req.body.mediaUrl = req.file.location;
+    req.body.mediaType = mediaType;
+
     next();
   });
 };

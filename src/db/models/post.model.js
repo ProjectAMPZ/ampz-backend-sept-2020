@@ -19,6 +19,9 @@ const PostSchema = new mongoose.Schema(
     mediaUrl: {
       type: String,
     },
+    mediaType: {
+      type: String,
+    },
 
     category: {
       type: String,
