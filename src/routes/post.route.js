@@ -4,6 +4,7 @@ import verifyToken from '../middlewares/auth.middleware';
 import postFileUpload from '../services/postImageUpload.service';
 import CommentValidator from '../validations/post/comment.validator';
 import singleFileDelete from '../services/imageDelete.service';
+import CountValidator from '../validations/post/count.validator';
 
 const router = Router();
 
@@ -26,4 +27,9 @@ router.put(
   PostController.commentOnPost
 );
 router.put('/application/:postId', verifyToken, PostController.applyForEvent);
+router.put('/count/:postId', 
+    verifyToken,
+    CountValidator.validateData(),
+    CountValidator.myValidationResult,
+    PostController.increaseCount);
 export default router;
