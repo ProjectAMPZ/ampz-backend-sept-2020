@@ -233,7 +233,7 @@ class PostController {
     }
   }
 
-    /**
+  /**
    * apply for event.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
@@ -254,6 +254,37 @@ class PostController {
       res
         .status(200)
         .json({ status: 'success', message: 'Application updated successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
+   /**
+   * increase share count.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async increaseCount(req, res) {
+    try {
+      const { category } = req.body;
+      const { postId } = req.params;
+      const item = await Post.findById(postId);
+      let newData = {};     
+      if(category === 'share'){
+        newData = {
+          share : +item.share + 1,
+        }     
+      }else{
+        newData = {
+          views: +item.views + 1,
+        }
+      }
+    
+      await Post.findOneAndUpdate(postId,{...newData})
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Count updated successfully' });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
