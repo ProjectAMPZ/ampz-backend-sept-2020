@@ -8,6 +8,15 @@ import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import PostController from '../controllers/post.controller';
 import PostServices from '../services/post.services';
+import aws from 'aws-sdk';
+
+const awsCredentials = aws.config.update({
+  secretAccessKey: process.env.S3_ACCESS_SECRET,
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  region: 'us-west-1',
+});
+
+const s3 = new aws.S3(awsCredentials);
 
 chai.should();
 chai.use(Sinonchai);

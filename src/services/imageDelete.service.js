@@ -9,22 +9,24 @@ const awsCredentials = aws.config.update({
 const s3 = new aws.S3(awsCredentials);
 
 const singleFileDelete = async (req, res, next) => {
-  if (req.body.mediaUrl) {
-    const mediaUrlKey = req.body.mediaUrl.substring(53);
-    await s3.deleteObject(
-      {
-        Bucket: 'ampz-backend-sept',
-        Key: mediaUrlKey,
-      },
-      () => {
-        // if (err) {
-        //   // console.log(err);
-        // } else {
-        //   // console.log(data);
-        // }
-      }
-    );
-  }
+  (async () => {
+    const s4 = new aws.S3(awsCredentials);
+    if (req.body.mediaUrl) {
+      await s3.deleteObject(
+        {
+          Bucket: 'ampz-backend-sept',
+          Key: req.body.mediaUrl.substring(53),
+        },
+        () => {
+          // if (err) {
+          //   // console.log(err);
+          // } else {
+          //   // console.log(data);
+          // }
+        }
+      );
+    }
+  })();
 
   next();
 };
