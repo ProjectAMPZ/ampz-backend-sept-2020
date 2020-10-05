@@ -3,6 +3,7 @@ import Application from '../db/models/application.model';
 import Bookmark from '../db/models/bookmark.model';
 import Comment from '../db/models/comment.model';
 import Like from '../db/models/like.model';
+import Report from '../db/models/report.model';
 import logger from '../config';
 import PostServices from '../services/post.services';
 
@@ -289,6 +290,33 @@ class PostController {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
+
+  /**
+   * report post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async reportPost(req, res) {
+    try {
+      const userId = req.data.id;
+      const { postId } = req.params;
+      const { text } = req.body;
+      const request = {
+        postId,
+        userId,
+        text,
+      };
+      Report.create({ ...request });
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Post reported successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
+
 }
 
 export default PostController;
