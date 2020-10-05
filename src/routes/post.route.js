@@ -25,4 +25,5 @@ router.put(
   CommentValidator.myValidationResult,
   PostController.commentOnPost
 );
+router.put('/application/:postId', verifyToken, PostController.applyForEvent);
 export default router;

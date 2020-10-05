@@ -232,6 +232,32 @@ class PostController {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
+
+    /**
+   * apply for event.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async applyForEvent(req, res) {
+    try {
+      const userId = req.data.id;
+      const { postId } = req.params;
+
+      const result = await PostServices.appliedForByUser(postId, userId, res);
+      if (result) {
+        await PostServices.removeApplication(postId, userId, res);
+      } else {
+        await PostServices.makeApplication(postId, userId, res);
+      }
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Application updated successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
 }
 
 export default PostController;
