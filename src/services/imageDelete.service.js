@@ -10,7 +10,6 @@ const s3 = new aws.S3(awsCredentials);
 
 const singleFileDelete = async (req, res, next) => {
   (async () => {
-    const s4 = new aws.S3(awsCredentials);
     if (req.body.mediaUrl) {
       await s3.deleteObject(
         {

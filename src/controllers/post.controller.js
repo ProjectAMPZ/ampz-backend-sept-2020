@@ -62,9 +62,10 @@ class PostController {
         deadline,
         fee,
         mediaUrl: req.body.mediaUrl,
+        mediaType: req.body.mediaType,
         category: req.query.category,
       };
-      if (tags) post.tags = tags.split(',').map((tag) => tag.trim());
+      if (tags) post.tags = tags.split(' ').map((tag) => tag.trim());
       post = await Post.create(post);
       res.status(201).json({ status: 'success', data: post });
     } catch (err) {
