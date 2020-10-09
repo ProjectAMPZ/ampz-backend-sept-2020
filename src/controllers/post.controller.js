@@ -93,7 +93,8 @@ class PostController {
           select: '_id userId text',
           model: Comment,
         })
-        .populate({ path: 'like', select: '_id userId', model: Like });
+        .populate({ path: 'like', select: '_id userId', model: Like })
+        .sort({ createdAt: -1 });
       res.status(200).json({ status: 'success', data: posts });
     } catch (err) {
       // logger.error(err.message);
