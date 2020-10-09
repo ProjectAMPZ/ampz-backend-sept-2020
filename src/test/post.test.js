@@ -111,7 +111,7 @@ describe('Post Route Endpoint', () => {
         .field('caption', 'Humble Beginings')
         .field(
           'description',
-          'TJoin one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
         .field('sport', 'Football')
@@ -144,7 +144,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/img3.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -167,7 +167,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image2.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -196,7 +196,7 @@ describe('Post Route Endpoint', () => {
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -265,7 +265,7 @@ describe('Post Route Endpoint', () => {
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           postId = res.body.data._id;
           done();
@@ -280,7 +280,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
@@ -303,7 +303,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
@@ -343,7 +343,7 @@ describe('Post Route Endpoint', () => {
         });
     });
 
-    it('should update post if update fields are supplied', (done) => {
+    it('should update post if update fields is supplied', (done) => {
       chai
         .request(app)
         .put(`/api/v1/post/${postId}`)
@@ -351,7 +351,7 @@ describe('Post Route Endpoint', () => {
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
         .field('caption', 'Humble Beginings')
-        .attach('media', path.resolve(__dirname, '../assets/img/img3.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
