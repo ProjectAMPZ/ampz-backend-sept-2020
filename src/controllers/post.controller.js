@@ -283,8 +283,8 @@ class PostController {
           views: +item.views + 1,
         }
       }
-    
-      await Post.findOneAndUpdate(postId,{...newData})
+      console.log('am here')
+      await Post.findOneAndUpdate({_id:postId},{...newData})
       res
         .status(200)
         .json({ status: 'success', message: 'Count updated successfully' });
