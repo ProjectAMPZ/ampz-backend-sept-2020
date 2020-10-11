@@ -16,6 +16,7 @@ chai.use(chaiHttp);
 let postToken;
 let postId;
 let mediaUrl;
+let myPostId;
 
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
@@ -197,7 +198,7 @@ describe('Post Route Endpoint', () => {
         .field('tags', 'football, lagos, event')
         .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
         .end((err, res) => {
-          postId = res.body.data._id;
+          postId = res.body.data._id;       
           done();
         });
     });
@@ -490,6 +491,87 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+  describe('PUT api/v1/post/count/:postId', () => {
+    it('should not increase post count if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/count/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not increase post count if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/count/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should not increase post count if category is not supplied', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/count/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have
+            .property('error')
+            .eql('Your request contains invalid parameters');
+          done();
+        });
+    });
+    it('should increase post view count if a user supplies valid token and category', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/count/${postId}`)
+        .set('token', postToken)
+        .send({category: 'share' })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('should increase post share count if a user supplies valid token and category', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/count/${postId}`)
+        .set('token', postToken)
+        .send({ category: 'share7' })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.increaseCount(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
   describe('Post Services Mock', () => {
     it('Should fake server error on likedByUser function', (done) => {
       const req = { body: {} };
@@ -559,6 +641,40 @@ describe('Post Route Endpoint', () => {
     });
   });
 
+    it('Should fake server error on appliedForByUser function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.appliedForByUser(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+    it('Should fake server error on removeApplication function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.removeApplication(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+    it('Should fake server error on makeApplication function', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostServices.makeApplication(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+  });
   describe('DELETE api/v1/profile/post/:postId', () => {
     before((done) => {
       chai
@@ -646,6 +762,151 @@ describe('Post Route Endpoint', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       PostController.deletePost(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+
+  describe('PUT api/v1/post/application/:postId', () => {
+    it('should not make application if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/application/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not not make application if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/application/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should apply for an event if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/application/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('should apply for an event if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/application/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('should remove an application if a user supplies valid token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/application/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.applyForEvent(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+  describe('PUT api/v1/post/report/:postId', () => {
+    it('should not report post if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/report/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not report post if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/report/${postId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should not report post if text is not supplied', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/report/${postId}`)
+        .set('token', postToken)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have
+            .property('error')
+            .eql('Your request contains invalid parameters');
+          done();
+        });
+    });
+    it('should report post if a user supplies valid token and text', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/post/report/${postId}`)
+        .set('token', postToken)
+        .send({ text: 'This is test report' })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('message');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.reportPost(req, res);
       res.status.should.have.callCount(1);
       done();
     });
