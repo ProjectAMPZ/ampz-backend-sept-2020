@@ -1,5 +1,6 @@
 import Like from '../db/models/like.model';
 import Bookmark from '../db/models/bookmark.model';
+import Application from '../db/models/application.model';
 
 export default {
   async likedByUser(postId, userId, res) {
@@ -88,4 +89,49 @@ export default {
       });
     }
   },
+
+  async appliedForByUser(postId, userId, res) {
+    try {
+      const condition = {
+        postId,
+        userId
+      };
+      const user = await Application.findOne(condition);
+      return user;
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error checking for application',
+      });
+    }
+  },
+  async removeApplication(postId, userId, res) {
+    try {
+      const condition = {
+        postId,
+        userId
+      };
+      await Application.deleteMany(condition);
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error removing application',
+      });
+    }
+  },
+  async makeApplication(postId, userId, res) {
+    try {
+      const condition = {
+        postId,
+        userId
+      };
+      await Application.create(condition);
+    } catch (err) {
+      return res.status(500).json({
+        status: '500 Internal server error',
+        error: 'Error submitting applications',
+      });
+    }
+  },
+
 };
