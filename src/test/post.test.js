@@ -66,8 +66,11 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'POST CAPTION')
-        .field('description', 'POST DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
         .end((err, res) => {
           res.should.have.status(400);
@@ -77,6 +80,59 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
+
+    it('should not create post if the file type is invalid', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/post?category=academy')
+        .set('token', postToken)
+        .set('Content-Type', 'multipart/form-data')
+        .set('Connection', 'keep-alive')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
+        .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
+    it('should not create post if the file type is invalid', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/post?category=event')
+        .set('token', postToken)
+        .set('Content-Type', 'multipart/form-data')
+        .set('Connection', 'keep-alive')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
+        .field('eventType', 'Football event')
+        .field('sport', 'Football')
+        .field('minAge', '16')
+        .field('maxAge', '20')
+        .field('country', 'Nigeria')
+        .field('state', 'Lagos')
+        .field('venue', 'Yaba')
+        .field('tags', 'football, lagos, event')
+        .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('400 Invalid Request');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+
     it('should create post if post fields are submitted', (done) => {
       chai
         .request(app)
@@ -84,10 +140,13 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'TEST POST CAPTION')
-        .field('description', 'TEST POST DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/img3.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -103,10 +162,13 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'TEST ACADEMY CAPTION')
-        .field('description', 'TEST ACADEMY DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image2.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -122,8 +184,11 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'TEST EVENT CAPTION')
-        .field('description', 'TEST EVENT DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('eventType', 'Football event')
         .field('sport', 'Football')
         .field('minAge', '16')
@@ -132,7 +197,7 @@ describe('Post Route Endpoint', () => {
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -186,8 +251,11 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'UPDATE POST')
-        .field('description', 'UPDATE POST DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('eventType', 'Football event')
         .field('sport', 'Football')
         .field('minAge', '16')
@@ -196,7 +264,7 @@ describe('Post Route Endpoint', () => {
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           postId = res.body.data._id;       
           done();
@@ -206,9 +274,12 @@ describe('Post Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/post/${postId}`)
-        .field('description', 'UPDATE POST DESCRIPTION')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('eventType', 'Football event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
@@ -226,9 +297,12 @@ describe('Post Route Endpoint', () => {
         .request(app)
         .put(`/api/v1/post/${postId}`)
         .set('token', 'invalid token')
-        .field('description', 'UPDATE POST DESCRIPTION')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .field('eventType', 'Football event')
-        .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
@@ -248,8 +322,11 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'POST CAPTION')
-        .field('description', 'POST DESCRIPTION')
+        .field('caption', 'Humble Beginings')
+        .field(
+          'description',
+          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+        )
         .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
         .field(
           'mediaUrl',
@@ -270,8 +347,8 @@ describe('Post Route Endpoint', () => {
         .set('token', postToken)
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
-        .field('caption', 'TEST POST CAPTION')
-        .attach('media', path.resolve(__dirname, '../assets/img/img3.jpg'))
+        .field('caption', 'Humble Beginings')
+        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
