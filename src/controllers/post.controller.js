@@ -91,10 +91,12 @@ class PostController {
           model: Application,
         })
         .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+        .populate({ path: 'report', select: '_id userId', model: Report })
         .populate({
           path: 'comment',
           select: '_id userId text',
           model: Comment,
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
         })
         .populate({ path: 'like', select: '_id userId', model: Like })
         .sort({ createdAt: -1 });
@@ -176,9 +178,22 @@ class PostController {
       } else {
         await PostServices.like(postId, userId, res);
       }
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Post like updated successfully' });
+      const posts = await Post.findOne({_id:postId}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+        .populate({
+          path: 'application',
+          select: '_id userId',
+          model: Application,
+        })
+        .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+        .populate({ path: 'report', select: '_id userId', model: Report })
+        .populate({
+          path: 'comment',
+          select: '_id userId text',
+          model: Comment,
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        })
+        .populate({ path: 'like', select: '_id userId', model: Like });        
+      res.status(200).json({ status: 'success', data: posts });   
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -202,9 +217,22 @@ class PostController {
       } else {
         await PostServices.bookmark(postId, userId, res);
       }
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Bookmark updated successfully' });
+      const posts = await Post.findOne({_id:postId}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+      .populate({
+        path: 'application',
+        select: '_id userId',
+        model: Application,
+      })
+      .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+      .populate({ path: 'report', select: '_id userId', model: Report })
+      .populate({
+        path: 'comment',
+        select: '_id userId text',
+        model: Comment,
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+      })
+      .populate({ path: 'like', select: '_id userId', model: Like });        
+    res.status(200).json({ status: 'success', data: posts }); 
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -227,10 +255,23 @@ class PostController {
         userId,
         text,
       };
-      Comment.create({ ...request });
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Comment added successfully' });
+      await Comment.create({ ...request });
+      const posts = await Post.findOne({_id:postId}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+      .populate({
+        path: 'application',
+        select: '_id userId',
+        model: Application,
+      })
+      .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+      .populate({ path: 'report', select: '_id userId', model: Report })
+      .populate({
+        path: 'comment',
+        select: '_id userId text',
+        model: Comment,
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+      })
+      .populate({ path: 'like', select: '_id userId', model: Like });        
+    res.status(200).json({ status: 'success', data: posts }); 
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -254,9 +295,22 @@ class PostController {
       } else {
         await PostServices.makeApplication(postId, userId, res);
       }
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Application updated successfully' });
+      const posts = await Post.findOne({_id:postId}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+      .populate({
+        path: 'application',
+        select: '_id userId',
+        model: Application,
+      })
+      .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+      .populate({ path: 'report', select: '_id userId', model: Report })
+      .populate({
+        path: 'comment',
+        select: '_id userId text',
+        model: Comment,
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+      })
+      .populate({ path: 'like', select: '_id userId', model: Like });        
+      res.status(200).json({ status: 'success', data: posts }); 
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -283,11 +337,23 @@ class PostController {
           views: +item.views + 1,
         }
       }
-      console.log('am here')
-      await Post.findOneAndUpdate({_id:postId},{...newData})
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Count updated successfully' });
+     
+      const posts = await Post.findOneAndUpdate({_id:postId},{...newData}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+        .populate({
+          path: 'application',
+          select: '_id userId',
+          model: Application,
+        })
+        .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+        .populate({ path: 'report', select: '_id userId', model: Report })
+        .populate({
+          path: 'comment',
+          select: '_id userId text',
+          model: Comment,
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        })
+        .populate({ path: 'like', select: '_id userId', model: Like });        
+      res.status(200).json({ status: 'success', data: posts });     
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -310,10 +376,24 @@ class PostController {
         userId,
         text,
       };
-      Report.create({ ...request });
-      res
-        .status(200)
-        .json({ status: 'success', message: 'Post reported successfully' });
+      await Report.create({ ...request });
+
+      const posts = await Post.findOne({_id:postId}).populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+        .populate({
+          path: 'application',
+          select: '_id userId',
+          model: Application,
+        })
+        .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+        .populate({ path: 'report', select: '_id userId', model: Report })
+        .populate({
+          path: 'comment',
+          select: '_id userId text',
+          model: Comment,
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        })
+        .populate({ path: 'like', select: '_id userId', model: Like });        
+      res.status(200).json({ status: 'success', data: posts });  
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }

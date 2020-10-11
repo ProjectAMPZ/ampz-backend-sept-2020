@@ -132,6 +132,13 @@ PostSchema.virtual('comment', {
   justOne: false,
 });
 
+PostSchema.virtual('report', {
+  ref: 'report',
+  localField: '_id',
+  foreignField: 'postId',
+  justOne: false,
+});
+
 const Post = mongoose.model('post', PostSchema);
 
 export default Post;

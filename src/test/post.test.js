@@ -408,7 +408,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -421,7 +421,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -472,7 +472,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -485,7 +485,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -552,7 +552,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -619,7 +619,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -633,7 +633,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -716,8 +716,6 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });
-  });
-
     it('Should fake server error on appliedForByUser function', (done) => {
       const req = { body: {} };
       const res = {
@@ -752,7 +750,6 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
-
   describe('DELETE api/v1/profile/post/:postId', () => {
     before((done) => {
       chai
@@ -844,7 +841,6 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
-
   describe('PUT api/v1/post/application/:postId', () => {
     it('should not make application if the user does not supply a token', (done) => {
       chai
@@ -880,7 +876,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -893,7 +889,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -906,7 +902,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -973,7 +969,7 @@ describe('Post Route Endpoint', () => {
           res.should.have.status(200);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('message');
+          res.body.should.have.property('data');
           done();
         });
     });
@@ -989,5 +985,4 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
- 
-
+});

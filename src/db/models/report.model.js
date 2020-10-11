@@ -23,6 +23,6 @@ const ReportSchema = new mongoose.Schema({
   },
 });
 
-const Report = mongoose.model('Report', ReportSchema);
+const Report = mongoose.model('report', ReportSchema);
 
 export default Report;
