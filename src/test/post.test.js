@@ -46,7 +46,7 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-    it('should not create post if the token is invalid', (done) => {
+    it('should not create post if token is invalid', (done) => {
       chai
         .request(app)
         .post('/api/v1/post?category=post')
@@ -639,6 +639,8 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });
+  });
+
     it('Should fake server error on appliedForByUser function', (done) => {
       const req = { body: {} };
       const res = {
@@ -673,6 +675,7 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+
   describe('DELETE api/v1/profile/post/:postId', () => {
     before((done) => {
       chai
@@ -764,6 +767,7 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+
   describe('PUT api/v1/post/application/:postId', () => {
     it('should not make application if the user does not supply a token', (done) => {
       chai
@@ -909,4 +913,4 @@ describe('Post Route Endpoint', () => {
     });
   });
  
-});
+

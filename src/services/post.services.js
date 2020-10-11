@@ -89,6 +89,7 @@ export default {
       });
     }
   },
+
   async appliedForByUser(postId, userId, res) {
     try {
       const condition = {

@@ -10,35 +10,45 @@ import verifyToken from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post('/signup',
+router.post(
+  '/signup',
   SignUpValidator.validateData(),
   SignUpValidator.myValidationResult,
   SignUpValidator.emailAlreadyExist,
   SignUpValidator.usernameAlreadyExist,
   SignUpValidator.phonenumberAlreadyExist,
-  AuthController.signUp);
+  AuthController.signUp
+);
 
-router.post('/resend-verification',
+router.post(
+  '/resend-verification',
   ResendVerificationValidator.validateData(),
   ResendVerificationValidator.myValidationResult,
-  AuthController.resendVerificationCode);
+  AuthController.resendVerificationCode
+);
 
-router.post('/activate_account',
+router.post(
+  '/activate_account',
   AccountActivationValidator.validateData(),
   AccountActivationValidator.myValidationResult,
   AccountActivationValidator.emailAlreadyExist,
   AccountActivationValidator.confirmActivationCode,
-  AuthController.activateAccount);
+  AuthController.activateAccount
+);
 
-router.post('/login',
+router.post(
+  '/login',
   LoginValidator.validateData(),
   LoginValidator.myValidationResult,
-  AuthController.login);
+  AuthController.login
+);
 
-router.post('/social_login',
+router.post(
+  '/social_login',
   SocialLoginValidator.validateData(),
   SocialLoginValidator.myValidationResult,
-  AuthController.socialLogin);
+  AuthController.socialLogin
+);
 
 router.get(
   '/:email/reset_password',
@@ -46,12 +56,15 @@ router.get(
   AuthController.resetPassword
 );
 
-router.post('/change_password',
+router.post(
+  '/change_password',
   PasswordResetValidator.validateData(),
   PasswordResetValidator.myValidationResult,
   PasswordResetValidator.verifyPasscode,
-  AuthController.changePassword);
+  AuthController.changePassword
+);
 
 router.get('/load_user', verifyToken, AuthController.loadUser);
+router.get('/users', AuthController.getUsers);
 
 export default router;
