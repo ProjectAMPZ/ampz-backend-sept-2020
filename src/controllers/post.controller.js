@@ -3,6 +3,7 @@ import Application from '../db/models/application.model';
 import Bookmark from '../db/models/bookmark.model';
 import Comment from '../db/models/comment.model';
 import Like from '../db/models/like.model';
+import Report from '../db/models/report.model';
 import logger from '../config';
 import PostServices from '../services/post.services';
 
@@ -95,7 +96,8 @@ class PostController {
           select: '_id userId text',
           model: Comment,
         })
-        .populate({ path: 'like', select: '_id userId', model: Like });
+        .populate({ path: 'like', select: '_id userId', model: Like })
+        .sort({ createdAt: -1 });
       res.status(200).json({ status: 'success', data: posts });
     } catch (err) {
       // logger.error(err.message);
@@ -233,6 +235,90 @@ class PostController {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
+
+  /**
+   * apply for event.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async applyForEvent(req, res) {
+    try {
+      const userId = req.data.id;
+      const { postId } = req.params;
+
+      const result = await PostServices.appliedForByUser(postId, userId, res);
+      if (result) {
+        await PostServices.removeApplication(postId, userId, res);
+      } else {
+        await PostServices.makeApplication(postId, userId, res);
+      }
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Application updated successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
+   /**
+   * increase share count.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async increaseCount(req, res) {
+    try {
+      const { category } = req.body;
+      const { postId } = req.params;
+      const item = await Post.findById(postId);
+      let newData = {};     
+      if(category === 'share'){
+        newData = {
+          share : +item.share + 1,
+        }     
+      }else{
+        newData = {
+          views: +item.views + 1,
+        }
+      }
+      console.log('am here')
+      await Post.findOneAndUpdate({_id:postId},{...newData})
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Count updated successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
+
+  /**
+   * report post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async reportPost(req, res) {
+    try {
+      const userId = req.data.id;
+      const { postId } = req.params;
+      const { text } = req.body;
+      const request = {
+        postId,
+        userId,
+        text,
+      };
+      Report.create({ ...request });
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Post reported successfully' });
+    } catch (err) {
+      res.status(500).json({ status: 'error', error: 'internal server error' });
+    }
+  }
+
 }
 
 export default PostController;
