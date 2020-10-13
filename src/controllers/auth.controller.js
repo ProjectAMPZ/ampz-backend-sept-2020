@@ -6,6 +6,8 @@ import Feature from '../db/models/feature.model';
 import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
 import Achievement from '../db/models/achievement.model';
+import Post from '../db/models/post.model';
+import Application from '../db/models/application.model';
 import ResetPassword from '../db/models/resetPassword.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
@@ -149,6 +151,16 @@ class AuthController {
           // throw new Error('Error occured in db fetching achievement');
         }
       });
+
+      const post = await Post.find().populate({
+        path: 'application',
+        model: Application,
+        populate: {
+          path: 'userId',
+          select: '_id userName profilePhotoUrl yearOfBirth location',
+        },
+      });
+
       const token = await Helper.generateToken(
         user.id,
         user.role,
@@ -163,6 +175,7 @@ class AuthController {
           experience,
           association,
           achievement,
+          post,
         },
       });
     } catch (err) {
@@ -230,6 +243,15 @@ class AuthController {
         }
       });
 
+      const post = await Post.find().populate({
+        path: 'application',
+        model: Application,
+        populate: {
+          path: 'userId',
+          select: '_id userName profilePhotoUrl yearOfBirth location',
+        },
+      });
+
       const token = await Helper.generateToken(
         user[0].id,
         user[0].role,
@@ -246,6 +268,7 @@ class AuthController {
           experience,
           association,
           achievement,
+          post,
         },
       });
     } catch (err) {
@@ -310,6 +333,15 @@ class AuthController {
               // throw new Error('Error occured in db fetching achievement');
             }
           });
+
+          const post = await Post.find().populate({
+            path: 'application',
+            model: Application,
+            populate: {
+              path: 'userId',
+              select: '_id userName profilePhotoUrl yearOfBirth location',
+            },
+          });
           const userToken = await Helper.generateToken(
             myUser[0]._id,
             myUser[0].role,
@@ -326,6 +358,7 @@ class AuthController {
               experience,
               association,
               achievement,
+              post,
             },
           });
         }
@@ -376,6 +409,15 @@ class AuthController {
                     // throw new Error('Error occured in db fetching achievement');
                   }
                 });
+
+                const post = await Post.find().populate({
+                  path: 'application',
+                  model: Application,
+                  populate: {
+                    path: 'userId',
+                    select: '_id userName profilePhotoUrl yearOfBirth location',
+                  },
+                });
                 const userToken = await Helper.generateToken(
                   createdUser.id,
                   createdUser.role,
@@ -390,6 +432,7 @@ class AuthController {
                     experience,
                     association,
                     achievement,
+                    post,
                   },
                 });
               })();
@@ -556,6 +599,15 @@ class AuthController {
           }
         });
 
+        const post = await Post.find().populate({
+          path: 'application',
+          model: Application,
+          populate: {
+            path: 'userId',
+            select: '_id userName profilePhotoUrl yearOfBirth location',
+          },
+        });
+
         const token = await Helper.generateToken(
           user[0].id,
           user[0].role,
@@ -572,6 +624,7 @@ class AuthController {
             experience,
             association,
             achievement,
+            post,
           },
         });
       }

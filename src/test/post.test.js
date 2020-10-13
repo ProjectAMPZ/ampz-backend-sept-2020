@@ -16,7 +16,6 @@ chai.use(chaiHttp);
 let postToken;
 let postId;
 let mediaUrl;
-let myPostId;
 
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
@@ -122,6 +121,10 @@ describe('Post Route Endpoint', () => {
         .field('country', 'Nigeria')
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
+        .field('startDate', '10/10/2020')
+        .field('endDate', '20/10/2020')
+        .field('startTime', '09:00AM')
+        .field('endTime', '4:00PM')
         .field('tags', 'football, lagos, event')
         .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
         .end((err, res) => {
@@ -197,6 +200,10 @@ describe('Post Route Endpoint', () => {
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
         .field('tags', 'football, lagos, event')
+        .field('startDate', '10/10/2020')
+        .field('endDate', '20/10/2020')
+        .field('startTime', '09:00AM')
+        .field('endTime', '4:00PM')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
@@ -263,10 +270,14 @@ describe('Post Route Endpoint', () => {
         .field('country', 'Nigeria')
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
+        .field('startDate', '10/10/2020')
+        .field('endDate', '20/10/2020')
+        .field('startTime', '09:00AM')
+        .field('endTime', '4:00PM')
         .field('tags', 'football, lagos, event')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
-          postId = res.body.data._id;       
+          postId = res.body.data._id;
           done();
         });
     });
@@ -614,7 +625,7 @@ describe('Post Route Endpoint', () => {
         .request(app)
         .put(`/api/v1/post/count/${postId}`)
         .set('token', postToken)
-        .send({category: 'share' })
+        .send({ category: 'share' })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -767,6 +778,10 @@ describe('Post Route Endpoint', () => {
         .field('country', 'Nigeria')
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
+        .field('startDate', '10/10/2020')
+        .field('endDate', '20/10/2020')
+        .field('startTime', '09:00AM')
+        .field('endTime', '4:00PM')
         .field('tags', 'football, lagos, event')
         .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
         .end((err, res) => {
