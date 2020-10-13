@@ -9,6 +9,10 @@ const ApplicationSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'user',
   },
+  status: {
+    type: String,
+    default: 'pending',
+  },
   createdAt: {
     type: Date,
     default: Date.now,

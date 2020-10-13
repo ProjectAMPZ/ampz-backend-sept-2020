@@ -6,6 +6,10 @@ const FilterSchema = new mongoose.Schema({
     ref: 'user',
   },
 
+  filterName: {
+    type: String,
+  },
+
   gender: {
     type: String,
   },
