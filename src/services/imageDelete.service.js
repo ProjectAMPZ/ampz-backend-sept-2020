@@ -11,7 +11,6 @@ const s3 = new aws.S3(awsCredentials);
 const singleFileDelete = async (req, res, next) => {
   (async () => {
     if (req.body.mediaUrl) {
-
       s3.deleteObject(
         {
           Bucket: 'ampz-backend-sept',

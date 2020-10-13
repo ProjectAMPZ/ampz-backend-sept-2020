@@ -7,6 +7,7 @@ import singleFileDelete from '../services/imageDelete.service';
 
 import CountValidator from '../validations/post/count.validator';
 import ReportValidator from '../validations/post/report.validator';
+
 const router = Router();
 
 router.get('/', PostController.getPosts);
@@ -28,7 +29,8 @@ router.put(
   PostController.commentOnPost
 );
 router.put('/application/:postId', verifyToken, PostController.applyForEvent);
-router.put('/count/:postId', 
+router.put(
+  '/count/:postId',
   verifyToken,
   CountValidator.validateData(),
   CountValidator.myValidationResult,
