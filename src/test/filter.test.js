@@ -12,10 +12,6 @@ chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
 
-let filterToken;
-let filterUserId;
-let filterId;
-
 const filter = {
   gender: 'Male',
   sport: '1',
@@ -30,22 +26,24 @@ const updatefilter = {
   gender: 'Female',
 };
 
+let token;
+let userId;
+let filterId;
+
+before((done) => {
+  Auth.findOne({ email: 'info@ampz.tv' }, (err, user) => {
+    if (user) {
+      (async () => {
+        userId = user._id;
+        token = await Helper.generateToken(user._id, user._role, user.userName);
+      })();
+      done();
+    }
+  });
+});
+
 describe('Filter Route Endpoint', () => {
   describe('POST api/v1/filter', () => {
-    before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            filterToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
-        }
-      });
-    });
     it('should not create filter if the user does not supply a token', (done) => {
       chai
         .request(app)
@@ -71,13 +69,19 @@ describe('Filter Route Endpoint', () => {
           done();
         });
     });
-
-    it('should create filter if token is valid and data is supplied', (done) => {
+    it('should create filter if the token is valid', (done) => {
       chai
         .request(app)
         .post('/api/v1/filter')
-        .set('token', filterToken)
-        .send(filter)
+        .set('token', token)
+        .send({
+          gender: 'Male',
+          sport: '1',
+          position: 'CD',
+          education: '2',
+          filterName: 'first Filter',
+          userId,
+        })
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -86,6 +90,7 @@ describe('Filter Route Endpoint', () => {
           done();
         });
     });
+
     it('Should fake server error', (done) => {
       const req = { body: {} };
       const res = {
@@ -101,23 +106,11 @@ describe('Filter Route Endpoint', () => {
 
   describe('PUT api/v1/filter/:filterId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            filterUserId = myuser._id;
-            filterToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-        }
-      });
       Filter.create(
         {
           gender: 'Male',
           sport: '1',
-          userId: filterUserId,
+          userId,
         },
         (err, filter) => {
           filterId = filter._id;
@@ -157,7 +150,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .put('/api/v1/filter/5f723030f2a978274813c51d')
-        .set('token', filterToken)
+        .set('token', token)
         .send(filter)
         .end((err, res) => {
           res.should.have.status(404);
@@ -171,7 +164,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/filter/${filterId}`)
-        .set('token', filterToken)
+        .set('token', token)
         .send(updatefilter)
         .end((err, res) => {
           res.should.have.status(200);
@@ -195,24 +188,12 @@ describe('Filter Route Endpoint', () => {
   });
   describe('GET api/v1/filter/:filterId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            filterUserId = myuser._id;
-            filterToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-        }
-      });
       Filter.create(
         {
           sport: '1',
           position: 'CD',
           education: '2',
-          userId: filterUserId,
+          userId,
         },
         (err, filter) => {
           filterId = filter._id;
@@ -249,7 +230,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .get('/api/v1/filter/5f723030f2a978274813c51d')
-        .set('token', filterToken)
+        .set('token', token)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
@@ -262,7 +243,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .get(`/api/v1/filter/${filterId}`)
-        .set('token', filterToken)
+        .set('token', token)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -285,24 +266,12 @@ describe('Filter Route Endpoint', () => {
   });
   describe('DELETE api/v1/filter/:filterId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            filterUserId = myuser._id;
-            filterToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-        }
-      });
       Filter.create(
         {
           sport: '1',
           position: 'CD',
           education: '2',
-          userId: filterUserId,
+          userId,
         },
         (err, filter) => {
           filterId = filter._id;
@@ -339,7 +308,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .delete('/api/v1/filter/5f70f3fee718fe18e4635e48')
-        .set('token', filterToken)
+        .set('token', token)
         .end((err, res) => {
           res.should.have.status(404);
           res.body.should.be.an('object');
@@ -352,7 +321,7 @@ describe('Filter Route Endpoint', () => {
       chai
         .request(app)
         .delete(`/api/v1/filter/${filterId}`)
-        .set('token', filterToken)
+        .set('token', token)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');

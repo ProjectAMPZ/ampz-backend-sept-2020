@@ -16,7 +16,6 @@ chai.use(chaiHttp);
 let postToken;
 let postId;
 let mediaUrl;
-let myPostId;
 
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
@@ -266,7 +265,7 @@ describe('Post Route Endpoint', () => {
         .field('tags', 'football, lagos, event')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
-          postId = res.body.data._id;       
+          postId = res.body.data._id;
           done();
         });
     });
@@ -614,7 +613,7 @@ describe('Post Route Endpoint', () => {
         .request(app)
         .put(`/api/v1/post/count/${postId}`)
         .set('token', postToken)
-        .send({category: 'share' })
+        .send({ category: 'share' })
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
