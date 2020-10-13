@@ -63,7 +63,7 @@ describe('Profile Experience Route Endpoint', () => {
         }
       });
     });
-    it('should not create experience if the user does not supply a token', (done) => {
+    it('should not create experience if the user does not supply token', (done) => {
       chai
         .request(app)
         .post('/api/v1/profile/experience')
@@ -75,7 +75,7 @@ describe('Profile Experience Route Endpoint', () => {
           done();
         });
     });
-    it('should not create experience if the token is invalid', (done) => {
+    it('should not create experience if token is invalid', (done) => {
       chai
         .request(app)
         .post('/api/v1/profile/experience')

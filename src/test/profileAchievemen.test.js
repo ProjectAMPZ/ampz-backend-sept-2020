@@ -242,7 +242,7 @@ describe('Profile Achievement Route Endpoint', () => {
         }
       );
     });
-    it('should not get achievement if the user does not supply a token', (done) => {
+    it('should not get achievement if the user does not supply token', (done) => {
       chai
         .request(app)
         .get(`/api/v1/profile/achievement/${achievementId}`)
