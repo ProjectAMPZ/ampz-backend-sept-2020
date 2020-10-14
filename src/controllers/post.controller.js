@@ -94,9 +94,9 @@ class PostController {
         .populate({ path: 'report', select: '_id userId', model: Report })
         .populate({
           path: 'comment',
-          select: '_id userId text',
-          model: Comment,
-          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+          select: '_id userId text createdAt',
+          model: Comment,        
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
         })
         .populate({ path: 'like', select: '_id userId', model: Like })
         .sort({ createdAt: -1 });
@@ -188,9 +188,9 @@ class PostController {
         .populate({ path: 'report', select: '_id userId', model: Report })
         .populate({
           path: 'comment',
-          select: '_id userId text',
-          model: Comment,
-          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+          select: '_id userId text createdAt',
+          model: Comment,        
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
         })
         .populate({ path: 'like', select: '_id userId', model: Like });        
       res.status(200).json({ status: 'success', data: posts });   
@@ -227,9 +227,9 @@ class PostController {
       .populate({ path: 'report', select: '_id userId', model: Report })
       .populate({
         path: 'comment',
-        select: '_id userId text',
-        model: Comment,
-        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        select: '_id userId text createdAt',
+        model: Comment,        
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
       })
       .populate({ path: 'like', select: '_id userId', model: Like });        
     res.status(200).json({ status: 'success', data: posts }); 
@@ -266,9 +266,9 @@ class PostController {
       .populate({ path: 'report', select: '_id userId', model: Report })
       .populate({
         path: 'comment',
-        select: '_id userId text',
-        model: Comment,
-        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        select: '_id userId text createdAt',
+        model: Comment,        
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
       })
       .populate({ path: 'like', select: '_id userId', model: Like });        
     res.status(200).json({ status: 'success', data: posts }); 
@@ -305,9 +305,9 @@ class PostController {
       .populate({ path: 'report', select: '_id userId', model: Report })
       .populate({
         path: 'comment',
-        select: '_id userId text',
-        model: Comment,
-        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+        select: '_id userId text createdAt',
+        model: Comment,        
+        populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
       })
       .populate({ path: 'like', select: '_id userId', model: Like });        
       res.status(200).json({ status: 'success', data: posts }); 
@@ -348,9 +348,9 @@ class PostController {
         .populate({ path: 'report', select: '_id userId', model: Report })
         .populate({
           path: 'comment',
-          select: '_id userId text',
-          model: Comment,
-          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+          select: '_id userId text createdAt',
+          model: Comment,        
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
         })
         .populate({ path: 'like', select: '_id userId', model: Like });        
       res.status(200).json({ status: 'success', data: posts });     
@@ -388,9 +388,9 @@ class PostController {
         .populate({ path: 'report', select: '_id userId', model: Report })
         .populate({
           path: 'comment',
-          select: '_id userId text',
-          model: Comment,
-          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }
+          select: '_id userId text createdAt',
+          model: Comment,        
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
         })
         .populate({ path: 'like', select: '_id userId', model: Like });        
       res.status(200).json({ status: 'success', data: posts });  
