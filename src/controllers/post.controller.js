@@ -399,6 +399,40 @@ class PostController {
     }
   }
 
+   /**
+   * get single post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getPost(req, res) {
+    try {
+      const { postId } = req.params;
+      const posts = await Post.findOne({_id: postId})
+        .populate({ path: 'userId', select: 'userName profilePhotoUrl' })
+        .populate({
+          path: 'application',
+          select: '_id userId',
+          model: Application,
+        })
+        .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
+        .populate({ path: 'report', select: '_id userId', model: Report })
+        .populate({
+          path: 'comment',
+          select: '_id userId text createdAt',
+          model: Comment,        
+          populate:{ path: 'userId', select: 'userName profilePhotoUrl' }         
+        })
+        .populate({ path: 'like', select: '_id userId', model: Like })
+        .sort({ createdAt: -1 });
+      res.status(200).json({ status: 'success', data: posts });
+    } catch (err) {
+      // logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'server error' });
+    }
+  }
+
 }
 
 export default PostController;
