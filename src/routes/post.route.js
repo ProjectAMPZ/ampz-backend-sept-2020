@@ -27,19 +27,20 @@ router.put(
   CommentValidator.myValidationResult,
   PostController.commentOnPost
 );
-
 router.put('/application/:postId', verifyToken, PostController.applyForEvent);
 router.put('/count/:postId', 
-    verifyToken,
-    CountValidator.validateData(),
-    CountValidator.myValidationResult,
-    PostController.increaseCount);
+  verifyToken,
+  CountValidator.validateData(),
+  CountValidator.myValidationResult,
+  PostController.increaseCount
+);
 router.put(
-      '/report/:postId',
-      verifyToken,
-      ReportValidator.validateData(),
-      ReportValidator.myValidationResult,
-      PostController.reportPost
-    );
+  '/report/:postId',
+  verifyToken,
+  ReportValidator.validateData(),
+  ReportValidator.myValidationResult,
+  PostController.reportPost
+);
+router.get('/:postId', PostController.getPost);
 
 export default router;

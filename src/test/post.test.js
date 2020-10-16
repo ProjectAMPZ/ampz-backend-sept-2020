@@ -985,4 +985,29 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
+  describe('GET api/v1/post/:postId', () => {
+    it('should get all post, events and virtual coach posts', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/post/${postId}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.getPost(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
 });
