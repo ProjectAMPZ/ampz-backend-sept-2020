@@ -151,8 +151,14 @@ class AuthController {
           // throw new Error('Error occured in db fetching achievement');
         }
       });
+      
+      const post = await Post.find(condition, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching post');
+        }
+      }).populate({
 
-      const post = await Post.find().populate({
         path: 'application',
         model: Application,
         populate: {
@@ -243,7 +249,12 @@ class AuthController {
         }
       });
 
-      const post = await Post.find().populate({
+      const post = await Post.find(condition, (err) => {
+        if (err) {
+          // logger.error(err);
+          // throw new Error('Error occured in db fetching post');
+        }
+      }).populate({
         path: 'application',
         model: Application,
         populate: {
@@ -334,8 +345,14 @@ class AuthController {
             }
           });
 
-          const post = await Post.find().populate({
-            path: 'application',
+
+          const post = await Post.find(condition, (err) => {
+            if (err) {
+              // logger.error(err);
+              // throw new Error('Error occured in db fetching post');
+            }
+          }).populate({
+           path: 'application',
             model: Application,
             populate: {
               path: 'userId',
@@ -410,7 +427,13 @@ class AuthController {
                   }
                 });
 
-                const post = await Post.find().populate({
+ 
+                const post = await Post.find(condition, (err) => {
+                  if (err) {
+                    // logger.error(err);
+                    // throw new Error('Error occured in db fetching post');
+                  }
+                }).populate({
                   path: 'application',
                   model: Application,
                   populate: {
@@ -599,7 +622,12 @@ class AuthController {
           }
         });
 
-        const post = await Post.find().populate({
+        const post = await Post.find(condition, (err) => {
+          if (err) {
+            // logger.error(err);
+            // throw new Error('Error occured in db fetching post');
+          }
+        }).populate({
           path: 'application',
           model: Application,
           populate: {

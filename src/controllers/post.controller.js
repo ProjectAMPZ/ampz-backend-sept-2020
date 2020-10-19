@@ -101,7 +101,9 @@ class PostController {
         })
         .populate({ path: 'like', select: '_id userId', model: Like })
         .sort({ createdAt: -1 });
-      res.status(200).json({ status: 'success', data: posts });
+      res
+        .status(200)
+        .json({ status: 'success', count: posts.length, data: posts });
     } catch (err) {
       // logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'server error' });
