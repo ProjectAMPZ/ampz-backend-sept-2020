@@ -65,7 +65,7 @@ class PostController {
         mediaType: req.body.mediaType,
         category: req.query.category,
       };
-      if (tags) post.tags = tags.split(',').map((tag) => tag.trim());
+      post.tags = tags.split(',').map((tag) => tag.trim());
       if (req.query.category === 'event') post.status = 'in-review';
       post = await Post.create(post);
       res.status(201).json({ status: 'success', data: post });
