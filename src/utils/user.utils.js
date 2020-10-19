@@ -5,7 +5,6 @@ import { config } from 'dotenv';
 config();
 
 export default {
-
   async encrptPassword(password) {
     const pass = await bcrypt.hash(password, 8);
     return pass;
@@ -33,24 +32,11 @@ export default {
   async generateToken(id, role, userName) {
     const token = jwt.sign(
       {
-        data: { id, role, userName }
+        data: { id, role, userName },
       },
       process.env.SECRET || 'alternativeSecret',
       { expiresIn: '30d' }
     );
     return token;
   },
-
-  // async verifyToken(token, req, res) {
-  //   await jwt.verify(token, process.env.SECRET || 'alternativeSecret', (error, result) => {
-  //     if (error) {
-  //       return res.status(401).json({
-  //         status: '401 Unauthorized',
-  //         error: 'Access token is Invalid'
-  //       });
-  //     }
-  //     req.body.payLoad = result.data;
-  //     return true;
-  //   });
-  // }
 };

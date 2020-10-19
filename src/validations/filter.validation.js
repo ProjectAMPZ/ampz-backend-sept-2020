@@ -1,20 +1,22 @@
 import { check, validationResult } from 'express-validator';
 
 /**
- *Contains Comment Validator
+ *Contains Filter Validator
  *
  *
  *
- * @class Post
+ * @class Filter
  */
-class CommentValidator {
+class FilterValidator {
   /**
-   * validate user data.
-   * @memberof Post
+   * validate filter data.
+   * @memberof Filter
    * @returns {null} - No response.
    */
   static validateData() {
-    return [check('text').not().isEmpty().withMessage('Enter comment')];
+    return [
+      check('filterName').not().isEmpty().withMessage('Enter Filter Name'),
+    ];
   }
 
   /**
@@ -25,7 +27,7 @@ class CommentValidator {
    * @memberof SignUp
    * @returns {JSON} - A JSON success response.
    */
-  static async myValidationResult(req, res, next) {
+  static async ValidationResult(req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const errArr = errors.array().map(({ msg }) => msg);
@@ -39,4 +41,4 @@ class CommentValidator {
   }
 }
 
-export default CommentValidator;
+export default FilterValidator;

@@ -24,7 +24,7 @@ class AssociationController {
         data: association,
       });
     } catch (err) {
-      res.status(500).json({ status: 'error', error: 'Server error' });
+      // res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 

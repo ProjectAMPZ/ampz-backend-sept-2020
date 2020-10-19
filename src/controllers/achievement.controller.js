@@ -24,7 +24,7 @@ class AchievementController {
         data: achievement,
       });
     } catch (err) {
-      res.status(500).json({ status: 'error', error: 'Server error' });
+      // res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 
