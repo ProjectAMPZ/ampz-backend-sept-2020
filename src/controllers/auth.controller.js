@@ -151,7 +151,6 @@ class AuthController {
           // throw new Error('Error occured in db fetching achievement');
         }
       });
-
       const post = await Post.find(condition, (err) => {
         if (err) {
           // logger.error(err);
@@ -259,6 +258,7 @@ class AuthController {
         populate: {
           path: 'userId',
           select: '_id userName profilePhotoUrl yearOfBirth userLocation',
+
         },
       });
 
@@ -343,7 +343,6 @@ class AuthController {
               // throw new Error('Error occured in db fetching achievement');
             }
           });
-
           const post = await Post.find(condition, (err) => {
             if (err) {
               // logger.error(err);
