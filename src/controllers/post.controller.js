@@ -90,6 +90,10 @@ class PostController {
           path: 'application',
           select: '_id userId',
           model: Application,
+          populate: {
+            path: 'userId',
+            select: '_id userName profilePhotoUrl yearOfBirth userLocation',
+          },
         })
         .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })
         .populate({ path: 'report', select: '_id userId', model: Report })

@@ -151,19 +151,17 @@ class AuthController {
           // throw new Error('Error occured in db fetching achievement');
         }
       });
-      
       const post = await Post.find(condition, (err) => {
         if (err) {
           // logger.error(err);
           // throw new Error('Error occured in db fetching post');
         }
       }).populate({
-
         path: 'application',
         model: Application,
         populate: {
           path: 'userId',
-          select: '_id userName profilePhotoUrl yearOfBirth location',
+          select: '_id userName profilePhotoUrl yearOfBirth userLocation',
         },
       });
 
@@ -259,7 +257,8 @@ class AuthController {
         model: Application,
         populate: {
           path: 'userId',
-          select: '_id userName profilePhotoUrl yearOfBirth location',
+          select: '_id userName profilePhotoUrl yearOfBirth userLocation',
+
         },
       });
 
@@ -344,19 +343,17 @@ class AuthController {
               // throw new Error('Error occured in db fetching achievement');
             }
           });
-
-
           const post = await Post.find(condition, (err) => {
             if (err) {
               // logger.error(err);
               // throw new Error('Error occured in db fetching post');
             }
           }).populate({
-           path: 'application',
+            path: 'application',
             model: Application,
             populate: {
               path: 'userId',
-              select: '_id userName profilePhotoUrl yearOfBirth location',
+              select: '_id userName profilePhotoUrl yearOfBirth userLocation',
             },
           });
           const userToken = await Helper.generateToken(
@@ -427,7 +424,6 @@ class AuthController {
                   }
                 });
 
- 
                 const post = await Post.find(condition, (err) => {
                   if (err) {
                     // logger.error(err);
@@ -438,7 +434,8 @@ class AuthController {
                   model: Application,
                   populate: {
                     path: 'userId',
-                    select: '_id userName profilePhotoUrl yearOfBirth location',
+                    select:
+                      '_id userName profilePhotoUrl yearOfBirth userLocation',
                   },
                 });
                 const userToken = await Helper.generateToken(
@@ -632,7 +629,7 @@ class AuthController {
           model: Application,
           populate: {
             path: 'userId',
-            select: '_id userName profilePhotoUrl yearOfBirth location',
+            select: '_id userName profilePhotoUrl yearOfBirth userLocation',
           },
         });
 
@@ -673,7 +670,7 @@ class AuthController {
    */
   static async getUsers(req, res) {
     try {
-      const users = await Auth.find(req.query);
+      const users = await Auth.find();
       res.status(200).json({
         status: 'success',
         count: users.length,
