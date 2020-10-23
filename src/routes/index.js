@@ -9,7 +9,6 @@ import postRouter from './post.route';
 import filterRouter from './filter.route';
 import lineupRoute from './lineup.route';
 import watchlistRoute from './watchlist.route';
-
 const router = Router();
 
 router.use('/auth', authRouter);
@@ -22,5 +21,6 @@ router.use('/post', postRouter);
 router.use('/filter', filterRouter);
 router.use('/lineup', lineupRoute);
 router.use('/watchlist', watchlistRoute);
+
 
 export default router;
