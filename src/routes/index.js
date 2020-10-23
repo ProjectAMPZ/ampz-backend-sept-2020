@@ -22,5 +22,4 @@ router.use('/post', postRouter);
 router.use('/filter', filterRouter);
 router.use('/lineup', lineupRoute);
 router.use('/watchlist', watchlistRoute);
-
 export default router;
