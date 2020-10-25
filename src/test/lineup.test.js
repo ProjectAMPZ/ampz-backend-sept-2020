@@ -15,7 +15,6 @@ chai.use(chaiHttp);
 let token;
 let lineupId;
 let talentId;
-let userId;
 
 const updatetalent = {
   marketValue: '90000',
@@ -26,7 +25,6 @@ const updatetalent = {
 before((done) => {
   Auth.findOne({ email: 'aim@ampz.tv' }, (err, myuser) => {
     if (myuser) {
-      userId = myuser._id;
       (async () => {
         token = await Helper.generateToken(
           myuser._id,
