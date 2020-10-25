@@ -10,6 +10,7 @@ import filterRouter from './filter.route';
 import lineupRoute from './lineup.route';
 import watchlistRoute from './watchlist.route';
 
+
 const router = Router();
 
 router.use('/auth', authRouter);
