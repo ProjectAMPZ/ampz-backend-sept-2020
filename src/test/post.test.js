@@ -115,7 +115,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
-        .field('sport', 'Football')
+        .field('sport', '2')
         .field('minAge', '16')
         .field('maxAge', '20')
         .field('country', 'Nigeria')
@@ -149,6 +149,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('tags', 'football, lagos, event')
+        .field('sport', '2')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.should.have.status(201);
@@ -166,6 +167,7 @@ describe('Post Route Endpoint', () => {
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
         .field('caption', 'Humble Beginings')
+        .field('sport', '2')
         .field(
           'description',
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
@@ -199,7 +201,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
-        .field('sport', 'Football')
+        .field('sport', '3')
         .field('minAge', '16')
         .field('maxAge', '20')
         .field('country', 'Nigeria')
@@ -276,7 +278,7 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('eventType', 'Football event')
-        .field('sport', 'Football')
+        .field('sport', '2')
         .field('minAge', '16')
         .field('maxAge', '20')
         .field('country', 'Nigeria')
@@ -371,6 +373,7 @@ describe('Post Route Endpoint', () => {
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
         .field('caption', 'Humble Beginings')
+        .field('sport', '2')
         .attach(
           'media',
           path.resolve(

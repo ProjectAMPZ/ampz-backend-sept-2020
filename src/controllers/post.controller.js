@@ -92,7 +92,8 @@ class PostController {
           model: Application,
           populate: {
             path: 'userId',
-            select: '_id userName profilePhotoUrl yearOfBirth userLocation',
+            select:
+              '_id fullName userName profilePhotoUrl yearOfBirth userLocation',
           },
         })
         .populate({ path: 'bookmark', select: '_id userId', model: Bookmark })

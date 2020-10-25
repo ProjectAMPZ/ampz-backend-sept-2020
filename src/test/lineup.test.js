@@ -20,7 +20,6 @@ let talentId;
 let newTalentId;
 let oldTalentId;
 
-
 const updatetalent = {
   marketValue: '90000',
   contractEndMonth: 'January',
@@ -161,12 +160,9 @@ describe('Lineup Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/lineup/${lineupId}`)
-        .set('token', 'invalid token')
-        .field('name', '2025 Talent Stream')
-        .field(
-          'description',
-          'Suspendisse auctor nisi luctus mauris porttitor, quis tincidunt massa aliquet.'
-        )
+        .set('token', 'dsskdkdkdkkdkdkdkdk')
+        .field('name', '2020 Talent Stream')
+        .field('description', 'Suspendisse auctor')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -281,6 +277,58 @@ describe('Lineup Route Endpoint', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       LineupController.getLineup(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+
+  describe('GET api/v1/lineup', () => {
+    it('should not get lineups if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/lineup`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not get lineups if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/lineup`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should get lineups if lineup is found', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/lineup`)
+        .set('token', token)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      LineupController.getLineups(req, res);
       res.status.should.have.callCount(1);
       done();
     });
