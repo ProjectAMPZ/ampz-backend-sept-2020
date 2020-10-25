@@ -7,6 +7,8 @@ import app from '../index';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import LineupController from '../controllers/lineup.controller';
+import TalentLineup from '../db/models/talentLineup.model';
+import logger from '../config';
 
 chai.should();
 chai.use(Sinonchai);
@@ -15,7 +17,8 @@ chai.use(chaiHttp);
 let token;
 let lineupId;
 let talentId;
-let userId;
+let newTalentId;
+let oldTalentId;
 
 const updatetalent = {
   marketValue: '90000',
@@ -26,7 +29,6 @@ const updatetalent = {
 before((done) => {
   Auth.findOne({ email: 'aim@ampz.tv' }, (err, myuser) => {
     if (myuser) {
-      userId = myuser._id;
       (async () => {
         token = await Helper.generateToken(
           myuser._id,
@@ -34,6 +36,7 @@ before((done) => {
           myuser.userName
         );
       })();
+      TalentLineup.collection.drop();
       done();
     }
   });
@@ -41,6 +44,20 @@ before((done) => {
 
 describe('Lineup Route Endpoint', () => {
   describe('POST api/v1/lineup', () => {
+    before((done) => {
+      Auth.findOne({ email: 'aim@ampz.tv' }, (err, myuser) => {
+        if (myuser) {
+          (async () => {
+            token = await Helper.generateToken(
+              myuser._id,
+              myuser._role,
+              myuser.userName
+            );
+          })();
+          done();
+        }
+      });
+    });
     it('should not create lineup if the user does not supply token', (done) => {
       chai
         .request(app)
@@ -105,6 +122,7 @@ describe('Lineup Route Endpoint', () => {
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
           res.body.should.have.property('data');
+          lineupId = res.body.data._id;
           done();
         });
     });
@@ -121,40 +139,17 @@ describe('Lineup Route Endpoint', () => {
     });
   });
   describe('PUT api/v1/lineup/:lineupId', () => {
-    before((done) => {
-      chai
-        .request(app)
-        .post('/api/v1/lineup')
-        .set('token', token)
-        .set('Content-Type', 'multipart/form-data')
-        .set('Connection', 'keep-alive')
-        .field('name', '2025 Talent Stream')
-        .field(
-          'description',
-          'Suspendisse auctor nisi luctus mauris porttitor, quis tincidunt massa aliquet.'
-        )
-        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
-        .end((err, res) => {
-          lineupId = res.body.data._id;
-          done();
-        });
-    });
     it('should not update lineup if the user does not supply a token', (done) => {
       chai
         .request(app)
         .put(`/api/v1/lineup/${lineupId}`)
-        .field('name', '2025 Talent Stream')
+        .field('name', '2028 Talent Stream')
         .field(
           'description',
           'Suspendisse auctor nisi luctus mauris porttitor, quis tincidunt massa aliquet.'
         )
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
-        .field(
-          'mediaUrl',
-          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
-        )
         .end((err, res) => {
-          res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('401 Unauthorized');
           res.body.should.have.property('error');
@@ -172,15 +167,10 @@ describe('Lineup Route Endpoint', () => {
           'Suspendisse auctor nisi luctus mauris porttitor, quis tincidunt massa aliquet.'
         )
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
-        .field(
-          'mediaUrl',
-          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
-        )
         .end((err, res) => {
-          res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
+          res.body.should.have.property('error').eql('Access token is Invalid');
           done();
         });
     });
@@ -367,92 +357,126 @@ describe('Lineup Route Endpoint', () => {
     });
   });
 
-  // describe('POST api/v1/lineup/talent/:talentId', () => {
-  //   before((done) => {
-  //     Auth.findOne({ email: 'willaim@gmail.com' }, (err, myuser) => {
-  //       if (myuser) {
-  //         (async () => {
-  //           talentId = myuser._id;
-  //           token = await Helper.generateToken(
-  //             myuser._id,
-  //             myuser._role,
-  //             myuser.userName
-  //           );
-  //         })();
-  //         done();
-  //       }
-  //     });
-  //   });
-  //   it('should not add talent if the user does not supply a token', (done) => {
-  //     chai
-  //       .request(app)
-  //       .post(`/api/v1/lineup/talent/${talentId}`)
-  //       .end((err, res) => {
-  //         res.should.have.status(401);
-  //         res.body.should.be.an('object');
-  //         res.body.should.have.property('status').eql('401 Unauthorized');
-  //         res.body.should.have.property('error');
-  //         done();
-  //       });
-  //   });
-  //   it('should not add talent if the token is invalid', (done) => {
-  //     chai
-  //       .request(app)
-  //       .post(`/api/v1/lineup/talent/${talentId}`)
-  //       .set('token', 'invalid token')
-  //       .end((err, res) => {
-  //         res.should.have.status(401);
-  //         res.body.should.be.an('object');
-  //         res.body.should.have.property('status').eql('401 Unauthorized');
-  //         res.body.should.have.property('error').eql('Access token is Invalid');
-  //         done();
-  //       });
-  //   });
-  //   it('should not add talent if talent already exist', (done) => {
-  //     chai
-  //       .request(app)
-  //       .post(`/api/v1/lineup/talent/${talentId}`)
-  //       .set('token', token)
-  //       .end((err, res) => {
-  //         res.should.have.status(200);
-  //         res.body.should.be.an('object');
-  //         res.body.should.have.property('status').eql('success');
-  //         res.body.should.have.property('data');
-  //         done();
-  //       });
-  //   });
-  //   it('should add talent if talent does not exist', (done) => {
-  //     chai
-  //       .request(app)
-  //       .post(`/api/v1/lineup/talent/${talentId}`)
-  //       .set('token', token)
-  //       .send({
-  //         talentId,
-  //         userId,
-  //         marketValue: '80000',
-  //         contractEndMonth: 'June',
-  //         contractEndYear: '2020',
-  //       })
-  //       .end((err, res) => {
-  //         res.should.have.status(200);
-  //         res.body.should.be.an('object');
-  //         res.body.should.have.property('status').eql('success');
-  //         res.body.should.have.property('data');
-  //         done();
-  //       });
-  //   });
-  //   it('Should fake server error', (done) => {
-  //     const req = { body: {} };
-  //     const res = {
-  //       status() {},
-  //       send() {},
-  //     };
-  //     sinon.stub(res, 'status').returnsThis();
-  //     LineupController.addTalentToLineup(req, res);
-  //     res.status.should.have.callCount(0);
-  //     done();
-  //   });
-  // });
+  describe('POST api/v1/lineup/talent/:talentId', () => {
+    before((done) => {
+      Auth.findOne({ email: 'pulisic@gmail.com' }, (err, user) => {
+        if (user) {
+          newTalentId = user._id;
+        }
+      });
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            lineupId = myuser._id;
+            (async () => {
+              token = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+
+            Auth.findOne(
+              { email: 'okwuosachijioke@gmail.com' },
+              (err, myuser) => {
+                if (myuser) {
+                  talentId = myuser._id;
+
+                  TalentLineup.create({
+                    userId: talentId,
+                    lineupId: lineupId,
+                  })
+                    .then(function (user) {
+                      oldTalentId = user.userId;
+                      done();
+                    })
+                    .catch(function (err) {
+                      logger.error(err);
+                    });
+                }
+              }
+            );
+          }
+        }
+      );
+    });
+    it('should not add talent if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .post(`/api/v1/lineup/talent/${talentId}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not add talent if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .post(`/api/v1/lineup/talent/${talentId}`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should not add talent if talent already exist', (done) => {
+      chai
+        .request(app)
+        .post(`/api/v1/lineup/talent/${oldTalentId}`)
+        .send({
+          oldTalentId,
+          lineupId,
+          marketValue: '80000',
+          contractEndMonth: 'June',
+          contractEndYear: '2020',
+        })
+        .set('token', token)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have
+            .property('message')
+            .eql('you already sent a request to this talent');
+          done();
+        });
+    });
+    it('should add talent if talent does not exist', (done) => {
+      chai
+        .request(app)
+        .post(`/api/v1/lineup/talent/${newTalentId}`)
+        .set('token', token)
+        .send({
+          newTalentId,
+          lineupId,
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      LineupController.addTalentToLineup(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
+  });
 
   describe('PUT api/v1/lineup/talent/:talentId', () => {
     before((done) => {
@@ -470,7 +494,7 @@ describe('Lineup Route Endpoint', () => {
         }
       });
     });
-    it('should not update talent if the user does not supply a token', (done) => {
+    it('should not update talent if the user does not supply  token', (done) => {
       chai
         .request(app)
         .put(`/api/v1/lineup/talent/${talentId}`)
