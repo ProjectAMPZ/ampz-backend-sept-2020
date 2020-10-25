@@ -16,7 +16,9 @@ app.use(morgan('combined', { stream: logger.stream }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.get('/api/v1', (req, res) => res.status(200).json({ status: 'success', message: 'Welcome to AMPZ API' }));
+app.get('/api/v1', (req, res) =>
+  res.status(200).json({ status: 'success', message: 'Welcome to AMPZ API' })
+);
 app.use('/api/v1', v1Router);
 
 app.use((req, res, next) => {
