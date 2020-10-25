@@ -171,7 +171,13 @@ describe('Post Route Endpoint', () => {
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
         .field('tags', 'football, lagos, event')
-        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
+        .attach(
+          'media',
+          path.resolve(
+            __dirname,
+            '../assets/img/pexels-digital-buggu-186241.jpg'
+          )
+        )
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -204,7 +210,13 @@ describe('Post Route Endpoint', () => {
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
-        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
+        .attach(
+          'media',
+          path.resolve(
+            __dirname,
+            '../assets/img/pexels-saruul-saruulaa-5489581.mp4'
+          )
+        )
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.an('object');
@@ -359,7 +371,13 @@ describe('Post Route Endpoint', () => {
         .set('Content-Type', 'multipart/form-data')
         .set('Connection', 'keep-alive')
         .field('caption', 'Humble Beginings')
-        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
+        .attach(
+          'media',
+          path.resolve(
+            __dirname,
+            '../assets/img/pexels-saruul-saruulaa-5489581.mp4'
+          )
+        )
         .field(
           'mediaUrl',
           'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'

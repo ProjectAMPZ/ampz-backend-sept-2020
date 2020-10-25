@@ -97,42 +97,42 @@ class LineupController {
     }
   }
 
-  // /**
-  //  * add Talent to Lineup.
-  //  * @param {Request} req - Response object.
-  //  * @param {Response} res - The payload.
-  //  * @memberof AuthController
-  //  * @returns {JSON} - A JSON success response.
-  //  */
-  // static async addTalentToLineup(req, res) {
-  //   const lineupId = req.data.id;
-  //   const userId = req.params.talentId;
-  //   try {
-  //     let talent = {
-  //       userId,
-  //       lineupId,
-  //     };
+  /**
+   * add Talent to Lineup.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async addTalentToLineup(req, res) {
+    const lineupId = req.data.id;
+    const userId = req.params.talentId;
+    try {
+      let talent = {
+        userId,
+        lineupId,
+      };
 
-  //     const isExist = await TalentLineup.findOne({
-  //       userId: req.params.talentId,
-  //     });
-  //     if (isExist) {
-  //       return res.status(400).json({
-  //         status: 'error',
-  //         message: 'you already sent a request to this talent',
-  //       });
-  //     }
+      const isExist = await TalentLineup.findOne({
+        userId: req.params.talentId,
+      });
+      if (isExist) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'you already sent a request to this talent',
+        });
+      }
 
-  //     const newTalent = await TalentLineup.create(talent);
-  //     res.status(200).json({
-  //       status: 'success',
-  //       data: newTalent,
-  //     });
-  //   } catch (err) {
-  //     logger.error(err.message);
-  //     res.status(500).json({ status: 'error', error: 'Server error' });
-  //   }
-  // }
+      const newTalent = await TalentLineup.create(talent);
+      res.status(200).json({
+        status: 'success',
+        data: newTalent,
+      });
+    } catch (err) {
+      // logger.error(err.message);
+      // res.status(500).json({ status: 'error', error: 'Server error' });
+    }
+  }
 
   /**
    * upadte talents.
