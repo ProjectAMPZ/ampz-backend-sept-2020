@@ -712,7 +712,7 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });
-    it('Should fake server error on likedByUser function', (done) => {
+    it('Should fake server error on bookmarkedByUser function', (done) => {
       const req = { body: {} };
       const res = {
         status() {},
@@ -723,7 +723,7 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });
-    it('Should fake server error on unlike function', (done) => {
+    it('Should fake server error on bookmark function', (done) => {
       const req = { body: {} };
       const res = {
         status() {},
@@ -734,7 +734,7 @@ describe('Post Route Endpoint', () => {
       res.status.should.have.callCount(0);
       done();
     });
-    it('Should fake server error on like function', (done) => {
+    it('Should fake server error on removeBookmark function', (done) => {
       const req = { body: {} };
       const res = {
         status() {},

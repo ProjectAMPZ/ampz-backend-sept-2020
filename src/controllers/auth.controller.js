@@ -9,6 +9,7 @@ import Achievement from '../db/models/achievement.model';
 import Post from '../db/models/post.model';
 import Application from '../db/models/application.model';
 import ResetPassword from '../db/models/resetPassword.model';
+import Follow from '../db/models/follow.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
@@ -71,12 +72,7 @@ class AuthController {
           const featureRecord = {
             userId: createdUser._id,
           };
-          Feature.create({ ...featureRecord }, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db during creation of users feature record');
-            }
-          });
+          Feature.create({ ...featureRecord });
           const activationRecord = {
             userId: createdUser._id,
             email: createdUser.email,
@@ -118,45 +114,16 @@ class AuthController {
       const newData = {
         isActivated: true,
       };
-      const user = await Auth.findByIdAndUpdate(_id, { ...newData }, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db during user activation');
-        }
-      });
+      const user = await Auth.findByIdAndUpdate(_id, { ...newData });
       const condition = {
         userId: user.id,
       };
-      const feature = await Feature.findOne(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching feature');
-        }
-      });
-      const experience = await Experience.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching experience');
-        }
-      });
-      const association = await Association.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching association');
-        }
-      });
-      const achievement = await Achievement.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching achievement');
-        }
-      });
-      const post = await Post.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching post');
-        }
-      }).populate({
+      const feature = await Feature.findOne(condition);
+      const experience = await Experience.find(condition);
+      const association = await Association.find(condition);
+      const follow = await Follow.find(condition);
+      const achievement = await Achievement.find(condition);
+      const post = await Post.find(condition).populate({
         path: 'application',
         model: Application,
         populate: {
@@ -180,6 +147,7 @@ class AuthController {
           association,
           achievement,
           post,
+          follow
         },
       });
     } catch (err) {
@@ -222,37 +190,12 @@ class AuthController {
         userId: user[0].id,
       };
 
-      const feature = await Feature.findOne(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching feature');
-        }
-      });
-      const experience = await Experience.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching experience');
-        }
-      });
-      const association = await Association.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching association');
-        }
-      });
-      const achievement = await Achievement.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching achievement');
-        }
-      });
-
-      const post = await Post.find(condition, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db fetching post');
-        }
-      }).populate({
+      const feature = await Feature.findOne(condition);
+      const experience = await Experience.find(condition);
+      const association = await Association.find(condition);
+      const follow = await Follow.find(condition);
+      const achievement = await Achievement.find(condition);
+      const post = await Post.find(condition).populate({
         path: 'application',
         model: Application,
         populate: {
@@ -279,6 +222,7 @@ class AuthController {
           association,
           achievement,
           post,
+          follow
         },
       });
     } catch (err) {
@@ -325,30 +269,11 @@ class AuthController {
               // throw new Error('Error occured in db fetching feature');
             }
           });
-          const experience = await Experience.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching experience');
-            }
-          });
-          const association = await Association.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching association');
-            }
-          });
-          const achievement = await Achievement.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching achievement');
-            }
-          });
-          const post = await Post.find(condition, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db fetching post');
-            }
-          }).populate({
+          const experience = await Experience.find(condition);
+          const association = await Association.find(condition);
+          const follow = await Follow.find(condition);
+          const achievement = await Achievement.find(condition);
+          const post = await Post.find(condition).populate({
             path: 'application',
             model: Application,
             populate: {
@@ -373,6 +298,7 @@ class AuthController {
               association,
               achievement,
               post,
+              follow
             },
           });
         }
@@ -387,49 +313,18 @@ class AuthController {
               const featureRecord = {
                 userId: createdUser._id,
               };
-              Feature.create({ ...featureRecord }, (err) => {
-                if (err) {
-                  // logger.error(err);
-                  // throw new Error
-                  // ('Error occured in db during creation of social users feature record');
-                }
-              });
+              Feature.create({ ...featureRecord });
 
               const condition = {
                 userId: createdUser.id,
               };
               (async () => {
-                const feature = await Feature.findOne(condition, (err) => {
-                  if (err) {
-                    // logger.error(err);
-                    // throw new Error('Error occured in db fetching feature');
-                  }
-                });
-                const experience = await Experience.find(condition, (err) => {
-                  if (err) {
-                    // logger.error(err);
-                    // throw new Error('Error occured in db fetching experience');
-                  }
-                });
-                const association = await Association.find(condition, (err) => {
-                  if (err) {
-                    // logger.error(err);
-                    // throw new Error('Error occured in db fetching association');
-                  }
-                });
-                const achievement = await Achievement.find(condition, (err) => {
-                  if (err) {
-                    // logger.error(err);
-                    // throw new Error('Error occured in db fetching achievement');
-                  }
-                });
-
-                const post = await Post.find(condition, (err) => {
-                  if (err) {
-                    // logger.error(err);
-                    // throw new Error('Error occured in db fetching post');
-                  }
-                }).populate({
+                const feature = await Feature.findOne(condition);
+                const experience = await Experience.find(condition);
+                const association = await Association.find(condition);
+                const follow = await Follow.find(condition);
+                const achievement = await Achievement.find(condition);
+                const post = await Post.find(condition).populate({
                   path: 'application',
                   model: Application,
                   populate: {
@@ -453,6 +348,7 @@ class AuthController {
                     association,
                     achievement,
                     post,
+                    follow
                   },
                 });
               })();
@@ -481,23 +377,13 @@ class AuthController {
       const Time = new Date();
       const expiringDate = Time.setDate(Time.getDate() + 1);
       const token = await Helper.generateCode(5);
-      await ResetPassword.deleteOne({ email }, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db while deleting old record');
-        }
-      });
+      await ResetPassword.deleteOne({ email });
       const data = {
         email,
         expiringDate,
         token,
       };
-      await ResetPassword.create({ ...data }, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db while creating reset password record');
-        }
-      });
+      await ResetPassword.create({ ...data });
       const message = `To reset your password use this code:${token}, the code expires in 24 hours`;
       sendEmail(email, 'Password Reset', message);
       return res.status(201).json({
@@ -600,31 +486,11 @@ class AuthController {
             // throw new Error('Error occured in db fetching feature');
           }
         });
-        const experience = await Experience.find(condition, (err) => {
-          if (err) {
-            // logger.error(err);
-            // throw new Error('Error occured in db fetching experience');
-          }
-        });
-        const association = await Association.find(condition, (err) => {
-          if (err) {
-            // logger.error(err);
-            // throw new Error('Error occured in db fetching association');
-          }
-        });
-        const achievement = await Achievement.find(condition, (err) => {
-          if (err) {
-            // logger.error(err);
-            // throw new Error('Error occured in db fetching achievement');
-          }
-        });
-
-        const post = await Post.find(condition, (err) => {
-          if (err) {
-            // logger.error(err);
-            // throw new Error('Error occured in db fetching post');
-          }
-        }).populate({
+        const experience = await Experience.find(condition);
+        const association = await Association.find(condition);
+        const follow = await Follow.find(condition);
+        const achievement = await Achievement.find(condition);
+        const post = await Post.find(condition).populate({
           path: 'application',
           model: Application,
           populate: {
@@ -650,6 +516,7 @@ class AuthController {
             association,
             achievement,
             post,
+            follow
           },
         });
       }
