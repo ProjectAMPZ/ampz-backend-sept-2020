@@ -9,6 +9,7 @@ import WatchlistController from '../controllers/watchlist.controller';
 import WatchlistTalent from '../db/models/watchlistTalent.model';
 import logger from '../config';
 
+
 chai.should();
 chai.use(Sinonchai);
 chai.use(chaiHttp);
@@ -62,6 +63,7 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
                     })
                     .catch(function (err) {
                       logger.error(err);
+
                     });
                 }
               }
