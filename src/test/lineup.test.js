@@ -20,6 +20,7 @@ let talentId;
 let newTalentId;
 let oldTalentId;
 
+
 const updatetalent = {
   marketValue: '90000',
   contractEndMonth: 'January',
