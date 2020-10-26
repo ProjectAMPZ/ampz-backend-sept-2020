@@ -63,6 +63,7 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
                     })
                     .catch(function (err) {
                       logger.error(err);
+
                     });
                 }
               }
