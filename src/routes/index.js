@@ -11,6 +11,7 @@ import lineupRoute from './lineup.route';
 import watchlistRouter from './watchlist.route';
 import userRoute from './user.route';
 
+
 const router = Router();
 
 router.use('/auth', authRouter);
@@ -24,5 +25,6 @@ router.use('/filter', filterRouter);
 router.use('/lineup', lineupRoute);
 router.use('/watchlist', watchlistRouter);
 router.use('/user', userRoute);
+
 
 export default router;

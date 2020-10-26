@@ -14,11 +14,11 @@ router.put(
 );
 router.get('/:lineupId', verifyToken, LineupController.getLineup);
 router.delete('/:lineupId', verifyToken, LineupController.deleteLineup);
-// router.post(
-//   '/talent/:talentId',
-//   verifyToken,
-//   LineupController.addTalentToLineup
-// );
+router.post(
+  '/talent/:talentId',
+  verifyToken,
+  LineupController.addTalentToLineup
+);
 router.put('/talent/:talentId', verifyToken, LineupController.updateTalent);
 router.delete(
   '/talent/:talentId',

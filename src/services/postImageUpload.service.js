@@ -14,10 +14,14 @@ const awsCredentials = aws.config.update({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/jpg'
-    || file.mimetype === 'image/jpeg'
-    || file.mimetype === 'image/png'
-    || file.mimetype === 'video/mp4'
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg' ||
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'video/mp4' ||
+    file.mimetype === 'video/wmv' ||
+    file.mimetype === 'video/3gp' ||
+    file.mimetype === 'video/ogg' ||
+    file.mimetype === 'video/flv'
   ) {
     cb(null, true);
   } else {

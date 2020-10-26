@@ -7,6 +7,7 @@ import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import WatchlistController from '../controllers/watchlist.controller';
 import WatchlistTalent from '../db/models/watchlistTalent.model';
+import logger from '../config';
 
 chai.should();
 chai.use(Sinonchai);
@@ -19,8 +20,9 @@ let userId;
 let oldUserId;
 
 before((done) => {
-  WatchlistTalent.collection.drop();
-  done();
+  WatchlistTalent.collection.drop(() => {
+    done();
+  });
 });
 
 describe('Watchlist Watchlist Route Endpoint', async () => {
@@ -60,7 +62,7 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
                       done();
                     })
                     .catch(function (err) {
-                      console.log(err);
+                      logger.error(err);
                     });
                 }
               }
