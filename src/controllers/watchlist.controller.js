@@ -90,6 +90,7 @@ class WatchlistController {
       }).populate({
         path: 'userId',
         select: '_id fullName profilePhotoUrl',
+
       });
 
       res.status(200).json({
