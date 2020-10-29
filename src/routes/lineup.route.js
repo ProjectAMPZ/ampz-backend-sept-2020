@@ -13,6 +13,7 @@ router.put(
   LineupController.updateLineup
 );
 router.get('/:lineupId', verifyToken, LineupController.getLineup);
+router.get('/', verifyToken, LineupController.getLineups);
 router.delete('/:lineupId', verifyToken, LineupController.deleteLineup);
 router.post(
   '/talent/:talentId',

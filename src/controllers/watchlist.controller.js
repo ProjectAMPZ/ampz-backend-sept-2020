@@ -89,7 +89,7 @@ class WatchlistController {
         watchlistId: req.data.id,
       }).populate({
         path: 'userId',
-        select: 'userName profilePhotoUrl',
+        select: '_id fullName userName profilePhotoUrl',
       });
 
       res.status(200).json({

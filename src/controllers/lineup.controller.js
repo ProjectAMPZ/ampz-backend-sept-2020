@@ -98,6 +98,33 @@ class LineupController {
   }
 
   /**
+   * get Lineups.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getLineups(req, res) {
+    try {
+      const lineups = await Lineup.find({
+        userId: req.data.id,
+      });
+
+      res.status(200).json({
+        status: 'success',
+        count: lineups.length,
+        data: lineups,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
+
+  /**
    * add Talent to Lineup.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
