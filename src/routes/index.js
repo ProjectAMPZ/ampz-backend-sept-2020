@@ -7,9 +7,9 @@ import achievementRouter from './achievement.route';
 import associationRouter from './association.route';
 import postRouter from './post.route';
 import filterRouter from './filter.route';
-import lineupRoute from './lineup.route';
+import lineupRouter from './lineup.route';
 import watchlistRouter from './watchlist.route';
-import userRoute from './user.route';
+import userRouter from './user.route';
 
 const router = Router();
 
@@ -21,8 +21,8 @@ router.use('/profile', associationRouter);
 router.use('/profile', achievementRouter);
 router.use('/post', postRouter);
 router.use('/filter', filterRouter);
-router.use('/lineup', lineupRoute);
+router.use('/lineup', lineupRouter);
 router.use('/watchlist', watchlistRouter);
-router.use('/user', userRoute);
+router.use('/user', userRouter);
 
 export default router;

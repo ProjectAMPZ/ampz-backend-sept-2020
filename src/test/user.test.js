@@ -5,8 +5,9 @@ import sinon from 'sinon';
 import app from '../index';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
-import FollowController from '../controllers/user.controller';
+import UserController from '../controllers/user.controller';
 import UserServices from '../services/user.services';
+
 
 chai.should();
 chai.use(Sinonchai);
@@ -89,7 +90,7 @@ describe('User Route Endpoint', () => {
                 send() {},
             };
             sinon.stub(res, 'status').returnsThis();
-            FollowController.followUser(req, res);
+            UserController.followUser(req, res);
             res.status.should.have.callCount(1);
             done();
         });
@@ -128,5 +129,42 @@ describe('User Route Endpoint', () => {
             res.status.should.have.callCount(0);
             done();
         });        
+    }); 
+    describe('GET api/v1/user/:profileId', () => {      
+        it('Should get a users information when valid user id is provided', (done) => {
+            chai
+                .request(app)
+                .get(`/api/v1/user/${profileId}`)             
+                .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('success');  
+                res.body.should.have.property('data');           
+                done();
+            });
+        });
+        it('Should not get a users information when invalid user id is provided', (done) => {
+            chai
+                .request(app)
+                .get('/api/v1/user/5f749b6d8c767d03d926e945')             
+                .end((err, res) => {
+                res.should.have.status(404);
+                res.body.should.be.an('object');
+                res.body.should.have.property('status').eql('error');  
+                res.body.should.have.property('error');           
+                done();
+            });
+        });
+        it('Should fake server error', (done) => {
+            const req = { body: {} };
+            const res = {
+                status() {},
+                send() {},
+            };
+            sinon.stub(res, 'status').returnsThis();
+            UserController.getUser(req, res);
+            res.status.should.have.callCount(1);
+            done();
+        });
     });      
 });

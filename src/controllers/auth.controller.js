@@ -407,12 +407,7 @@ class AuthController {
       const newData = {
         password: encryptpassword,
       };
-      await Auth.findOneAndUpdate({ email }, { ...newData }, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db during password change');
-        }
-      });
+      await Auth.findOneAndUpdate({ email }, { ...newData });
 
       return res.status(200).json({
         status: 'success',
@@ -442,15 +437,10 @@ class AuthController {
       };
       const message = `Your account activation code is <b>${code}<b/>`;
       sendEmail(email, 'Account Activation', message);
-      Activation.findOneAndUpdate({ email }, { ...newData }, (err) => {
-        if (err) {
-          // logger.error(err);
-          // throw new Error('Error occured in db during creation of activation record');
-        }
-        return res.status(201).json({
-          status: 'success',
-          message: 'Account activation code has been sent to your email',
-        });
+      await Activation.findOneAndUpdate({ email }, { ...newData });
+      return res.status(201).json({
+        status: 'success',
+        message: 'Account activation code has been sent to your email',
       });
     } catch (err) {
       return res.status(500).json({
@@ -475,12 +465,7 @@ class AuthController {
           userId: user[0].id,
         };
 
-        const feature = await Feature.findOne(condition, (err) => {
-          if (err) {
-            // logger.error(err);
-            // throw new Error('Error occured in db fetching feature');
-          }
-        });
+        const feature = await Feature.findOne(condition);
         const experience = await Experience.find(condition);
         const association = await Association.find(condition);
         const follow = await Follow.find(condition);
@@ -518,7 +503,7 @@ class AuthController {
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
-        error: 'Error Logging in user',
+        error: 'Error Loading user',
       });
     }
   }
