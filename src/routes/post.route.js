@@ -31,7 +31,6 @@ router.put(
 router.put('/application/:postId', verifyToken, PostController.applyForEvent);
 router.put(
   '/count/:postId',
-  verifyToken,
   CountValidator.validateData(),
   CountValidator.myValidationResult,
   PostController.increaseCount
