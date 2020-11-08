@@ -62,7 +62,7 @@ const postFileUpload = async (req, res, next) => {
       const s4 = new aws.S3(awsCredentials);
       if (req.body.mediaUrl) {
         const mediaUrlKey = req.body.mediaUrl.substring(53);
-        await s4.deleteObject(
+        s4.deleteObject(
           {
             Bucket: 'ampz-backend-sept',
             Key: mediaUrlKey,

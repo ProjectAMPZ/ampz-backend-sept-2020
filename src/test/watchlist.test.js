@@ -20,9 +20,8 @@ let userId;
 let oldUserId;
 
 before((done) => {
-  WatchlistTalent.collection.drop(() => {
-    done();
-  });
+  WatchlistTalent.collection.drop();
+  done();
 });
 
 describe('Watchlist Watchlist Route Endpoint', async () => {
@@ -57,11 +56,11 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
                     userId: talentId,
                     watchlistId: userId,
                   })
-                    .then(function (user) {
+                    .then((user) => {
                       oldUserId = user.userId;
                       done();
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                       logger.error(err);
                     });
                 }

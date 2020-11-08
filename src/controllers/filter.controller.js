@@ -1,3 +1,4 @@
+import logger from '../config';
 import Filter from '../db/models/filter.model';
 /**
  *Contains Filter Controller
@@ -90,6 +91,33 @@ class FilterController {
         data: filter,
       });
     } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
+
+  /**
+   * get all Filters for a user.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getFilters(req, res) {
+    try {
+      const filters = await Filter.find({
+        userId: req.data.id,
+      });
+
+      res.status(200).json({
+        status: 'success',
+        count: filters.length,
+        data: filters,
+      });
+    } catch (err) {
+      logger.error(err.message);
       res.status(500).json({
         status: 'error',
         error: 'Server error',
