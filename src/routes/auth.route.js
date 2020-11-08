@@ -65,6 +65,5 @@ router.post(
 );
 
 router.get('/load_user', verifyToken, AuthController.loadUser);
-router.get('/users', AuthController.getUsers);
 
 export default router;

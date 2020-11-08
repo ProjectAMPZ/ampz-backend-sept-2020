@@ -20,18 +20,21 @@ let mediaUrl;
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            postToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              postToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+            done();
+          }
         }
-      });
+      );
     });
     it('should not create post if the user does not supply a token', (done) => {
       chai
@@ -178,45 +181,6 @@ describe('Post Route Endpoint', () => {
           path.resolve(
             __dirname,
             '../assets/img/pexels-digital-buggu-186241.jpg'
-          )
-        )
-        .end((err, res) => {
-          res.should.have.status(201);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
-          done();
-        });
-    });
-    it('should create post if events post fields are submitted', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/post?category=event')
-        .set('token', postToken)
-        .set('Content-Type', 'multipart/form-data')
-        .set('Connection', 'keep-alive')
-        .field('caption', 'Humble Beginings')
-        .field(
-          'description',
-          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
-        )
-        .field('eventType', 'Football event')
-        .field('sport', '3')
-        .field('minAge', '16')
-        .field('maxAge', '20')
-        .field('country', 'Nigeria')
-        .field('state', 'Lagos')
-        .field('venue', 'Yaba')
-        .field('tags', 'football, lagos, event')
-        .field('startDate', '10/10/2020')
-        .field('endDate', '20/10/2020')
-        .field('startTime', '09:00AM')
-        .field('endTime', '4:00PM')
-        .attach(
-          'media',
-          path.resolve(
-            __dirname,
-            '../assets/img/pexels-saruul-saruulaa-5489581.mp4'
           )
         )
         .end((err, res) => {
