@@ -17,48 +17,51 @@ let associationUserId;
 let associationId;
 
 const partiallyconmpleteAssociation = {
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
-  issueMonth: 'TEST issueMonth',
-  issueYear: 'TEST issueYear',
+  associationType: 'associationType',
+  associationName: 'associationName',
+  issueMonth: 1,
+  issueYear: 1,
   active: true,
-  description: 'TEST description',
+  description: 'description',
 };
 
 const conmpleteAssociation = {
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
-  issueMonth: 'TEST issueMonth',
-  issueYear: 'TEST issueYear',
-  expiryMonth: 'TEST expiryMonth',
-  expiryYear: 'TEST expiryYear',
-  description: 'TEST description',
+  associationType: 'associationType',
+  associationName: 'associationName',
+  issueMonth: 1,
+  issueYear: 1,
+  expiryMonth: 1,
+  expiryYear: 1,
+  description: 'description',
   active: true,
 };
 const incompleteAssociation = {
-  associationType: 'TEST associationType',
-  associationName: 'TEST associationName',
+  associationType: 'associationType',
+  associationName: 'associationName',
 };
 
 const updateExperience = {
-  associationType: 'TEST associationType',
+  associationType: 'associationType',
 };
 
 describe('Profile Association Route Endpoint', () => {
   describe('POST api/v1/profile/association', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            associationToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              associationToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+            done();
+          }
         }
-      });
+      );
     });
     it('should not create association if the user does not supply a token', (done) => {
       chai
@@ -145,27 +148,30 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('PUT api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            associationUserId = myuser._id;
-            associationToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              associationUserId = myuser._id;
+              associationToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Association.create(
         {
-          associationName: 'TEST institution',
-          associationType: 'TEST associationType',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          expiryMonth: 'TEST expiryMonth',
-          expiryYear: 'TEST expiryYear',
-          description: 'TEST description',
+          associationName: 'institution',
+          associationType: 'associationType',
+          issueMonth: 1,
+          issueYear: 1,
+          expiryMonth: 1,
+          expiryYear: 1,
+          description: 'description',
           active: false,
           userId: associationUserId,
         },
@@ -246,25 +252,30 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('GET api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            associationUserId = myuser._id;
-            associationToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              associationUserId = myuser._id;
+              associationToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Association.create(
         {
-          associationName: 'TEST institution',
-          associationType: 'TEST associationType',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          description: 'TEST description',
+          associationName: 'institution',
+          associationType: 'associationType',
+          issueMonth: 1,
+          issueYear: 1,
+          expiryMonth: 1,
+          expiryYear: 1,
+          description: 'description',
           active: true,
           userId: associationUserId,
         },
@@ -341,27 +352,30 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('DELETE api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            associationUserId = myuser._id;
-            associationToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              associationUserId = myuser._id;
+              associationToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Association.create(
         {
-          associationName: 'TEST institution',
-          associationType: 'TEST associationType',
-          issueMonth: 'TEST issueMonth',
-          issueYear: 'TEST issueYear',
-          expiryMonth: 'TEST expiryMonth',
-          expiryYear: 'TEST expiryYear',
-          description: 'TEST description',
+          associationName: 'institution',
+          associationType: 'associationType',
+          issueMonth: 1,
+          issueYear: 1,
+          expiryMonth: 1,
+          expiryYear: 1,
+          description: 'description',
           active: false,
           userId: associationUserId,
         },
