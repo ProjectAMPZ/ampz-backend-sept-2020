@@ -659,6 +659,17 @@ describe('Auth Route Endpoints', () => {
           done();
         });
     });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      AuthController.resendVerificationCode(req, res);
+      res.status.should.have.callCount(0);
+      done();
+    });
   });
   describe('GET api/v1/auth/load_user', () => {
     before((done) => {
@@ -724,31 +735,6 @@ describe('Auth Route Endpoints', () => {
       sinon.stub(res, 'status').returnsThis();
       AuthController.loadUser(req, res);
       res.status.should.have.callCount(1);
-      done();
-    });
-  });
-  describe('GET api/v1/auth/users', () => {
-    it('should get all users', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/auth/users')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('success');
-          res.body.should.have.property('data');
-          done();
-        });
-    });
-    it('Should fake server error', (done) => {
-      const req = { body: {} };
-      const res = {
-        status() {},
-        send() {},
-      };
-      sinon.stub(res, 'status').returnsThis();
-      AuthController.getUsers(req, res);
-      res.status.should.have.callCount(0);
       done();
     });
   });
