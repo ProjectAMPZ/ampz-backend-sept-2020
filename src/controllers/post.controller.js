@@ -6,6 +6,7 @@ import Like from '../db/models/like.model';
 import Report from '../db/models/report.model';
 import logger from '../config';
 import PostServices from '../services/post.services';
+import Tag from '../db/models/tag.model';
 
 /**
  *Contains Post Controller
@@ -65,12 +66,48 @@ class PostController {
         mediaType: req.body.mediaType,
         category: req.query.category,
       };
-      post.tags = tags.split(',').map((tag) => tag.trim());
+      post.tags = tags.split(' ').map((tag) => tag.trim());
       if (req.query.category === 'event') post.status = 'in-review';
       post = await Post.create(post);
+
+      const tagsToSave = post.tags;
+      tagsToSave.forEach(async (tag) => {
+        const existingTag = await Tag.findOne({ tagName: tag });
+
+        if (existingTag) {
+          existingTag.count++;
+          existingTag.postId.push(post._id);
+          await existingTag.save();
+        } else {
+          await Tag.create({
+            postId: post._id,
+            tagName: tag,
+            count: 1,
+          });
+        }
+      });
       res.status(201).json({ status: 'success', data: post });
     } catch (err) {
       logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'server error' });
+    }
+  }
+
+  /**
+   * get all tags with posts.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getPostsTags(req, res) {
+    try {
+      const tags = await Tag.find();
+      res
+        .status(200)
+        .json({ status: 'success', count: tags.length, data: tags });
+    } catch (err) {
+      // logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'server error' });
     }
   }

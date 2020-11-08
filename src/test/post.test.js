@@ -20,18 +20,21 @@ let mediaUrl;
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            postToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              postToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+            done();
+          }
         }
-      });
+      );
     });
     it('should not create post if the user does not supply a token', (done) => {
       chai
@@ -125,7 +128,7 @@ describe('Post Route Endpoint', () => {
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .attach('media', path.resolve(__dirname, '../assets/img/svgimage.svg'))
         .end((err, res) => {
           res.should.have.status(400);
@@ -148,7 +151,7 @@ describe('Post Route Endpoint', () => {
           'description',
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .field('sport', '2')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
@@ -172,7 +175,7 @@ describe('Post Route Endpoint', () => {
           'description',
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
         )
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .attach(
           'media',
           path.resolve(
@@ -207,11 +210,12 @@ describe('Post Route Endpoint', () => {
         .field('country', 'Nigeria')
         .field('state', 'Lagos')
         .field('venue', 'Yaba')
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .field('startDate', '10/10/2020')
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
+        .field('fee', '1000')
         .attach(
           'media',
           path.resolve(
@@ -288,7 +292,7 @@ describe('Post Route Endpoint', () => {
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           postId = res.body.data._id;
@@ -803,7 +807,7 @@ describe('Post Route Endpoint', () => {
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
-        .field('tags', 'football, lagos, event')
+        .field('tags', '#football #lagos #event')
         .attach('media', path.resolve(__dirname, '../assets/img/image1.jpg'))
         .end((err, res) => {
           postId = res.body.data._id;
@@ -1043,6 +1047,32 @@ describe('Post Route Endpoint', () => {
       sinon.stub(res, 'status').returnsThis();
       PostController.getPost(req, res);
       res.status.should.have.callCount(1);
+      done();
+    });
+  });
+
+  describe('GET api/v1/post/tags/all', () => {
+    it('should get all all post tags', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/post/tags/all')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.getPostsTags(req, res);
+      res.status.should.have.callCount(0);
       done();
     });
   });

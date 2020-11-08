@@ -56,6 +56,56 @@ class BioController {
     }
   }
 
+  // /**
+  //  * Upload Proof.
+  //  * @param {Request} req - Response object.
+  //  * @param {Response} res - The payload.
+  //  * @memberof ProfileController
+  //  * @returns {JSON} - A JSON success response.
+  //  */
+  // static async uploadProofs(req, res) {
+  //   try {
+  //     await User.findOneAndUpdate({ _id: req.data.id }, req.body);
+  //     res.status(200).json({
+  //       status: 'success',
+  //       message: 'proof uploaded',
+  //     });
+  //   } catch (err) {
+  //     logger.error(err.message);
+  //     res.status(500).json({
+  //       status: 'error',
+  //       error: 'Server error',
+  //     });
+  //   }
+  // }
+
+  // /**
+  //  * Upload Proof.
+  //  * @param {Request} req - Response object.
+  //  * @param {Response} res - The payload.
+  //  * @memberof ProfileController
+  //  * @returns {JSON} - A JSON success response.
+  //  */
+  // static async uploadProofs(req, res) {
+  //   try {
+  //     const user = await User.findOne({ _id: req.data.id });
+  //     user.proofs.push(req.body);
+
+  //     await user.save();
+  //     res.status(200).json({
+  //       status: 'success',
+  //       message: 'proof uploaded',
+  //       data: user.proofs,
+  //     });
+  //   } catch (err) {
+  //     logger.error(err.message);
+  //     res.status(500).json({
+  //       status: 'error',
+  //       error: 'Server error',
+  //     });
+  //   }
+  // }
+
   /**
    * Update role.
    * @param {Request} req - Response object.
