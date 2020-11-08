@@ -17,19 +17,19 @@ let achievementUserId;
 let achievementId;
 
 const conmpleteAchievement = {
-  title: 'TEST ACHIEVEMENT',
-  month: 'june',
-  year: '2019',
-  description: 'my description',
+  title: 'achievement',
+  month: 2,
+  year: 2,
+  description: 'description',
 };
 
 const incompleteAchievement = {
-  title: 'TEST ACHIEVEMENT',
-  day: '20',
+  title: 'achievement',
+  day: 4,
 };
 
 const updateAchievement = {
-  title: 'TEST ACHIEVEMENT',
+  title: 'achievement',
 };
 
 describe('Profile Achievement Route Endpoint', () => {
@@ -133,10 +133,10 @@ describe('Profile Achievement Route Endpoint', () => {
       });
       Achievement.create(
         {
-          title: 'TEST ACHIEVEMENT',
-          month: 'june',
-          year: '2019',
-          description: 'my description',
+          title: 'achievement',
+          month: 2,
+          year: 2,
+          description: 'description',
           userId: achievementUserId,
         },
         (err, achievement) => {
@@ -230,10 +230,10 @@ describe('Profile Achievement Route Endpoint', () => {
       });
       Achievement.create(
         {
-          title: 'TEST ACHIEVEMENT',
-          month: 'june',
-          year: '2019',
-          description: 'my description',
+          title: 'achievement',
+          month: 2,
+          year: 2,
+          description: 'description',
           userId: achievementUserId,
         },
         (err, achievement) => {
@@ -323,10 +323,10 @@ describe('Profile Achievement Route Endpoint', () => {
       });
       Achievement.create(
         {
-          title: 'TEST ACHIEVEMENT',
-          month: 'june',
-          year: '2019',
-          description: 'my description',
+          title: 'achievement',
+          month: 2,
+          year: 2,
+          description: 'description',
           userId: achievementUserId,
         },
         (err, achievement) => {
