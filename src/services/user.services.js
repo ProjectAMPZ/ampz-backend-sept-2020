@@ -5,7 +5,7 @@ export default {
     try {
       const condition = {
         userId,
-        profileId
+        profileId,
       };
       const user = await Follow.findOne(condition);
       return user;
@@ -20,7 +20,7 @@ export default {
     try {
       const condition = {
         userId,
-        profileId
+        profileId,
       };
       await Follow.deleteMany(condition);
     } catch (err) {
@@ -32,18 +32,17 @@ export default {
   },
   async followUser(profileId, userId, res) {
     try {
-        console.log('inside')
       const condition = {
         userId,
-        profileId
-      };     
-     const result = await Follow.create(condition);
-     return result;
+        profileId,
+      };
+      const result = await Follow.create(condition);
+      return result;
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error following user',
       });
     }
-  }
+  },
 };

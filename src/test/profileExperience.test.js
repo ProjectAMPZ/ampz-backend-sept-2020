@@ -17,34 +17,34 @@ let experienceUserId;
 let experienceId;
 
 const partiallyconmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
+  teamName: 'experience',
   competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
+  startMonth: 2,
+  startYear: 2,
   keyAchievements: 'awesome achievements',
   active: true,
 };
 
 const conmpleteExperience = {
-  teamName: 'TEST EXPEREINCE',
+  teamName: 'experience',
   competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
-  endMonth: 'Dec',
-  endYear: '2019',
+  startMonth: 2,
+  startYear: 2,
+  endMonth: 2,
+  endYear: 2,
   keyAchievements: 'awesome achievements',
   active: true,
 };
 
 const incompleteExperience = {
-  teamName: 'EXPEREINCE 2',
+  teamName: 'experience',
   competitionType: 'another competition',
-  startMonth: 'august',
-  startYear: '2019',
+  startMonth: 2,
+  startYear: 2,
 };
 
 const updateExperience = {
-  teamName: 'EXPEREINCE 2',
+  teamName: 'experience',
 };
 
 describe('Profile Experience Route Endpoint', () => {
@@ -162,12 +162,12 @@ describe('Profile Experience Route Endpoint', () => {
       });
       Experience.create(
         {
-          teamName: 'TEST EXPEREINCE',
+          teamName: 'experience',
           competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
+          startMonth: 2,
+          startYear: 2,
+          endMonth: 2,
+          endYear: 2,
           keyAchievements: 'awesome achievements',
           active: true,
           userId: experienceUserId,
@@ -262,12 +262,12 @@ describe('Profile Experience Route Endpoint', () => {
       });
       Experience.create(
         {
-          teamName: 'NEW EXPEREINCE',
+          teamName: 'experience',
           competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
+          startMonth: 2,
+          startYear: 2,
+          endMonth: 2,
+          endYear: 2,
           keyAchievements: 'awesome achievements',
           active: true,
           userId: experienceUserId,
@@ -357,12 +357,12 @@ describe('Profile Experience Route Endpoint', () => {
       });
       Experience.create(
         {
-          teamName: 'TEST EXPEREINCE',
+          teamName: 'experience',
           competitionType: 'another competition',
-          startMonth: 'august',
-          startYear: '2019',
-          endMonth: 'Dec',
-          endYear: '2019',
+          startMonth: 2,
+          startYear: 2,
+          endMonth: 2,
+          endYear: 2,
           keyAchievements: 'awesome achievements',
           active: true,
           userId: experienceUserId,
