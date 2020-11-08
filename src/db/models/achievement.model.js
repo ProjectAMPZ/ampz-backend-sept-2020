@@ -11,12 +11,12 @@ const AchievementSchema = new mongoose.Schema({
     trim: true,
   },
   month: {
-    type: String,
+    type: Number,
     required: true,
   },
 
   year: {
-    type: String,
+    type: Number,
     required: true,
   },
   description: {

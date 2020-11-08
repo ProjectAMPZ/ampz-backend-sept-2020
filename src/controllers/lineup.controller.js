@@ -135,7 +135,7 @@ class LineupController {
     const lineupId = req.data.id;
     const userId = req.params.talentId;
     try {
-      let talent = {
+      const talent = {
         userId,
         lineupId,
       };

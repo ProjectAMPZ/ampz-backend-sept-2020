@@ -12,6 +12,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 global.logger = logger;
 app.use(cors());
+
 app.use(morgan('combined', { stream: logger.stream }));
 
 app.use(express.json());
@@ -35,7 +36,7 @@ app.use((err, req, res) => {
 });
 
 app.listen(port, () => {
-  logger.info(`Server running at port ${port}`);
+  logger.info(`Server running at port ${port} on ${process.env.NODE_ENV}`);
 });
 
 export default app;
