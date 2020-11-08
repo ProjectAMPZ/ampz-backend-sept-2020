@@ -6,12 +6,12 @@ const awsCredentials = aws.config.update({
   region: 'us-west-1',
 });
 
-const s3 = new aws.S3(awsCredentials);
-
 const singleFileDelete = async (req, res, next) => {
   (async () => {
+    const s4 = new aws.S3(awsCredentials);
+
     if (req.body.mediaUrl) {
-      s3.deleteObject(
+      await s4.deleteObject(
         {
           Bucket: 'ampz-backend-sept',
           Key: req.body.mediaUrl.substring(53),

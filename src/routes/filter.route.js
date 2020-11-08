@@ -14,6 +14,7 @@ router.post(
 );
 router.put('/:filterId', verifyToken, FilterController.updateFilter);
 router.get('/:filterId', verifyToken, FilterController.getFilter);
+router.get('/filters/user', verifyToken, FilterController.getFilters);
 router.delete('/:filterId', verifyToken, FilterController.deleteFilter);
 
 export default router;

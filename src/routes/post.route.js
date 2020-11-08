@@ -44,5 +44,6 @@ router.put(
   PostController.reportPost
 );
 router.get('/:postId', PostController.getPost);
+router.get('/tags/all', PostController.getPostsTags);
 
 export default router;

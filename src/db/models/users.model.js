@@ -85,6 +85,9 @@ const UserSchema = new mongoose.Schema(
     profilePhotoUrl: {
       type: String,
     },
+
+    proofs: [{ type: String }],
+
     createdAt: {
       type: Date,
       default: Date.now(),

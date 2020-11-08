@@ -7,6 +7,8 @@ import {
   profilePhotoUpload,
 } from '../services/imageUpload.service';
 
+// import { proofUpload } from '../services/proofUpload.service';
+
 const router = Router();
 
 router.put('/bio', verifyToken, BioController.updateBio);
@@ -24,6 +26,8 @@ router.put(
   profilePhotoUpload,
   BioController.uploadImage
 );
+
+// router.put('/bio/proof', verifyToken, proofUpload, BioController.uploadProofs);
 
 router.put(
   '/bio/role',

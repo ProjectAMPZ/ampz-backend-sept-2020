@@ -9,6 +9,7 @@ import Auth from '../db/models/users.model';
 import LineupController from '../controllers/lineup.controller';
 import TalentLineup from '../db/models/talentLineup.model';
 import logger from '../config';
+import WatchlistTalent from '../db/models/watchlistTalent.model';
 
 chai.should();
 chai.use(Sinonchai);
@@ -36,8 +37,9 @@ before((done) => {
           myuser.userName
         );
       })();
-      TalentLineup.collection.drop();
-      done();
+      TalentLineup.collection.drop(() => {
+        done();
+      });
     }
   });
 });
@@ -144,10 +146,7 @@ describe('Lineup Route Endpoint', () => {
         .request(app)
         .put(`/api/v1/lineup/${lineupId}`)
         .field('name', '2028 Talent Stream')
-        .field(
-          'description',
-          'Suspendisse auctor nisi luctus mauris porttitor, quis tincidunt massa aliquet.'
-        )
+        .field('description', 'Suspendisse auctor')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -156,7 +155,7 @@ describe('Lineup Route Endpoint', () => {
           done();
         });
     });
-    it('should not update lineup if the token is invalid', (done) => {
+    it('should not update lineup if token is invalid', (done) => {
       chai
         .request(app)
         .put(`/api/v1/lineup/${lineupId}`)
@@ -286,7 +285,7 @@ describe('Lineup Route Endpoint', () => {
     it('should not get lineups if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/lineup`)
+        .get('/api/v1/lineup')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -298,7 +297,7 @@ describe('Lineup Route Endpoint', () => {
     it('should not get lineups if the token is invalid', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/lineup`)
+        .get('/api/v1/lineup')
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -311,7 +310,7 @@ describe('Lineup Route Endpoint', () => {
     it('should get lineups if lineup is found', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/lineup`)
+        .get('/api/v1/lineup')
         .set('token', token)
         .end((err, res) => {
           res.should.have.status(200);
@@ -434,13 +433,13 @@ describe('Lineup Route Endpoint', () => {
 
                   TalentLineup.create({
                     userId: talentId,
-                    lineupId: lineupId,
+                    lineupId,
                   })
-                    .then(function (user) {
+                    .then((user) => {
                       oldTalentId = user.userId;
                       done();
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                       logger.error(err);
                     });
                 }
@@ -529,7 +528,7 @@ describe('Lineup Route Endpoint', () => {
 
   describe('PUT api/v1/lineup/talent/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'willaim@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             talentId = myuser._id;
