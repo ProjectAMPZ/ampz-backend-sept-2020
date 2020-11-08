@@ -7,6 +7,7 @@ import Post from '../db/models/post.model';
 import Application from '../db/models/application.model';
 import Follow from '../db/models/follow.model';
 import AuthServices from '../services/auth.services';
+import Auth from '../db/models/users.model';
 
 /**
  *Contains User Controller
@@ -25,22 +26,25 @@ class UserController {
    */
   static async followUser(req, res) {
     try {
-      let result1 = '';  
+      let result1 = '';
       const userId = req.data.id;
-      const { profileId } = req.params;  
-    
-      const result = await FollowServices.followedByUser(profileId, userId, res);     
-      if (result) {      
-        result1 = await FollowServices.unFollowUser(profileId, userId, res);        
-      } else {      
+      const { profileId } = req.params;
+
+      const result = await FollowServices.followedByUser(
+        profileId,
+        userId,
+        res
+      );
+      if (result) {
+        result1 = await FollowServices.unFollowUser(profileId, userId, res);
+      } else {
         result1 = await FollowServices.followUser(profileId, userId, res);
       }
-      res.status(200).json({ status: 'success', data: result1});
+      res.status(200).json({ status: 'success', data: result1 });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
   }
-
 
   /**
    * get user.
@@ -50,7 +54,7 @@ class UserController {
    * @returns {JSON} - A JSON success response.
    */
   static async getUser(req, res) {
-    try {     
+    try {
       const user = await AuthServices.userIdExist(req.params.profileId, res);
       if (user.length) {
         const condition = {
@@ -72,7 +76,7 @@ class UserController {
 
         return res.status(200).json({
           status: 'success',
-          data: {         
+          data: {
             user: {
               ...user[0]._doc,
             },
@@ -81,20 +85,43 @@ class UserController {
             association,
             achievement,
             post,
-            follow
+            follow,
           },
         });
-      }else{
-        return res.status(404).json({
-          status: 'error',
-          error: 'User not found',
-        });
       }
+      return res.status(404).json({
+        status: 'error',
+        error: 'User not found',
+      });
     } catch (err) {
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error Logging in user',
       });
+    }
+  }
+
+  /**
+   * Get all users.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof AuthController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUsers(req, res) {
+    try {
+      const users = await Auth.find().populate({
+        path: 'feature',
+        select: 'sport position',
+      });
+      res.status(200).json({
+        status: 'success',
+        count: users.length,
+        data: users,
+      });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 }
