@@ -20,18 +20,21 @@ let mediaUrl;
 describe('Post Route Endpoint', () => {
   describe('POST api/v1/post', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            postToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              postToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+            done();
+          }
         }
-      });
+      );
     });
     it('should not create post if the user does not supply a token', (done) => {
       chai
@@ -212,6 +215,7 @@ describe('Post Route Endpoint', () => {
         .field('endDate', '20/10/2020')
         .field('startTime', '09:00AM')
         .field('endTime', '4:00PM')
+        .field('fee', '1000')
         .attach(
           'media',
           path.resolve(
