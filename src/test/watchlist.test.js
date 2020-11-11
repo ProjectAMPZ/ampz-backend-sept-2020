@@ -57,11 +57,11 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
                     userId: talentId,
                     watchlistId: userId,
                   })
-                    .then(function (user) {
+                    .then((user) => {
                       oldUserId = user.userId;
                       done();
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                       logger.error(err);
                     });
                 }

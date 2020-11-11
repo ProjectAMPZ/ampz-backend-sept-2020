@@ -13,7 +13,6 @@ import Follow from '../db/models/follow.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
-import logger from '../config';
 
 config();
 
@@ -147,7 +146,7 @@ class AuthController {
           association,
           achievement,
           post,
-          follow
+          follow,
         },
       });
     } catch (err) {
@@ -201,7 +200,6 @@ class AuthController {
         populate: {
           path: 'userId',
           select: '_id userName profilePhotoUrl yearOfBirth userLocation',
-
         },
       });
 
@@ -222,7 +220,7 @@ class AuthController {
           association,
           achievement,
           post,
-          follow
+          follow,
         },
       });
     } catch (err) {
@@ -293,7 +291,7 @@ class AuthController {
               association,
               achievement,
               post,
-              follow
+              follow,
             },
           });
         }
@@ -343,7 +341,7 @@ class AuthController {
                     association,
                     achievement,
                     post,
-                    follow
+                    follow,
                   },
                 });
               })();
@@ -496,7 +494,7 @@ class AuthController {
             association,
             achievement,
             post,
-            follow
+            follow,
           },
         });
       }
@@ -505,27 +503,6 @@ class AuthController {
         status: '500 Internal server error',
         error: 'Error Loading user',
       });
-    }
-  }
-
-  /**
-   * Get all users.
-   * @param {Request} req - Response object.
-   * @param {Response} res - The payload.
-   * @memberof AuthController
-   * @returns {JSON} - A JSON success response.
-   */
-  static async getUsers(req, res) {
-    try {
-      const users = await Auth.find();
-      res.status(200).json({
-        status: 'success',
-        count: users.length,
-        data: users,
-      });
-    } catch (err) {
-      logger.error(err.message);
-      res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 }
