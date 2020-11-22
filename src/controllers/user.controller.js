@@ -110,10 +110,12 @@ class UserController {
    */
   static async getUsers(req, res) {
     try {
+
       const users = await Auth.find().populate({
         path: 'feature',
         select: 'sport position',
       });
+
       res.status(200).json({
         status: 'success',
         count: users.length,
