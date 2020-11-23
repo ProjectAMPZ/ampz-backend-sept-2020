@@ -114,6 +114,7 @@ class UserController {
         path: 'feature',
         select: 'sport position',
       });
+
       res.status(200).json({
         status: 'success',
         count: users.length,
