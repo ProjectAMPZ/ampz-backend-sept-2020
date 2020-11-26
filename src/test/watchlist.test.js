@@ -20,9 +20,8 @@ let userId;
 let oldUserId;
 
 before((done) => {
-  WatchlistTalent.collection.drop(() => {
-    done();
-  });
+  WatchlistTalent.collection.drop();
+  done();
 });
 
 describe('Watchlist Watchlist Route Endpoint', async () => {
