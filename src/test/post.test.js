@@ -325,7 +325,7 @@ describe('Post Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/post/${postId}`)
-        .set('token', 'invalid token')
+        .set('token', 'gttfgfgfgdttd')
         .field(
           'description',
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
@@ -920,7 +920,7 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-    it('should apply for an event if a user supplies valid token', (done) => {
+    it('should apply for an event if user supplies valid token', (done) => {
       chai
         .request(app)
         .put(`/api/v1/post/application/${postId}`)
@@ -1047,6 +1047,31 @@ describe('Post Route Endpoint', () => {
       sinon.stub(res, 'status').returnsThis();
       PostController.getPost(req, res);
       res.status.should.have.callCount(1);
+      done();
+    });
+  });
+  describe('GET api/v1/post/tags/all', () => {
+    it('should get all tags', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/post/tags/all`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      PostController.getPostsTags(req, res);
+      res.status.should.have.callCount(0);
       done();
     });
   });
