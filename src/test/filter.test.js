@@ -31,7 +31,7 @@ let userId;
 let filterId;
 
 before((done) => {
-  Auth.findOne({ email: 'info@ampz.tv' }, (err, user) => {
+  Auth.findOne({ email: 'rasheedshinaopeyemi@gmail.com' }, (err, user) => {
     if (user) {
       (async () => {
         userId = user._id;
@@ -285,6 +285,59 @@ describe('Filter Route Endpoint', () => {
       done();
     });
   });
+
+  describe('GET api/v1/filter/filters/user', () => {
+    it('should not get filters if the user does not supply a token', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/filter/filters/user`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error');
+          done();
+        });
+    });
+    it('should not get filters if the token is invalid', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/filter/filters/user`)
+        .set('token', 'invalid token')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('401 Unauthorized');
+          res.body.should.have.property('error').eql('Access token is Invalid');
+          done();
+        });
+    });
+    it('should get filters if filters are found', (done) => {
+      chai
+        .request(app)
+        .get(`/api/v1/filter/filters/user`)
+        .set('token', token)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status').eql('success');
+          res.body.should.have.property('data');
+          done();
+        });
+    });
+    it('Should fake server error', (done) => {
+      const req = { body: {} };
+      const res = {
+        status() {},
+        send() {},
+      };
+      sinon.stub(res, 'status').returnsThis();
+      FilterController.getFilters(req, res);
+      res.status.should.have.callCount(1);
+      done();
+    });
+  });
+
   describe('DELETE api/v1/filter/:filterId', () => {
     before((done) => {
       Filter.create(

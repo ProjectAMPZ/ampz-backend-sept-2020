@@ -7,7 +7,6 @@ import app from '../index';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import PostController from '../controllers/post.controller';
-import Tag from '../db/models/tag.model';
 import PostServices from '../services/post.services';
 
 chai.should();
@@ -156,23 +155,6 @@ describe('Post Route Endpoint', () => {
         .field('sport', '2')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
         .end((err, res) => {
-          const tagsToSave = res.body.data.tags;
-          tagsToSave.forEach(async (tag) => {
-            const existingTag = await Tag.findOne({ tagName: tag });
-
-            if (existingTag) {
-              existingTag.count++;
-              existingTag.postId.push(res.body.data._id);
-              await existingTag.save();
-            } else {
-              await Tag.create({
-                postId: res.body.data._id,
-                tagName: tag,
-                count: 1,
-              });
-            }
-          });
-
           res.should.have.status(201);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
@@ -202,27 +184,10 @@ describe('Post Route Endpoint', () => {
           )
         )
         .end((err, res) => {
-          const tagsToSave = res.body.data.tags;
-          tagsToSave.forEach(async (tag) => {
-            const existingTag = await Tag.findOne({ tagName: tag });
-
-            if (existingTag) {
-              existingTag.count++;
-              existingTag.postId.push(res.body.data._id);
-              await existingTag.save();
-            } else {
-              await Tag.create({
-                postId: res.body.data._id,
-                tagName: tag,
-                count: 1,
-              });
-            }
-          });
           res.should.have.status(201);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
           res.body.should.have.property('data');
-
           done();
         });
     });
@@ -259,28 +224,10 @@ describe('Post Route Endpoint', () => {
           )
         )
         .end((err, res) => {
-          const tagsToSave = res.body.data.tags;
-          tagsToSave.forEach(async (tag) => {
-            const existingTag = await Tag.findOne({ tagName: tag });
-
-            if (existingTag) {
-              existingTag.count++;
-              existingTag.postId.push(res.body.data._id);
-              await existingTag.save();
-            } else {
-              await Tag.create({
-                postId: res.body.data._id,
-                tagName: tag,
-                count: 1,
-              });
-            }
-          });
-
           res.should.have.status(201);
           res.body.should.be.an('object');
           res.body.should.have.property('status').eql('success');
           res.body.should.have.property('data');
-
           done();
         });
     });
@@ -378,7 +325,7 @@ describe('Post Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/post/${postId}`)
-        .set('token', 'invalid token')
+        .set('token', 'gttfgfgfgdttd')
         .field(
           'description',
           'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
@@ -973,7 +920,7 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-    it('should apply for an event if a user supplies valid token', (done) => {
+    it('should apply for an event if user supplies valid token', (done) => {
       chai
         .request(app)
         .put(`/api/v1/post/application/${postId}`)
@@ -1103,12 +1050,11 @@ describe('Post Route Endpoint', () => {
       done();
     });
   });
-
   describe('GET api/v1/post/tags/all', () => {
-    it('should get all all post tags', (done) => {
+    it('should get all tags', (done) => {
       chai
         .request(app)
-        .get('/api/v1/post/tags/all')
+        .get(`/api/v1/post/tags/all`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');

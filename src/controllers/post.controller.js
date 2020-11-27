@@ -79,6 +79,7 @@ class PostController {
           existingTag.postId.push(post._id);
           await existingTag.save();
         } else {
+          /* istanbul ignore next */
           await Tag.create({
             postId: post._id,
             tagName: tag,
