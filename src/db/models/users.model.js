@@ -41,6 +41,9 @@ const UserSchema = new mongoose.Schema(
     yearOfBirth: {
       type: Number,
     },
+    age: {
+      type: Number,
+    },
     userLocation: {
       type: String,
     },
@@ -96,6 +99,11 @@ const UserSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+UserSchema.pre('save', function (next) {
+  this.age = new Date().getFullYear() - this.yearOfBirth;
+  next();
+});
 
 UserSchema.virtual('feature', {
   ref: 'feature',
