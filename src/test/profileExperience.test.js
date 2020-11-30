@@ -50,18 +50,21 @@ const updateExperience = {
 describe('Profile Experience Route Endpoint', () => {
   describe('POST api/v1/profile/experience', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            experienceToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              experienceToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+            done();
+          }
         }
-      });
+      );
     });
     it('should not create experience if the user does not supply token', (done) => {
       chai
@@ -148,18 +151,21 @@ describe('Profile Experience Route Endpoint', () => {
 
   describe('PUT api/v1/profile/experience/:experienceId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              experienceUserId = myuser._id;
+              experienceToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Experience.create(
         {
           teamName: 'experience',
@@ -248,18 +254,21 @@ describe('Profile Experience Route Endpoint', () => {
   });
   describe('GET api/v1/profile/experience/:experienceId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              experienceUserId = myuser._id;
+              experienceToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Experience.create(
         {
           teamName: 'experience',
@@ -343,18 +352,21 @@ describe('Profile Experience Route Endpoint', () => {
   });
   describe('DELETE api/v1/profile/experience/:experienceId', () => {
     before((done) => {
-      Auth.findOne({ email: 'okwuosachijioke1@gmail.com' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            experienceUserId = myuser._id;
-            experienceToken = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
+      Auth.findOne(
+        { email: 'rasheedshinaopeyemi@gmail.com' },
+        (err, myuser) => {
+          if (myuser) {
+            (async () => {
+              experienceUserId = myuser._id;
+              experienceToken = await Helper.generateToken(
+                myuser._id,
+                myuser._role,
+                myuser.userName
+              );
+            })();
+          }
         }
-      });
+      );
       Experience.create(
         {
           teamName: 'experience',
