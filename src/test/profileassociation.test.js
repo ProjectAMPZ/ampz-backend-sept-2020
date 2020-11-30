@@ -47,7 +47,7 @@ const updateExperience = {
 describe('Profile Association Route Endpoint', () => {
   describe('POST api/v1/profile/association', () => {
     before((done) => {
-      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationToken = await Helper.generateToken(
@@ -145,7 +145,7 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('PUT api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
@@ -246,7 +246,7 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('GET api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
@@ -343,7 +343,7 @@ describe('Profile Association Route Endpoint', () => {
 
   describe('DELETE api/v1/profile/association/:associationId', () => {
     before((done) => {
-      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             associationUserId = myuser._id;
