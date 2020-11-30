@@ -27,7 +27,7 @@ before((done) => {
 describe('Watchlist Watchlist Route Endpoint', async () => {
   describe('POST api/watchlist/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'pulisic@gmail.com' }, (err, user) => {
+      Auth.findOne({ email: 'eden@gmail.com' }, (err, user) => {
         if (user) {
           newTalentId = user._id;
         }
@@ -73,7 +73,7 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
     it('should not add talent to watchlist if user does not supply token', (done) => {
       chai
         .request(app)
-        .post(`/api/v1/watchlist/${talentId}`)
+        .post(`/api/v1/watchlist/${oldUserId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -85,7 +85,7 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
     it('should not add talent to watchlist if token is invalid', (done) => {
       chai
         .request(app)
-        .post(`/api/v1/watchlist/${talentId}`)
+        .post(`/api/v1/watchlist/${oldUserId}`)
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);

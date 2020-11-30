@@ -28,7 +28,7 @@ const updatetalent = {
 };
 
 before((done) => {
-  Auth.findOne({ email: 'aim@ampz.tv' }, (err, myuser) => {
+  Auth.findOne({ email: 'rasheedshinaopeyemi@gmail.com' }, (err, myuser) => {
     if (myuser) {
       (async () => {
         token = await Helper.generateToken(
@@ -46,20 +46,6 @@ before((done) => {
 
 describe('Lineup Route Endpoint', () => {
   describe('POST api/v1/lineup', () => {
-    before((done) => {
-      Auth.findOne({ email: 'aim@ampz.tv' }, (err, myuser) => {
-        if (myuser) {
-          (async () => {
-            token = await Helper.generateToken(
-              myuser._id,
-              myuser._role,
-              myuser.userName
-            );
-          })();
-          done();
-        }
-      });
-    });
     it('should not create lineup if the user does not supply token', (done) => {
       chai
         .request(app)
@@ -407,7 +393,7 @@ describe('Lineup Route Endpoint', () => {
 
   describe('POST api/v1/lineup/talent/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'pulisic@gmail.com' }, (err, user) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, user) => {
         if (user) {
           newTalentId = user._id;
         }
@@ -425,26 +411,23 @@ describe('Lineup Route Endpoint', () => {
               );
             })();
 
-            Auth.findOne(
-              { email: 'okwuosachijioke@gmail.com' },
-              (err, myuser) => {
-                if (myuser) {
-                  talentId = myuser._id;
+            Auth.findOne({ email: 'opeyemi@gmail.com' }, (err, myuser) => {
+              if (myuser) {
+                talentId = myuser._id;
 
-                  TalentLineup.create({
-                    userId: talentId,
-                    lineupId,
+                TalentLineup.create({
+                  userId: talentId,
+                  lineupId,
+                })
+                  .then((user) => {
+                    oldTalentId = user.userId;
+                    done();
                   })
-                    .then((user) => {
-                      oldTalentId = user.userId;
-                      done();
-                    })
-                    .catch((err) => {
-                      logger.error(err);
-                    });
-                }
+                  .catch((err) => {
+                    logger.error(err);
+                  });
               }
-            );
+            });
           }
         }
       );
@@ -452,7 +435,7 @@ describe('Lineup Route Endpoint', () => {
     it('should not add talent if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .post(`/api/v1/lineup/talent/${talentId}`)
+        .post(`/api/v1/lineup/talent/${oldTalentId}`)
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -464,7 +447,7 @@ describe('Lineup Route Endpoint', () => {
     it('should not add talent if the token is invalid', (done) => {
       chai
         .request(app)
-        .post(`/api/v1/lineup/talent/${talentId}`)
+        .post(`/api/v1/lineup/talent/${oldTalentId}`)
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -528,7 +511,7 @@ describe('Lineup Route Endpoint', () => {
 
   describe('PUT api/v1/lineup/talent/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'john@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             talentId = myuser._id;
