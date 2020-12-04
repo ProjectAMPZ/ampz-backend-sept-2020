@@ -8,12 +8,9 @@ const UserSchema = new mongoose.Schema(
     },
     userName: {
       type: String,
-      unique: true,
-      trim: true,
     },
     googleUserId: {
       type: String,
-      trim: true,
     },
     password: {
       type: String,
@@ -21,7 +18,6 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     gender: {
       type: String,

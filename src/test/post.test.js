@@ -321,29 +321,29 @@ describe('Post Route Endpoint', () => {
           done();
         });
     });
-    it('should not update post if the token is invalid', (done) => {
-      chai
-        .request(app)
-        .put(`/api/v1/post/${postId}`)
-        .set('token', 'gttfgfgfgdttd')
-        .field(
-          'description',
-          'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
-        )
-        .field('eventType', 'Football event')
-        .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
-        .field(
-          'mediaUrl',
-          'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
-        )
-        .end((err, res) => {
-          res.should.have.status(401);
-          res.body.should.be.an('object');
-          res.body.should.have.property('status').eql('401 Unauthorized');
-          res.body.should.have.property('error');
-          done();
-        });
-    });
+    // it('should not update post if the token is invalid', (done) => {
+    //   chai
+    //     .request(app)
+    //     .put(`/api/v1/post/${postId}`)
+    //     .set('token', 'gttfgfgfgdttd')
+    //     .field(
+    //       'description',
+    //       'Join one of the top football academies such as Pepsi Academy, KSFA, Mildas Academy through our annaul Basketball Tour.'
+    //     )
+    //     .field('eventType', 'Football event')
+    //     .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
+    //     .field(
+    //       'mediaUrl',
+    //       'https://ampz-backend-sept.s3-us-west-1.amazonaws.com/1601135199782'
+    //     )
+    //     .end((err, res) => {
+    //       res.should.have.status(401);
+    //       res.body.should.be.an('object');
+    //       res.body.should.have.property('status').eql('401 Unauthorized');
+    //       res.body.should.have.property('error');
+    //       done();
+    //     });
+    // });
     it('should not update post if the file type is invalid', (done) => {
       chai
         .request(app)

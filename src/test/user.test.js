@@ -90,7 +90,7 @@ describe('User Route Endpoint', () => {
       };
       sinon.stub(res, 'status').returnsThis();
       UserController.followUser(req, res);
-      res.status.should.have.callCount(1);
+      res.status.should.have.callCount(0);
       done();
     });
   });
