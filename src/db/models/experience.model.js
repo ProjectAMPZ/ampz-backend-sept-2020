@@ -12,16 +12,16 @@ const ExperienceSchema = new mongoose.Schema({
     type: String,
   },
   startMonth: {
-    type: Number,
+    type: String,
   },
   startYear: {
-    type: Number,
+    type: String,
   },
   endMonth: {
-    type: Number,
+    type: String,
   },
   endYear: {
-    type: Number,
+    type: String,
   },
   active: {
     type: Boolean,

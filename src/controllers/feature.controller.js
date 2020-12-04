@@ -42,6 +42,29 @@ class FeatureController {
       });
     }
   }
+
+  /**
+   * get user Feature.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUserFeature(req, res) {
+    try {
+      const feature = await Feature.find({ userId: req.data.id });
+
+      res.status(200).json({
+        status: 'success',
+        data: feature,
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
 }
 
 export default FeatureController;

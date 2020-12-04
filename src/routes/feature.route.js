@@ -14,5 +14,6 @@ router.put(
 );
 
 router.put('/feature/:userId', verifyToken, FeatureController.updateFeature);
+router.get('/feature/user', verifyToken, FeatureController.getUserFeature);
 
 export default router;

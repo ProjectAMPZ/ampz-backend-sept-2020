@@ -1,3 +1,4 @@
+import logger from '../config';
 import Association from '../db/models/association.model';
 
 /**
@@ -124,6 +125,31 @@ class AssociationController {
         message: 'association deleted successfully',
       });
     } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
+
+  /**
+   * get user association.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUserAssociation(req, res) {
+    try {
+      const associations = await Association.find({ userId: req.data.id });
+
+      res.status(200).json({
+        status: 'success',
+        count: associations.length,
+        data: associations,
+      });
+    } catch (err) {
+      logger.error(err.message);
       res.status(500).json({
         status: 'error',
         error: 'Server error',

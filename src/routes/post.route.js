@@ -45,5 +45,6 @@ router.put(
 );
 router.get('/:postId', PostController.getPost);
 router.get('/tags/all', PostController.getPostsTags);
+router.get('/user/posts/all', verifyToken, PostController.getUserPosts);
 
 export default router;

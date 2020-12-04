@@ -5,23 +5,23 @@ const AchievementSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'user',
   },
+
   title: {
     type: String,
-    required: true,
-    trim: true,
+  },
+
+  day: {
+    type: String,
   },
   month: {
-    type: Number,
-    required: true,
+    type: String,
   },
 
   year: {
-    type: Number,
-    required: true,
+    type: String,
   },
   description: {
     type: String,
-    required: true,
   },
   createdAt: {
     type: Date,
