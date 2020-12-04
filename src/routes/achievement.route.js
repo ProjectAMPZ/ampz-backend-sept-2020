@@ -31,4 +31,10 @@ router.delete(
   AchievementController.deleteAchievement
 );
 
+router.get(
+  '/achievement/user/all',
+  verifyToken,
+  AchievementController.getUserAchievement
+);
+
 export default router;

@@ -171,7 +171,7 @@ class AuthController {
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid email address',
+          error: 'Invalid Credential',
         });
       }
       const confirmPassword = await Helper.verifyPassword(
@@ -181,7 +181,7 @@ class AuthController {
       if (!confirmPassword) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid password',
+          error: 'Invalid Credential',
         });
       }
 
@@ -467,6 +467,7 @@ class AuthController {
         const experience = await Experience.find(condition);
         const association = await Association.find(condition);
         const follow = await Follow.find(condition);
+        const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
         const post = await Post.find(condition).populate({
           path: 'application',
@@ -495,6 +496,7 @@ class AuthController {
             achievement,
             post,
             follow,
+            following,
           },
         });
       }

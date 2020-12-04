@@ -1,4 +1,5 @@
 import User from '../db/models/users.model';
+import Helper from '../utils/user.utils';
 
 /**
  *Contains Bio Controller
@@ -65,15 +66,19 @@ class BioController {
    */
   static async updateBioRole(req, res) {
     try {
-      await User.findOneAndUpdate({ _id: req.data.id }, req.body, {
+      const user = await User.findOneAndUpdate({ _id: req.data.id }, req.body, {
         new: true,
       });
 
-      res
-        .status(200)
-        .json({ status: 'success', message: 'bio updated successfully' });
+      const token = await Helper.generateToken(
+        user.id,
+        user.role,
+        user.userName
+      );
+
+      res.status(200).json({ status: 'success', token });
     } catch (err) {
-      // logger.error(err.message);
+      logger.error(err.message);
       res.status(500).json({
         status: 'error',
         error: 'Server error',

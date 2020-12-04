@@ -31,4 +31,10 @@ router.delete(
   AssociationController.deleteAssociation
 );
 
+router.get(
+  '/association/user/all',
+  verifyToken,
+  AssociationController.getUserAssociation
+);
+
 export default router;

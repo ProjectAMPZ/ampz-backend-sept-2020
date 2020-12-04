@@ -12,16 +12,16 @@ const AssociationSchema = new mongoose.Schema({
     type: String,
   },
   issueMonth: {
-    type: Number,
+    type: String,
   },
   issueYear: {
-    type: Number,
+    type: String,
   },
   expiryMonth: {
-    type: Number,
+    type: String,
   },
   expiryYear: {
-    type: Number,
+    type: String,
   },
   active: {
     type: Boolean,

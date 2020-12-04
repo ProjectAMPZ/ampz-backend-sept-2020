@@ -24,7 +24,8 @@ class AchievementController {
         data: achievement,
       });
     } catch (err) {
-      // res.status(500).json({ status: 'error', error: 'Server error' });
+      logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
 
@@ -123,6 +124,30 @@ class AchievementController {
       res.status(200).json({
         status: 'success',
         message: 'achievement deleted successfully',
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
+
+  /**
+   * get user's achievement.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUserAchievement(req, res) {
+    try {
+      const achievements = await Achievement.find({ userId: req.data.id });
+
+      res.status(200).json({
+        status: 'success',
+        count: achievements.length,
+        data: achievements,
       });
     } catch (err) {
       res.status(500).json({

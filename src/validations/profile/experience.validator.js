@@ -29,12 +29,6 @@ class ExperienceValidator {
         .not()
         .isEmpty()
         .withMessage('key achievements is required'),
-      check('active')
-        .not()
-        .isEmpty()
-        .withMessage('select whelther you are active or not')
-        .isIn([true, false])
-        .withMessage('active must be true or false'),
     ];
   }
 

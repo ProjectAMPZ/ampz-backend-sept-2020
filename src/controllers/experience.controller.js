@@ -129,6 +129,30 @@ class ExperienceController {
       });
     }
   }
+
+  /**
+   * get user experience.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof postController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUserExperience(req, res) {
+    try {
+      const experiences = await Experience.find({ userId: req.data.id });
+
+      res.status(200).json({
+        status: 'success',
+        count: experiences.length,
+        data: experiences,
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        error: 'Server error',
+      });
+    }
+  }
 }
 
 export default ExperienceController;

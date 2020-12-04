@@ -8,12 +8,9 @@ const UserSchema = new mongoose.Schema(
     },
     userName: {
       type: String,
-      unique: true,
-      trim: true,
     },
     googleUserId: {
       type: String,
-      trim: true,
     },
     password: {
       type: String,
@@ -21,7 +18,6 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     gender: {
       type: String,
@@ -110,6 +106,20 @@ UserSchema.virtual('feature', {
   localField: '_id',
   foreignField: 'userId',
   justOne: true,
+});
+
+UserSchema.virtual('followers', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'userId',
+  justOne: false,
+});
+
+UserSchema.virtual('following', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'profileId',
+  justOne: false,
 });
 
 const User = mongoose.model('user', UserSchema);
