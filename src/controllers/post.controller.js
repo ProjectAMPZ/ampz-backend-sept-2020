@@ -18,7 +18,6 @@ class PostController {
 
   /**
    * create post.
-   * create a post.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof PostController
