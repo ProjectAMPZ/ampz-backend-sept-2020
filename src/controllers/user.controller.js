@@ -8,7 +8,9 @@ import Application from '../db/models/application.model';
 import Follow from '../db/models/follow.model';
 import AuthServices from '../services/auth.services';
 import Auth from '../db/models/users.model';
-
+import User from '../db/models/users.model';
+import Comment from '../db/models/comment.model';
+import Like from '../db/models/like.model';
 /**
  *Contains User Controller
  *
@@ -121,6 +123,33 @@ class UserController {
       res.status(500).json({ status: 'error', error: 'Server error' });
     }
   }
+
+  // /**
+  //  * Get all users.
+  //  * @param {Request} req - Response object.
+  //  * @param {Response} res - The payload.
+  //  * @memberof AuthController
+  //  * @returns {JSON} - A JSON success response.
+  //  */
+  // static async deleteUser(req, res) {
+  //   try {
+  //     await User.findByIdAndRemove(req.params.userId);
+  //     await Post.deleteMany({ userId: req.params.userId });
+  //     await Association.findOneAndRemove({ userId: req.params.userId });
+  //     await Experience.findOneAndRemove({ userId: req.params.userId });
+  //     await Feature.findOneAndRemove({ userId: req.params.userId });
+  //     await Comment.deleteMany({ userId: req.params.userId });
+  //     await Like.deleteMany({ userId: req.params.userId });
+
+  //     res.status(200).json({
+  //       status: 'success',
+  //       message: 'account deleted',
+  //     });
+  //   } catch (err) {
+  //     logger.error(err.message);
+  //     res.status(500).json({ status: 'error', error: 'Server error' });
+  //   }
+  // }
 }
 
 export default UserController;

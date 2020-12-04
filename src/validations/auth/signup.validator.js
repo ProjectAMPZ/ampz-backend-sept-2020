@@ -10,10 +10,10 @@ import AuthServices from '../../services/auth.services';
  */
 class SignUp {
   /**
-     * validate user data.
-     * @memberof SignUp
-     * @returns {null} - No response.
-     */
+   * validate user data.
+   * @memberof SignUp
+   * @returns {null} - No response.
+   */
   static validateData() {
     return [
       check('fullName')
@@ -63,7 +63,7 @@ class SignUp {
         .trim()
         .escape()
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('Confirm password does not match'),
+        .withMessage('Passwords do not match'),
       check('gender')
         .exists()
         .withMessage('Gender is required')
@@ -138,7 +138,7 @@ class SignUp {
       return res.status(400).json({
         status: '400 Invalid Request',
         error: 'Your request contains invalid parameters',
-        errors: errArr
+        errors: errArr,
       });
     }
     return next();
@@ -158,7 +158,7 @@ class SignUp {
     if (user.length) {
       return res.status(409).json({
         status: '409 Conflict',
-        error: 'Email address already exists'
+        error: 'Email address already exists',
       });
     }
     return next();
@@ -178,7 +178,7 @@ class SignUp {
     if (user.length) {
       return res.status(409).json({
         status: '409 Conflict',
-        error: 'Username already exists'
+        error: 'Username already exists',
       });
     }
     return next();
@@ -198,7 +198,7 @@ class SignUp {
     if (user.length) {
       return res.status(409).json({
         status: '409 Conflict',
-        error: 'Phonenumber already exists'
+        error: 'Phone number already exists',
       });
     }
     return next();

@@ -9,7 +9,6 @@ import Auth from '../db/models/users.model';
 import LineupController from '../controllers/lineup.controller';
 import TalentLineup from '../db/models/talentLineup.model';
 import logger from '../config';
-import WatchlistTalent from '../db/models/watchlistTalent.model';
 
 chai.should();
 chai.use(Sinonchai);

@@ -1,6 +1,8 @@
 import Lineup from '../db/models/lineup.model';
 import TalentLineup from '../db/models/talentLineup.model';
+import User from '../db/models/users.model';
 import logger from '../config';
+import SendEmail from '../utils/email.utils';
 
 /**
  *Contains Lineup Controller
@@ -132,33 +134,56 @@ class LineupController {
    * @returns {JSON} - A JSON success response.
    */
   static async addTalentToLineup(req, res) {
+    // const lineupId = req.data.id;
+    // const userId = req.params.talentId;
+    // try {
+    //   const talent = {
+    //     userId,
+    //     lineupId,
+    //   };
+
+    //   const isExist = await TalentLineup.findOne({
+    //     userId: req.params.talentId,
+    //   });
+    //   if (isExist) {
+    //     return res.status(400).json({
+    //       status: 'error',
+    //       message: 'you already sent a request to this talent',
+    //     });
+    //   }
+
+    //   let newTalent = await User.findOne({ _id: req.params.talentId });
+    //   const manager = await User.findOne({ _id: lineupId });
+    //   const managerName = manager.fullName;
+    //   const talentEmail = newTalent.email;
+    //   const talentName = newTalent.fullName;
+    //   const message = `Good day ${talentName}, \n You are recieving this message, because ${managerName} has requested you be added to his lineup `;
+    //   const subject = 'Team Request';
+
+    //   SendEmail(talentEmail, subject, message);
+
+    //   const lineupTalent = await TalentLineup.create(talent);
+    //   res.status(200).json({
+    //     status: 'success',
+    //     data: lineupTalent,
+    //   });
+    // } catch (err) {
+    //   // logger.error(err.message);
+    //   // res.status(500).json({ status: 'error', error: 'Server error' });
+    // }
+
     const lineupId = req.data.id;
-    const userId = req.params.talentId;
-    try {
-      const talent = {
-        userId,
-        lineupId,
-      };
 
-      const isExist = await TalentLineup.findOne({
-        userId: req.params.talentId,
-      });
-      if (isExist) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'you already sent a request to this talent',
-        });
-      }
+    const { emails } = req.body;
+    const userEmails = emails.split(',');
 
-      const newTalent = await TalentLineup.create(talent);
-      res.status(200).json({
-        status: 'success',
-        data: newTalent,
-      });
-    } catch (err) {
-      // logger.error(err.message);
-      // res.status(500).json({ status: 'error', error: 'Server error' });
-    }
+    const users = await User.find({ gender: 'male' });
+
+    res.status(200).json({
+      status: 'success',
+      count: users.length,
+      data: users,
+    });
   }
 
   /**
