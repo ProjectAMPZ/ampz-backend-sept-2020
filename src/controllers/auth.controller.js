@@ -233,7 +233,7 @@ class AuthController {
     }
   }
 
-  /**
+  /**`
    * Login user through google.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
@@ -244,10 +244,12 @@ class AuthController {
     try {
       const { token } = req.body;
       const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+      console.log('stage one');
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
+
       if (ticket) {
         const payload = ticket.getPayload();
         const response = {
@@ -259,6 +261,7 @@ class AuthController {
 
         // if the user has previously created account normally
         const myUser = await AuthServices.emailExist(payload.email, res);
+
         if (myUser.length) {
           const condition = {
             userId: myUser[0].id,
@@ -298,13 +301,16 @@ class AuthController {
             },
           });
         }
-        const user = await AuthServices.googleIdExist(payload.sub, res);
+        // const user = await AuthServices.googleIdExist(payload.sub, res);
         // if the user dont have existing account
-        if (!user.length) {
+        if (!myUser.length) {
           await Auth.create({ ...response }, (err, createdUser) => {
+            console.log(response);
             if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db during creation of google user');
+              logger.error(err.message);
+              throw new Error(
+                'Error occured in db during creation of google user'
+              );
             } else {
               const featureRecord = {
                 userId: createdUser._id,
@@ -354,6 +360,7 @@ class AuthController {
         }
       }
     } catch (err) {
+      logger.error(err.message);
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error logging in user through google',
