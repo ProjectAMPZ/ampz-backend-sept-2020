@@ -389,7 +389,7 @@ class AuthController {
         token,
       };
       await ResetPassword.create({ ...data });
-      const message = `To reset your password use this code:${token}, the code expires in 1 hour`;
+      const message = `To reset your password use this code:${token}, the code expires in 30 minutes`;
       sendEmail(email, 'Password Reset', message);
       return res.status(201).json({
         status: 'success',
