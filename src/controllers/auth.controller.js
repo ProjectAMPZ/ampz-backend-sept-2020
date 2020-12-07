@@ -378,8 +378,9 @@ class AuthController {
   static async resetPassword(req, res) {
     try {
       const { email } = req.params;
-      const Time = new Date();
-      const expiringDate = Time.setDate(Time.getDate() + 1);
+      let thirtyMinutes = 30 * 60 * 1000;
+      let date = new Date();
+      const expiringDate = new Date(date.getTime() + thirtyMinutes);
       const token = await Helper.generateCode(5);
       await ResetPassword.deleteOne({ email });
       const data = {

@@ -105,8 +105,9 @@ export default {
       if (user[0].token !== code) {
         return 2;
       }
-      const Time = new Date();
-      const currentDate = Time.setDate(Time.getDate());
+      // const Time = new Date();
+      // const currentDate = Time.setDate(Time.getDate());
+      const currentDate = new Date(new Date().getTime());
       if (+user[0].expiringDate < currentDate) {
         return 3;
       }
