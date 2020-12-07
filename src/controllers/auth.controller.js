@@ -172,7 +172,7 @@ class AuthController {
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid Credential',
+          error: 'invalid credential',
         });
       }
       const confirmPassword = await Helper.verifyPassword(
