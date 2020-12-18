@@ -125,7 +125,7 @@ class UserController {
   }
 
   // /**
-  //  * Get all users.
+  //  * delete a user.
   //  * @param {Request} req - Response object.
   //  * @param {Response} res - The payload.
   //  * @memberof AuthController
