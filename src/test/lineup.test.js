@@ -9,7 +9,6 @@ import Auth from '../db/models/users.model';
 import LineupController from '../controllers/lineup.controller';
 import TalentLineup from '../db/models/talentLineup.model';
 import logger from '../config';
-import WatchlistTalent from '../db/models/watchlistTalent.model';
 
 chai.should();
 chai.use(Sinonchai);
@@ -145,7 +144,10 @@ describe('Lineup Route Endpoint', () => {
       chai
         .request(app)
         .put(`/api/v1/lineup/${lineupId}`)
-        .set('token', 'dsskdkdkdkkdkdkdkdk')
+        .set(
+          'token',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNWZlZGMwM2JhNTNmYzA0ZTU4NjYzYTZiIiwicm9sZSI6IjViNjcxMjAyNTA3ODEzMmVhOWY0OWI4MiIsInVzZXJOYW1lIjoic2hpbmEifSwiaWF0IjoxNjA5NTk1NjQ5LCJleHAiOjE2MTIxODc2NDl9.yePF3mK02CbTV7yecUlDOgGgh11R4iO7Yldh92NPw5wty'
+        )
         .field('name', '2020 Talent Stream')
         .field('description', 'Suspendisse auctor')
         .attach('media', path.resolve(__dirname, '../assets/img/sport.jpg'))
@@ -393,7 +395,7 @@ describe('Lineup Route Endpoint', () => {
 
   describe('POST api/v1/lineup/talent/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, user) => {
+      Auth.findOne({ email: 'adekunlemary@ampz.tv' }, (err, user) => {
         if (user) {
           newTalentId = user._id;
         }
@@ -411,7 +413,7 @@ describe('Lineup Route Endpoint', () => {
               );
             })();
 
-            Auth.findOne({ email: 'opeyemi@gmail.com' }, (err, myuser) => {
+            Auth.findOne({ email: 'jdayo2012@gmail.com' }, (err, myuser) => {
               if (myuser) {
                 talentId = myuser._id;
 
@@ -511,7 +513,7 @@ describe('Lineup Route Endpoint', () => {
 
   describe('PUT api/v1/lineup/talent/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'odunayo@gmail.com' }, (err, myuser) => {
+      Auth.findOne({ email: 'adekunlemary@ampz.tv' }, (err, myuser) => {
         if (myuser) {
           (async () => {
             talentId = myuser._id;

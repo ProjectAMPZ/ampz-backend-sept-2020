@@ -27,7 +27,7 @@ before((done) => {
 describe('Watchlist Watchlist Route Endpoint', async () => {
   describe('POST api/watchlist/:talentId', () => {
     before((done) => {
-      Auth.findOne({ email: 'eden@gmail.com' }, (err, user) => {
+      Auth.findOne({ email: 'jdayo2012@gmail.com' }, (err, user) => {
         if (user) {
           newTalentId = user._id;
         }
@@ -46,26 +46,23 @@ describe('Watchlist Watchlist Route Endpoint', async () => {
               );
             })();
 
-            Auth.findOne(
-              { email: 'okwuosachijioke@gmail.com' },
-              (err, myuser) => {
-                if (myuser) {
-                  talentId = myuser._id;
+            Auth.findOne({ email: 'ros@ampz.tv' }, (err, myuser) => {
+              if (myuser) {
+                talentId = myuser._id;
 
-                  WatchlistTalent.create({
-                    userId: talentId,
-                    watchlistId: userId,
+                WatchlistTalent.create({
+                  userId: talentId,
+                  watchlistId: userId,
+                })
+                  .then((user) => {
+                    oldUserId = user.userId;
+                    done();
                   })
-                    .then((user) => {
-                      oldUserId = user.userId;
-                      done();
-                    })
-                    .catch((err) => {
-                      logger.error(err);
-                    });
-                }
+                  .catch((err) => {
+                    logger.error(err);
+                  });
               }
-            );
+            });
           }
         }
       );
