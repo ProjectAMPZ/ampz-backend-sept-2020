@@ -20,7 +20,7 @@ class UserController {
   /* eslint camelcase: 0 */
 
   /**
-   * like/unlike posts.
+   * follow/unfollow a user.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof PostController

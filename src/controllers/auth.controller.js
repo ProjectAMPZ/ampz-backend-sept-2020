@@ -244,7 +244,6 @@ class AuthController {
     try {
       const { token } = req.body;
       const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-      console.log('stage one');
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
