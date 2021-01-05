@@ -11,6 +11,8 @@ import Auth from '../db/models/users.model';
 import User from '../db/models/users.model';
 import Comment from '../db/models/comment.model';
 import Like from '../db/models/like.model';
+import logger from '../config';
+
 /**
  *Contains User Controller
  *
@@ -20,29 +22,45 @@ class UserController {
   /* eslint camelcase: 0 */
 
   /**
-   * follow/unfollow a user.
+   * follow user.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
    * @memberof PostController
    * @returns {JSON} - A JSON success response.
    */
   static async followUser(req, res) {
+    const userId = req.params.userId;
+    const profileId = req.data.id;
     try {
-      let result1 = '';
-      const userId = req.data.id;
-      const { profileId } = req.params;
-
-      const result = await FollowServices.followedByUser(
-        profileId,
+      let follower = new Follow({
         userId,
-        res
+        profileId,
+      });
+
+      let followers = await Follow.find({ userId: userId });
+
+      const following = followers.find(
+        (follower) => follower.profileId.toString() === req.data.id
       );
-      if (result) {
-        result1 = await FollowServices.unFollowUser(profileId, userId, res);
-      } else {
-        result1 = await FollowServices.followUser(profileId, userId, res);
+
+      if (following) {
+        // are these operations of  not expensive?
+        await Follow.deleteOne({ userId: userId, profileId: profileId });
+        followers = await Follow.find({ userId: userId });
+        return res.status(200).json({
+          status: 'success',
+          count: followers.length,
+          data: followers,
+        });
       }
-      res.status(200).json({ status: 'success', data: result1 });
+
+      await follower.save();
+
+      followers = await Follow.find({ userId: userId });
+
+      res
+        .status(200)
+        .json({ status: 'success', count: followers.length, data: followers });
     } catch (err) {
       res.status(500).json({ status: 'error', error: 'internal server error' });
     }
@@ -112,7 +130,10 @@ class UserController {
    */
   static async getUsers(req, res) {
     try {
-      const users = await Auth.find();
+      const users = await Auth.find()
+        .populate({ path: 'followers', model: Follow })
+        .populate({ path: 'following', model: Follow });
+
       res.status(200).json({
         status: 'success',
         count: users.length,
