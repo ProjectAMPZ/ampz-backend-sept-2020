@@ -484,6 +484,24 @@ class PostController {
       res.status(500).json({ status: 'error', error: 'server error' });
     }
   }
-}
 
+  /**
+   * get a user post.
+   * @param {Request} req - Response object.
+   * @param {Response} res - The payload.
+   * @memberof PostController
+   * @returns {JSON} - A JSON success response.
+   */
+  static async getUserPosts(req, res) {
+    try {
+      const posts = await Post.find({ userId: req.data.id });
+      res
+        .status(200)
+        .json({ status: 'success', count: posts.length, data: posts });
+    } catch (err) {
+      logger.error(err.message);
+      res.status(500).json({ status: 'error', error: 'server error' });
+    }
+  }
+}
 export default PostController;

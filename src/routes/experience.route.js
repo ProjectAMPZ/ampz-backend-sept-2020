@@ -31,4 +31,10 @@ router.delete(
   ExperienceController.deleteExperience
 );
 
+router.get(
+  '/experience/user/all',
+  verifyToken,
+  ExperienceController.getUserExperience
+);
+
 export default router;

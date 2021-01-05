@@ -108,6 +108,20 @@ UserSchema.virtual('feature', {
   justOne: true,
 });
 
+UserSchema.virtual('followers', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'userId',
+  justOne: false,
+});
+
+UserSchema.virtual('following', {
+  ref: 'follow',
+  localField: '_id',
+  foreignField: 'profileId',
+  justOne: false,
+});
+
 const User = mongoose.model('user', UserSchema);
 
 export default User;

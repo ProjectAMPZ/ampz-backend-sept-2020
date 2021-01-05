@@ -172,7 +172,7 @@ class AuthController {
       if (!user.length) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid credential',
+          error: 'Invalid Credential',
         });
       }
       const confirmPassword = await Helper.verifyPassword(
@@ -182,7 +182,7 @@ class AuthController {
       if (!confirmPassword) {
         return res.status(401).json({
           status: '401 Unauthorized',
-          error: 'Invalid credential',
+          error: 'Invalid Credential',
         });
       }
 
@@ -244,7 +244,6 @@ class AuthController {
     try {
       const { token } = req.body;
       const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID,
@@ -479,6 +478,7 @@ class AuthController {
         const experience = await Experience.find(condition);
         const association = await Association.find(condition);
         const follow = await Follow.find(condition);
+        const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
         const post = await Post.find(condition);
         // const post = await Post.find(condition).populate({
@@ -508,6 +508,7 @@ class AuthController {
             achievement,
             post,
             follow,
+            following,
           },
         });
       }
