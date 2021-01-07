@@ -290,7 +290,7 @@ describe('Filter Route Endpoint', () => {
     it('should not get filters if the user does not supply a token', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/filter/filters/user`)
+        .get('/api/v1/filter/filters/user')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -302,7 +302,7 @@ describe('Filter Route Endpoint', () => {
     it('should not get filters if the token is invalid', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/filter/filters/user`)
+        .get('/api/v1/filter/filters/user')
         .set('token', 'invalid token')
         .end((err, res) => {
           res.should.have.status(401);
@@ -315,7 +315,7 @@ describe('Filter Route Endpoint', () => {
     it('should get filters if filters are found', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/filter/filters/user`)
+        .get('/api/v1/filter/filters/user')
         .set('token', token)
         .end((err, res) => {
           res.should.have.status(200);
