@@ -304,7 +304,6 @@ class AuthController {
         // if the user dont have existing account
         if (!myUser.length) {
           await Auth.create({ ...response }, (err, createdUser) => {
-            console.log(response);
             if (err) {
               logger.error(err.message);
               throw new Error(
