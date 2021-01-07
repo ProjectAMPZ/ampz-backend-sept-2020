@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import Sinonchai from 'sinon-chai';
 import sinon from 'sinon';
 import path from 'path';
-import app from '../index';
+import app from '../server';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import LineupController from '../controllers/lineup.controller';

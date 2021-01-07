@@ -92,6 +92,9 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    date: {
+      type: Number,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -142,6 +145,11 @@ PostSchema.virtual('report', {
   localField: '_id',
   foreignField: 'postId',
   justOne: false,
+});
+
+PostSchema.pre('save', function (next) {
+  this.dateOfBirth = `${this.dayOfBirth} - ${this.monthOfBirth} - ${this.yearOfBirth}`;
+  next();
 });
 
 const Post = mongoose.model('post', PostSchema);

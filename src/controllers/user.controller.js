@@ -1,4 +1,4 @@
-import FollowServices from '../services/user.services';
+// import FollowServices from '../services/user.services';
 import Feature from '../db/models/feature.model';
 import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
@@ -8,9 +8,10 @@ import Application from '../db/models/application.model';
 import Follow from '../db/models/follow.model';
 import AuthServices from '../services/auth.services';
 import Auth from '../db/models/users.model';
-import User from '../db/models/users.model';
-import Comment from '../db/models/comment.model';
-import Like from '../db/models/like.model';
+// import User from '../db/models/users.model';
+// import Comment from '../db/models/comment.model';
+// import Like from '../db/models/like.model';
+import Lineup from '../db/models/lineup.model';
 import logger from '../config';
 
 /**
@@ -29,15 +30,15 @@ class UserController {
    * @returns {JSON} - A JSON success response.
    */
   static async followUser(req, res) {
-    const userId = req.params.userId;
+    const { userId } = req.params;
     const profileId = req.data.id;
     try {
-      let follower = new Follow({
+      const follower = new Follow({
         userId,
         profileId,
       });
 
-      let followers = await Follow.find({ userId: userId });
+      let followers = await Follow.find({ userId });
 
       const following = followers.find(
         (follower) => follower.profileId.toString() === req.data.id
@@ -45,8 +46,8 @@ class UserController {
 
       if (following) {
         // are these operations of  not expensive?
-        await Follow.deleteOne({ userId: userId, profileId: profileId });
-        followers = await Follow.find({ userId: userId });
+        await Follow.deleteOne({ userId, profileId });
+        followers = await Follow.find({ userId });
         return res.status(200).json({
           status: 'success',
           count: followers.length,
@@ -56,7 +57,7 @@ class UserController {
 
       await follower.save();
 
-      followers = await Follow.find({ userId: userId });
+      followers = await Follow.find({ userId });
 
       res
         .status(200)
@@ -84,7 +85,9 @@ class UserController {
         const experience = await Experience.find(condition);
         const association = await Association.find(condition);
         const follow = await Follow.find(condition);
+        const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
+        const lineup = await Lineup.find(condition);
         const post = await Post.find(condition).populate({
           path: 'application',
           model: Application,
@@ -104,8 +107,10 @@ class UserController {
             experience,
             association,
             achievement,
+            lineup,
             post,
             follow,
+            following,
           },
         });
       }

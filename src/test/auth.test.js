@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import Sinonchai from 'sinon-chai';
 import sgMail from '@sendgrid/mail';
 import sinon from 'sinon';
-import app from '../index';
+import app from '../server';
 import Auth from '../db/models/users.model';
 import Activation from '../db/models/accountActivation.model';
 import ResetPassword from '../db/models/resetPassword.model';

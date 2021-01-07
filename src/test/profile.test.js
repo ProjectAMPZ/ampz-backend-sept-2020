@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import Sinonchai from 'sinon-chai';
 import sinon from 'sinon';
 import path from 'path';
-import app from '../index';
+import app from '../server';
 import Helper from '../utils/user.utils';
 import BioController from '../controllers/bio.controller';
 import FeatureController from '../controllers/feature.controller';

@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import Sinonchai from 'sinon-chai';
 import sinon from 'sinon';
-import app from '../index';
+import app from '../server';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import Association from '../db/models/association.model';

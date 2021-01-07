@@ -2,17 +2,17 @@
   "name": "ampz-backend-sept-2020",
   "version": "1.0.0",
   "description": "Backend of AMPZ sports app built on Node Js, Express...",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node -r esm src/",
-    "dev": "nodemon -r esm src/",
+    "start": "node -r esm src/server",
+    "dev": "nodemon -r esm src/server",
     "test": "nyc --reporter=html --reporter=text mocha src/**/*.test.js -r esm --cache false --timeout 250000  --recursive --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint src/**/* --ext js --fix --ignore-pattern src/logs/*"
   },
   "nyc": {
     "exclude": [
-      "src/index.js",
+      "src/server.js",
       "src/config/index.js",
       "src/db/*",
       "src/routes/index.js",

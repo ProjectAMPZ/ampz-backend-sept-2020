@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import Sinonchai from 'sinon-chai';
 import sinon from 'sinon';
 import path from 'path';
-import app from '../index';
+import app from '../server';
 import Helper from '../utils/user.utils';
 import Auth from '../db/models/users.model';
 import PostController from '../controllers/post.controller';
@@ -1054,7 +1054,7 @@ describe('Post Route Endpoint', () => {
     it('should get all tags', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/post/tags/all`)
+        .get('/api/v1/post/tags/all')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
