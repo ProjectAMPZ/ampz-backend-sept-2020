@@ -1054,7 +1054,7 @@ describe('Post Route Endpoint', () => {
     it('should get all tags', (done) => {
       chai
         .request(app)
-        .get(`/api/v1/post/tags/all`)
+        .get('/api/v1/post/tags/all')
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
