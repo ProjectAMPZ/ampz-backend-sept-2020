@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
     userName: {
       type: String,
     },
+
     googleUserId: {
       type: String,
     },
@@ -32,13 +33,13 @@ const UserSchema = new mongoose.Schema(
       type: Number,
     },
     monthOfBirth: {
-      type: String,
+      type: Number,
     },
     yearOfBirth: {
       type: Number,
     },
-    age: {
-      type: Number,
+    birthDate: {
+      type: String,
     },
     userLocation: {
       type: String,
@@ -95,11 +96,6 @@ const UserSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-
-UserSchema.pre('save', function (next) {
-  this.age = new Date().getFullYear() - this.yearOfBirth;
-  next();
-});
 
 UserSchema.virtual('feature', {
   ref: 'feature',

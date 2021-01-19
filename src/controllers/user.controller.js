@@ -11,6 +11,7 @@ import Auth from '../db/models/users.model';
 import User from '../db/models/users.model';
 import Comment from '../db/models/comment.model';
 import Like from '../db/models/like.model';
+import Lineup from '../db/models/lineup.model';
 import logger from '../config';
 
 /**
@@ -84,7 +85,9 @@ class UserController {
         const experience = await Experience.find(condition);
         const association = await Association.find(condition);
         const follow = await Follow.find(condition);
+        const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
+        const lineup = await Lineup.find(condition);
         const post = await Post.find(condition).populate({
           path: 'application',
           model: Application,
@@ -104,8 +107,10 @@ class UserController {
             experience,
             association,
             achievement,
+            lineup,
             post,
             follow,
+            following,
           },
         });
       }

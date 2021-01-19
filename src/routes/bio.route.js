@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import BioController from '../controllers/bio.controller';
 import BioRoleValidator from '../validations/profile/bioRole.validation';
+import SignUpValidator from '../validations/auth/signup.validator';
 import verifyToken from '../middlewares/auth.middleware';
 import {
   coverPhotoUpload,
@@ -9,7 +10,13 @@ import {
 
 const router = Router();
 
-router.put('/bio', verifyToken, BioController.updateBio);
+router.put(
+  '/bio',
+  verifyToken,
+  SignUpValidator.usernameAlreadyExist,
+  SignUpValidator.phonenumberAlreadyExist,
+  BioController.updateBio
+);
 
 router.put(
   '/bio/coverphoto',

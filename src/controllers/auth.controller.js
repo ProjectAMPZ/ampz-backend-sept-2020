@@ -10,6 +10,7 @@ import Post from '../db/models/post.model';
 // import Application from '../db/models/application.model';
 import ResetPassword from '../db/models/resetPassword.model';
 import Follow from '../db/models/follow.model';
+import Lineup from '../db/models/lineup.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
@@ -479,6 +480,7 @@ class AuthController {
         const follow = await Follow.find(condition);
         const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
+        const lineup = await Lineup.find(condition);
         const post = await Post.find(condition);
         // const post = await Post.find(condition).populate({
         //   path: 'application',
@@ -505,6 +507,7 @@ class AuthController {
             experience,
             association,
             achievement,
+            lineup,
             post,
             follow,
             following,

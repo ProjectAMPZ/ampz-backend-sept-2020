@@ -19,17 +19,6 @@ const io = require('socket.io')(httpServer, {
   },
 });
 
-io.on('connection', (socket) => {
-  console.log('connected');
-  socket.on('message', (data) => {
-    console.log(data.message);
-  });
-});
-
-httpServer.listen(2000, () => {
-  console.log('app started on port 2000');
-});
-
 const port = process.env.PORT || 5000;
 global.logger = logger;
 app.use(cors());
