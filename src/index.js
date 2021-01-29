@@ -5,13 +5,13 @@ import morgan from 'morgan';
 import logger from './config';
 import './db';
 import v1Router from './routes';
+import Chat from './db/models/chat.model';
 
 config();
 
 const app = express();
-
-const httpServer = require('http').createServer();
-const io = require('socket.io')(httpServer, {
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
   cors: {
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
@@ -19,7 +19,6 @@ const io = require('socket.io')(httpServer, {
   },
 });
 
-const port = process.env.PORT || 5000;
 global.logger = logger;
 app.use(cors());
 
@@ -57,8 +56,14 @@ app.use((err, req, res) => {
   });
 });
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+  console.log('connected');
+});
+
+const port = process.env.PORT || 5000;
+
+server.listen(port, () => {
   logger.info(`Server running at port ${port} on ${process.env.NODE_ENV}`);
 });
 
-export default app;
+export default server;

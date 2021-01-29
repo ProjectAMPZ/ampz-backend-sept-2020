@@ -79,6 +79,10 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // loggedIn: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     coverPhotoUrl: {
       type: String,
     },
