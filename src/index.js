@@ -5,7 +5,6 @@ import morgan from 'morgan';
 import logger from './config';
 import './db';
 import v1Router from './routes';
-import Chat from './db/models/chat.model';
 
 config();
 
@@ -57,7 +56,14 @@ app.use((err, req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('connected');
+  // logger.log('connected')
+  socket.on('chatMessage', (chatData) => {
+    socket.emit('newMessage', chatData);
+  });
+
+  socket.on('disconnect', () => {
+    // logger.log('disconnected');
+  });
 });
 
 const port = process.env.PORT || 5000;
