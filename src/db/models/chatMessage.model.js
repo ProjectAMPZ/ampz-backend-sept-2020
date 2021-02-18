@@ -13,7 +13,7 @@ const chatMessageSchema = new mongoose.Schema(
       type: String,
     },
 
-    type: {
+    mediaUrl: {
       type: String,
     },
   },

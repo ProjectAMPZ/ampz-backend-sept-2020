@@ -1,15 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const Chat = require('../db/models/chat.model');
+import { Router } from 'express';
 
-router.get('/getChats', async (req, res) => {
-  await Chat.find()
-    .populate('sender')
-    .exec((err, chats) => {
-      console.log(chats);
-      if (err) return res.status(400).send(err);
-      res.status(200).send(chats);
-    });
-});
+import postFileUpload from '../services/postImageUpload.service';
+import ChatController from '../controllers/chat.controller';
 
-module.exports = router;
+const router = Router();
+
+router.post('/mediaupload', postFileUpload, ChatController.postChatMedia);
+
+export default router;
