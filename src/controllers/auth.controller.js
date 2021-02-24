@@ -7,9 +7,9 @@ import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
 import Achievement from '../db/models/achievement.model';
 import Post from '../db/models/post.model';
-// import Application from '../db/models/application.model';
 import ResetPassword from '../db/models/resetPassword.model';
 import Follow from '../db/models/follow.model';
+import Lineup from '../db/models/lineup.model';
 import Helper from '../utils/user.utils';
 import AuthServices from '../services/auth.services';
 import sendEmail from '../utils/email.utils';
@@ -123,14 +123,6 @@ class AuthController {
       const follow = await Follow.find(condition);
       const achievement = await Achievement.find(condition);
       const post = await Post.find(condition);
-      // const post = await Post.find(condition).populate({
-      //   path: 'application',
-      //   model: Application,
-      //   populate: {
-      //     path: 'userId',
-      //     select: '_id userName profilePhotoUrl yearOfBirth userLocation',
-      //   },
-      // });
 
       const token = await Helper.generateToken(
         user.id,
@@ -196,14 +188,6 @@ class AuthController {
       const follow = await Follow.find(condition);
       const achievement = await Achievement.find(condition);
       const post = await Post.find(condition);
-      // const post = await Post.find(condition).populate({
-      //   path: 'application',
-      //   model: Application,
-      //   populate: {
-      //     path: 'userId',
-      //     select: '_id userName profilePhotoUrl yearOfBirth userLocation',
-      //   },
-      // });
 
       const token = await Helper.generateToken(
         user[0].id,
@@ -233,7 +217,7 @@ class AuthController {
     }
   }
 
-  /**`
+  /** `
    * Login user through google.
    * @param {Request} req - Response object.
    * @param {Response} res - The payload.
@@ -271,14 +255,7 @@ class AuthController {
           const follow = await Follow.find(condition);
           const achievement = await Achievement.find(condition);
           const post = await Post.find(condition);
-          // const post = await Post.find(condition).populate({
-          //   path: 'application',
-          //   model: Application,
-          //   populate: {
-          //     path: 'userId',
-          //     select: '_id userName profilePhotoUrl yearOfBirth userLocation',
-          //   },
-          // });
+
           const userToken = await Helper.generateToken(
             myUser[0]._id,
             myUser[0].role,
@@ -324,15 +301,7 @@ class AuthController {
                 const association = await Association.find(condition);
                 const follow = await Follow.find(condition);
                 const achievement = await Achievement.find(condition);
-                // const post = await Post.find(condition).populate({
-                //   path: 'application',
-                //   model: Application,
-                //   populate: {
-                //     path: 'userId',
-                //     select:
-                //       '_id userName profilePhotoUrl yearOfBirth userLocation',
-                //   },
-                // });
+
                 const post = await Post.find(condition);
                 const userToken = await Helper.generateToken(
                   createdUser.id,
@@ -376,8 +345,8 @@ class AuthController {
   static async resetPassword(req, res) {
     try {
       const { email } = req.params;
-      let thirtyMinutes = 30 * 60 * 1000;
-      let date = new Date();
+      const thirtyMinutes = 30 * 60 * 1000;
+      const date = new Date();
       const expiringDate = new Date(date.getTime() + thirtyMinutes);
       const token = await Helper.generateCode(5);
       await ResetPassword.deleteOne({ email });
@@ -479,15 +448,8 @@ class AuthController {
         const follow = await Follow.find(condition);
         const following = await Follow.find({ profileId: user[0].id });
         const achievement = await Achievement.find(condition);
+        const lineup = await Lineup.find(condition);
         const post = await Post.find(condition);
-        // const post = await Post.find(condition).populate({
-        //   path: 'application',
-        //   model: Application,
-        //   populate: {
-        //     path: 'userId',
-        //     select: '_id userName profilePhotoUrl yearOfBirth userLocation',
-        //   },
-        // });
 
         const token = await Helper.generateToken(
           user[0].id,
@@ -505,6 +467,7 @@ class AuthController {
             experience,
             association,
             achievement,
+            lineup,
             post,
             follow,
             following,
