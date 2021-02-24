@@ -166,14 +166,14 @@ class LineupController {
     //   // logger.error(err.message);
     //   // res.status(500).json({ status: 'error', error: 'Server error' });
     // }
-    // const { emails } = req.body;
+    // `const { emails } = req.body;
     // // const userEmails = emails.split(',');
     // // const users = await User.find({ gender: 'male' });
     // res.status(200).json({
     //   status: 'success',
     //   count: users.length,
     //   data: users,
-    // });
+    // });`
   }
 
   /**

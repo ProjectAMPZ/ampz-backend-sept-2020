@@ -65,14 +65,7 @@ The API documentation is at [http://localhost:5000/api/v1/api-docs/](http://loca
 | POST /auth/login           | Login a user                             |
     
 
-## Author
-
-Okwuosa Chijioke (Okwuosachijioke@gmail.com) and Shina 
-
 ## License
 
 This is licensed for your use, modification and distribution under the [MIT license.](https://opensource.org/licenses/MIT)
 
-## My Env Variables
-PORT
-SECRET
