@@ -508,7 +508,7 @@ class PostController {
       res.status(200).json({
         status: 'success',
         data: post,
-        message: 'count increased successfully',
+        message: 'count increased',
       });
     } catch (err) {
       logger.error(err.message);
