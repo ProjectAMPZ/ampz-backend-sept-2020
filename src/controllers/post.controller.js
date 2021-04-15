@@ -505,7 +505,11 @@ class PostController {
           populate: { path: 'userId', select: 'userName profilePhotoUrl' },
         })
         .populate({ path: 'like', select: '_id userId', model: Like });
-      res.status(200).json({ status: 'success', data: post });
+      res.status(200).json({
+        status: 'success',
+        data: post,
+        message: 'count increased successfully',
+      });
     } catch (err) {
       logger.error(err.message);
       res.status(500).json({ status: 'error', error: 'internal server error' });
