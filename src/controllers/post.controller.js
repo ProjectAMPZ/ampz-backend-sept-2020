@@ -7,7 +7,6 @@ import Report from '../db/models/report.model';
 import logger from '../config';
 import PostServices from '../services/post.services';
 import Tag from '../db/models/tag.model';
-import { path } from 'app-root-path';
 
 /**
  *Contains Post Controller
