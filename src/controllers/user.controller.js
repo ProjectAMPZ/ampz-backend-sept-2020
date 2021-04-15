@@ -99,6 +99,7 @@ class UserController {
 
         return res.status(200).json({
           status: 'success',
+          message: 'fetched user successfully',
           data: {
             user: {
               ...user[0]._doc,
