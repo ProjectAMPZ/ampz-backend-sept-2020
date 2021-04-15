@@ -10,13 +10,7 @@ import {
 
 const router = Router();
 
-router.put(
-  '/bio',
-  verifyToken,
-  SignUpValidator.usernameAlreadyExist,
-  SignUpValidator.phonenumberAlreadyExist,
-  BioController.updateBio
-);
+router.put('/bio', verifyToken, BioController.updateBio);
 
 router.put(
   '/bio/coverphoto',

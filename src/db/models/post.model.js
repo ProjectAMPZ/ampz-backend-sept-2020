@@ -31,7 +31,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
     },
 
-    sport: {
+    applicationLink: {
       type: String,
     },
 
