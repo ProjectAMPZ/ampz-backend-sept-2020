@@ -17,16 +17,6 @@ class FeatureController {
    */
   static async updateFeature(req, res) {
     try {
-      const feature = await Feature.findOne({
-        userId: req.data.id,
-      });
-
-      if (!feature) {
-        return res
-          .status(404)
-          .json({ status: '404 Not Found', message: 'feature not found' });
-      }
-
       await Feature.findOneAndUpdate({ userId: req.data.id }, req.body, {
         new: true,
       });

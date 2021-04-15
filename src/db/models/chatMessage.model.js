@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 
 const chatMessageSchema = new mongoose.Schema(
   {
+    groupchatId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'groupchat',
+    },
     from: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
     },
 
-    to: {
-      type: String,
-    },
     message: {
       type: String,
     },
-
     mediaUrl: {
       type: String,
     },

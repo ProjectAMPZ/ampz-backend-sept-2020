@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
 
-const BookmarkSchema = new mongoose.Schema({
-  postId: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'post',
+const BookmarkSchema = new mongoose.Schema(
+  {
+    postId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'post',
+    },
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'user',
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  userId: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'user',
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+
+  { timestamps: true }
+);
 
 const Bookmark = mongoose.model('bookmark', BookmarkSchema);
 

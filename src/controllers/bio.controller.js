@@ -17,16 +17,38 @@ class BioController {
    * @returns {JSON} - A JSON success response.
    */
   static async updateBio(req, res) {
+    const { userName, phoneNumber } = req.body;
     try {
+      const user = await User.findById(req.data.id);
+      const users = await User.find({ userName: { $ne: user.userName } });
+      const usernames = users.filter((user) => user.userName !== undefined);
+
+      const names = usernames.map((user) => user.userName);
+      const phoneNumbers = usernames.map((user) => user.phoneNumber);
+
+      const usernameExist = names.includes(userName);
+      const phonenumberExist = phoneNumbers.includes(phoneNumber);
+
+      if (usernameExist && userName !== user.userName) {
+        return res
+          .status(400)
+          .json({ status: 'error', message: 'username already exist' });
+      }
+
+      if (phonenumberExist && phoneNumber !== user.phoneNumber) {
+        return res
+          .status(400)
+          .json({ status: 'error', message: 'phone number already exist' });
+      }
+
       await User.findOneAndUpdate({ _id: req.data.id }, req.body, {
         new: true,
       });
-
-      res
+      return res
         .status(200)
-        .json({ status: 'success', message: 'bio updated successfully' });
+        .json({ status: 'success', message: 'bio updated' });
     } catch (err) {
-      // logger.error(err.message);
+      logger.error(err.message);
       res.status(500).json({
         status: 'error',
         error: 'Server error',

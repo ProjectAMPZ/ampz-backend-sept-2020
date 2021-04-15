@@ -53,6 +53,12 @@ const UserSchema = new mongoose.Schema(
     guardianEmail: {
       type: String,
     },
+    club: {
+      type: String,
+    },
+    international: {
+      type: String,
+    },
     guardianPhone: {
       type: String,
     },
@@ -79,10 +85,12 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // loggedIn: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+
+    role: {
+      type: String,
+      enum: ['talent', 'scout', 'coach', 'academy', 'fan'],
+    },
+
     coverPhotoUrl: {
       type: String,
     },
