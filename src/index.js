@@ -5,20 +5,11 @@ import morgan from 'morgan';
 import logger from './config';
 import './db';
 import v1Router from './routes';
-// import Chat from './db/models/chatMessage.model';
-// import onlineUsers from './db/models/onlineUsers.model';
 
 config();
 
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-  cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
 
 global.logger = logger;
 app.use(cors());
@@ -56,58 +47,6 @@ app.use((err, req, res) => {
     },
   });
 });
-
-// io.on('connection', (socket) => {
-//   // logger.log('connected')
-//   socket.on('chatMessage', (chatData) => {
-//     // console.log(chatData);
-//     Chat.create(chatData, (err, res) => {
-//       if (err) throw err;
-//       socket.emit('newMessage', chatData);
-//     });
-
-//     onlineUsers.findOne({ name: chatData.to }, (err, res) => {
-//       // checks if the recipient of the message is online
-//       if (err) throw err;
-//       if (res != null) {
-//         // if the recipient is found online, the message is emmitted to him/her
-//         socket.to(res.socketId).emit('newMessage', chatData);
-//       }
-//     });
-//   });
-
-//   socket.on('usersDetails', (data) => {
-//     const onlineUser = {
-//       socketId: socket.id,
-//       name: data.from,
-//     };
-
-//     onlineUsers.create(onlineUser, (err, res) => {
-//       // inserts the logged in user to the collection of online users
-//       if (err) throw err;
-//       // console.log(onlineUser.name + ' is online...');
-//     });
-
-//     Chat.find(
-//       {
-//         from: { $in: [data.from, data.to] },
-//         to: { $in: [data.from, data.to] },
-//       },
-//       { projection: { _id: 0 } },
-//       (err, res) => {
-//         if (err) throw err;
-//         else if (res.length > 0) {
-//           socket.emit('outputMessage', res);
-//           // console.log(res);
-//         }
-//       }
-//     );
-//   });
-
-//   socket.on('disconnect', () => {
-//     // logger.log('disconnected');
-//   });
-// });
 
 const port = process.env.PORT || 5000;
 

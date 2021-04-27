@@ -99,7 +99,7 @@ class UserController {
 
         return res.status(200).json({
           status: 'success',
-          message: 'fetched user successfully',
+          message: 'user found',
           data: {
             user: {
               ...user[0]._doc,
@@ -120,6 +120,7 @@ class UserController {
         error: 'User not found',
       });
     } catch (err) {
+      console.log(err.message);
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error Logging in user',
