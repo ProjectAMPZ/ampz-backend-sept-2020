@@ -10,8 +10,6 @@ import filterRouter from './filter.route';
 import lineupRouter from './lineup.route';
 import watchlistRouter from './watchlist.route';
 import userRouter from './user.route';
-import chatRouter from './chat.route';
-// import messengerRouter from './messenger.route';
 
 const router = Router();
 
@@ -26,7 +24,5 @@ router.use('/filter', filterRouter);
 router.use('/lineup', lineupRouter);
 router.use('/watchlist', watchlistRouter);
 router.use('/user', userRouter);
-router.use('/chat', chatRouter);
-// router.use('/messenger', messengerRouter);
 
 export default router;
