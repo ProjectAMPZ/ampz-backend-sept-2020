@@ -50,12 +50,6 @@ app.use((err, req, res) => {
 const port = process.env.PORT || 5000;
 
 io.on('connection', (socket) => {
-  console.log('connected');
-
-  socket.on('hello', (data) => {
-    console.log(data);
-  });
-
   socket.on('disconnect', () => console.log('disconnected'));
 });
 
