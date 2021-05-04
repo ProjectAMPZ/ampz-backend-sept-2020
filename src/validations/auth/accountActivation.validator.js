@@ -10,10 +10,10 @@ import AuthServices from '../../services/auth.services';
  */
 class AccountActivation {
   /**
-     * validate user data.
-     * @memberof AccountActivation
-     * @returns {null} - No response.
-     */
+   * validate user data.
+   * @memberof AccountActivation
+   * @returns {null} - No response.
+   */
   static validateData() {
     return [
       check('email')
@@ -31,7 +31,7 @@ class AccountActivation {
         .isEmpty()
         .withMessage('Passcode cannot be empty')
         .trim()
-        .escape()
+        .escape(),
     ];
   }
 
@@ -50,7 +50,7 @@ class AccountActivation {
       return res.status(400).json({
         status: '400 Invalid Request',
         error: 'Your request contains invalid parameters',
-        errors: errArr
+        errors: errArr,
       });
     }
     return next();
@@ -70,7 +70,7 @@ class AccountActivation {
     if (!user.length) {
       return res.status(400).json({
         status: '400 Invalid Request',
-        error: 'User record not found'
+        error: 'User record not found',
       });
     }
     req.body._id = user[0]._id;
@@ -91,7 +91,7 @@ class AccountActivation {
     if (!user) {
       return res.status(400).json({
         status: '400 Invalid Request',
-        error: 'Wrong activation code'
+        error: 'Wrong activation code',
       });
     }
     return next();

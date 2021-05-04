@@ -10,6 +10,7 @@ import filterRouter from './filter.route';
 import lineupRouter from './lineup.route';
 import watchlistRouter from './watchlist.route';
 import userRouter from './user.route';
+import searchRouter from './search.route';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/filter', filterRouter);
 router.use('/lineup', lineupRouter);
 router.use('/watchlist', watchlistRouter);
 router.use('/user', userRouter);
+router.use('/search', searchRouter);
 
 export default router;
