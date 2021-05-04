@@ -30,7 +30,6 @@ app.get('/api/v1', (req, res) =>
   res.status(200).json({ status: 'success', message: 'Welcome to AMPZ API' })
 );
 
-// mount router
 app.use('/api/v1', v1Router);
 
 app.use((req, res, next) => {
