@@ -49,9 +49,7 @@ app.use((err, req, res) => {
 
 const port = process.env.PORT || 5000;
 
-io.on('connection', (socket) => {
-  socket.on('disconnect', () => console.log('disconnected'));
-});
+io.on('connection', (socket) => {});
 
 server.listen(port, () => {
   logger.info(`Server running at port ${port} in ${process.env.NODE_ENV} `);
