@@ -1,11 +1,12 @@
 import { OAuth2Client } from 'google-auth-library';
 import { config } from 'dotenv';
-import Auth from '../db/models/users.model';
+import Auth from '../db/models/user.model';
 import Activation from '../db/models/accountActivation.model';
 import Feature from '../db/models/feature.model';
 import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
 import Achievement from '../db/models/achievement.model';
+import MessengerModel from '../db/models/messenger.model';
 import Post from '../db/models/post.model';
 import ResetPassword from '../db/models/resetPassword.model';
 import Follow from '../db/models/follow.model';
@@ -63,34 +64,32 @@ class AuthController {
         role,
       };
       const code = await Helper.generateCode(5);
-      await Auth.create({ ...newUser }, (err, createdUser) => {
+      const createdUser = await Auth.create(newUser);
+
+      const featureRecord = {
+        userId: createdUser._id,
+      };
+      Feature.create({ ...featureRecord });
+      const activationRecord = {
+        userId: createdUser._id,
+        email: createdUser.email,
+        passcode: code,
+      };
+
+      //create the chats collections
+      await new MessengerModel({ user: createdUser._id, chats: [] }).save();
+      const message = `Your account activation code is <b>${code}<b/>`;
+      sendEmail(createdUser.email, 'Account Activation', message);
+      Activation.create({ ...activationRecord }, (err) => {
         if (err) {
           // logger.error(err);
-          // throw new Error('Error occured in db during creation of user');
-        } else {
-          const featureRecord = {
-            userId: createdUser._id,
-          };
-          Feature.create({ ...featureRecord });
-          const activationRecord = {
-            userId: createdUser._id,
-            email: createdUser.email,
-            passcode: code,
-          };
-          const message = `Your account activation code is <b>${code}<b/>`;
-          sendEmail(createdUser.email, 'Account Activation', message);
-          Activation.create({ ...activationRecord }, (err) => {
-            if (err) {
-              // logger.error(err);
-              // throw new Error('Error occured in db during creation of activation record');
-            }
-
-            return res.status(201).json({
-              status: 'success',
-              message: 'Account activation code has been sent to your email',
-            });
-          });
+          // throw new Error('Error occured in db during creation of activation record');
         }
+
+        return res.status(201).json({
+          status: 'success',
+          message: 'Account activation code has been sent to your email',
+        });
       });
     } catch (err) {
       return res.status(500).json({
@@ -182,6 +181,15 @@ class AuthController {
         userId: user[0].id,
       };
 
+      //create messenger model if it does not exist
+      const messengerModel = await MessengerModel.findOne({ user: user[0].id });
+      if (!messengerModel) {
+        await new MessengerModel({
+          user: user[0].id,
+          chats: [],
+        }).save();
+      }
+
       const feature = await Feature.findOne(condition);
       const experience = await Experience.find(condition);
       const association = await Association.find(condition);
@@ -255,6 +263,17 @@ class AuthController {
           const follow = await Follow.find(condition);
           const achievement = await Achievement.find(condition);
           const post = await Post.find(condition);
+
+          //create messenger model if it does not exist
+          const messengerModel = await MessengerModel.findOne({
+            user: myUser[0].id,
+          });
+          if (!messengerModel) {
+            await new MessengerModel({
+              user: myUser[0].id,
+              chats: [],
+            }).save();
+          }
 
           const userToken = await Helper.generateToken(
             myUser[0]._id,

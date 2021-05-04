@@ -1,4 +1,4 @@
-import Auth from '../db/models/users.model';
+import Auth from '../db/models/user.model';
 import Activation from '../db/models/accountActivation.model';
 import ResetPassword from '../db/models/resetPassword.model';
 

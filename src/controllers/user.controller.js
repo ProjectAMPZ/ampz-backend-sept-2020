@@ -1,4 +1,3 @@
-// import FollowServices from '../services/user.services';
 import Feature from '../db/models/feature.model';
 import Experience from '../db/models/experience.model';
 import Association from '../db/models/association.model';
@@ -7,10 +6,7 @@ import Post from '../db/models/post.model';
 import Application from '../db/models/application.model';
 import Follow from '../db/models/follow.model';
 import AuthServices from '../services/auth.services';
-import Auth from '../db/models/users.model';
-// import User from '../db/models/users.model';
-// import Comment from '../db/models/comment.model';
-// import Like from '../db/models/like.model';
+import Auth from '../db/models/user.model';
 import Lineup from '../db/models/lineup.model';
 import logger from '../config';
 
@@ -99,7 +95,7 @@ class UserController {
 
         return res.status(200).json({
           status: 'success',
-          message: 'fetched user successfully',
+          message: 'user found',
           data: {
             user: {
               ...user[0]._doc,
@@ -120,6 +116,7 @@ class UserController {
         error: 'User not found',
       });
     } catch (err) {
+      console.log(err.message);
       return res.status(500).json({
         status: '500 Internal server error',
         error: 'Error Logging in user',

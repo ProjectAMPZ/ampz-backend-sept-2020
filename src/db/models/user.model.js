@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import brcypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -15,6 +16,7 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
+      select: false,
     },
     email: {
       type: String,
@@ -86,10 +88,10 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
 
-    role: {
-      type: String,
-      enum: ['talent', 'scout', 'coach', 'academy', 'fan'],
-    },
+    // role: {
+    //   type: String,
+    //   enum: ['talent', 'scout', 'coach', 'academy', 'fan'],
+    // },
 
     coverPhotoUrl: {
       type: String,
@@ -97,11 +99,9 @@ const UserSchema = new mongoose.Schema(
     profilePhotoUrl: {
       type: String,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
   },
+
+  { timestamps: true },
 
   {
     toJSON: { virtuals: true },
@@ -128,6 +128,18 @@ UserSchema.virtual('following', {
   localField: '_id',
   foreignField: 'profileId',
   justOne: false,
+});
+
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await brcypt.compare(enteredPassword, this.password);
+};
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  const salt = await brcypt.genSalt(10);
+  this.password = await brcypt.hash(this.password, salt);
 });
 
 const User = mongoose.model('user', UserSchema);
