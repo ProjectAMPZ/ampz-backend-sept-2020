@@ -22,7 +22,7 @@ const io = require('socket.io')(server, {
 global.logger = logger;
 app.use(cors());
 
-// app.use(morgan('combined', { stream: logger.stream }));
+app.use(morgan('combined', { stream: logger.stream }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
